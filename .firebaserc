@@ -6,7 +6,7 @@
     "pour-over-guides": {
       "hosting": {
         "production": [
-          "pour-over-guides-dashboard"
+          "pouroverguides-dashboard"
         ],
         "staging": [
           "staging-dashboard-guides"
