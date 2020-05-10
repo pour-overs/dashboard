@@ -10,6 +10,12 @@
         ],
         "website": [
           "pour-over-guides"
+        ],
+        "staging-website": [
+          "staging-pouroverguides"
+        ],
+        "staging-dashboard": [
+          "staging-dashboard-guides"
         ]
       }
     }
