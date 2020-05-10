@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "pour-over-guides"
+  },
+  "targets": {
+    "pour-over-guides": {
+      "hosting": {
+        "dashboard": [
+          "pouroverguides-dashboard"
+        ],
+        "website": [
+          "pour-over-guides"
+        ]
+      }
+    }
+  }
+}
