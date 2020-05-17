@@ -16,9 +16,9 @@ RUN npm ci --production
 # and the runtime dependencies.
 FROM node:12-slim
 WORKDIR usr/src/app
-COPY --from=build-app /usr/src/app/__sapper__ ./__sapper__
-COPY --from=build-app /usr/src/app/static ./static
-COPY --from=build-runtime /usr/src/app/node_modules ./node_modules
+COPY --from=build-app usr/src/app/__sapper__ ./__sapper__
+COPY --from=build-app usr/src/app/static ./static
+COPY --from=build-runtime usr/src/app/node_modules ./node_modules
 
 ENV PORT 8080
 ENV HOST 0.0.0.0
