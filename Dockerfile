@@ -23,4 +23,5 @@ COPY --from=build-runtime /usr/src/app/node_modules ./node_modules
 ENV PORT 8080
 ENV HOST 0.0.0.0
 
-CMD npm start
+# Note that we didn't copy the package.json so we can't use 'npm start' here
+CMD ["node", "__sapper__/build"]
