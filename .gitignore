@@ -5,3 +5,5 @@ yarn-error.log
 /cypress/screenshots/
 /__sapper__/
 /public/
+firebase-admin-service-key.json
+.env
