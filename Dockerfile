@@ -10,14 +10,12 @@ RUN npm run build
 FROM node:12-slim AS build-runtime
 WORKDIR /usr/src/app
 COPY package*.json ./
-COPY ./.env* ./
 RUN npm ci --production
 
 # This stage only needs the compiled Sapper application
 # and the runtime dependencies.
 FROM node:12-slim
 WORKDIR /usr/src/app
-COPY --from=build-app /usr/src/app/.env* ./
 COPY --from=build-app /usr/src/app/__sapper__ ./__sapper__
 COPY --from=build-app /usr/src/app/static ./static
 COPY --from=build-runtime /usr/src/app/node_modules ./node_modules
