@@ -15,7 +15,9 @@
   }
 </style>
 
-<Nav {segment}/>
+{#if segment !== "auth"}
+  <Nav {segment}/>
+{/if}
 
 <main>
   <slot></slot>

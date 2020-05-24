@@ -1,13 +1,15 @@
 <script>
   export let segment;
-  console.log(segment);
 </script>
 
-<style></style>
+<style>
+
+</style>
 
 <svelte:head>
-  <title>{segment}</title>
+  <title>Dashboard | {segment}</title>
 </svelte:head>
+
 <main>
   <slot />
 </main>
