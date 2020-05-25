@@ -6,10 +6,11 @@ import cookie from "cookie";
  * @param {HttpResponse} res The response object
  * @param {Function} next A function to be called to continue the middleware chain
  */
-export const setCookie = (req, res, next) => {
+export default (req, res, next) => {
   res.cookie = (key, value, options) => {
     const cookieOptions = Object.assign({
       httpOnly: true,
+      secure: true,
       maxAge: 60 * 60 * 24 * 5 // 5 days
     }, options);
     const cookieDocument = cookie.serialize(key, value, cookieOptions);

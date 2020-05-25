@@ -7,6 +7,7 @@ export async function post(req, res, next) {
 
   let isValid = false;
   const { id_token } = req.query;
+  const secure = req.url.startsWith("https://");
 
   if (!id_token) {
     return next();
@@ -22,7 +23,7 @@ export async function post(req, res, next) {
     .then((sessionCookie) => {
       isValid = true;
       // Set cookie policy for session cookie.
-      const options = {maxAge: expiresIn, httpOnly: true, secure: true};
+      const options = {maxAge: expiresIn, httpOnly: true, secure, path:"/"};
       res.cookie('session', sessionCookie, options);
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ isValid }));

@@ -32,7 +32,6 @@ polka() // You can also use Express
 
   function authorization(req, res, next) {
     if (!isAuthenticated) {
-      console.log(req.method, req.url);
 
       if (isStaticFile(req.url) || isPublicURL(req.url)) {
         next();
