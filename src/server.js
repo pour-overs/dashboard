@@ -2,6 +2,7 @@ import sirv from 'sirv';
 import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
+import cookieParser from "cookie-parser";
 
 // initialize firebase admin sdk
 import "./services/firebase.js";
@@ -16,6 +17,7 @@ const isAuthenticated = false;
 
 polka() // You can also use Express
   .use(
+    cookieParser(),
     authorization,
     compression({ threshold: 0 }),
     sirv('static', { dev }),
