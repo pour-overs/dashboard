@@ -9,6 +9,7 @@ import cookie from "cookie";
 export default (req, res, next) => {
   res.cookie = (key, value, options) => {
     const cookieOptions = Object.assign({
+      sameSite: true,
       httpOnly: true,
       secure: true,
       maxAge: 60 * 60 * 24 * 5 // 5 days
