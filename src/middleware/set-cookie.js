@@ -12,8 +12,8 @@ export const setCookie = (req, res, next) => {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 5 // 5 days
     }, options);
-    const setCookie = cookie.serialize(key, value, cookieOptions);
-    res.setHeader('Set-Cookie', setCookie);
+    const cookieDocument = cookie.serialize(key, value, cookieOptions);
+    res.setHeader('Set-Cookie', cookieDocument);
   };
 
   next();
