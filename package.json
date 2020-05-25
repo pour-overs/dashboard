@@ -21,6 +21,7 @@
     "cookie-parser": "^1.4.5",
     "firebase": "^7.14.5",
     "firebase-admin": "^8.12.1",
+    "helmet": "^3.22.0",
     "polka": "next",
     "sirv": "^0.4.0"
   },
