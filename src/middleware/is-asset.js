@@ -38,10 +38,13 @@ export const analyzeDirectory = (dir) => {
  * @param {ServerResponse} res
  * @param {Function} next
  */
-export const isAsset = (dir) =>  {
+export const isAsset = (dir, displayFiles) =>  {
   analyzeDirectory(dir);
-  const assetsList = Array.from(assets.values()).join("\n\t");
-  console.log("analyzed static files:\n\t", assetsList)
+
+  if (displayFiles) {
+    const assetsList = Array.from(assets.values()).join("\n\t");
+    console.log("Analyzed static files:\n\t", assetsList)
+  }
 
   return (req, res, next) => {
 
