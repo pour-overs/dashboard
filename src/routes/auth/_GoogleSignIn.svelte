@@ -38,7 +38,7 @@
 
         verifyToken(idToken)
           .then(function(response) {
-            console.log(response);
+
             status = "Authorized. You've been signed in! Redirecting...";
 
             window.setTimeout(() => {
