@@ -1,11 +1,14 @@
 
 <script>
   import { onMount } from "svelte";
+
   let isMounted = false;
   let firebaseReady = false;
   let isfirebaseUIReady = false;
+
   onMount(() => {
     isMounted = true;
+    window.verifyToken = verifyToken;
   });
 
   function firebaseLoaded() {
@@ -16,7 +19,33 @@
     isfirebaseUIReady = true;
   }
 
+  async function verifyToken(id_token) {
+    // Example POST method implementation:
+
+    // Default options are marked with *
+    const response = await fetch(`/auth/session?id_token=${id_token}`, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'same-origin', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer',
+    });
+
+    console.log(response);
+
+    return response.json();
+  }
 </script>
+
+<style>
+
+  .login-container {
+    text-align: center;
+    padding: 1em 1em;
+    margin: auto auto;
+  }
+</style>
 
 <svelte:head>
   {#if isMounted}
@@ -50,19 +79,38 @@
 
       // FirebaseUI config.
       var uiConfig = {
-        signInSuccessUrl: '<url-to-redirect-to-on-success>',
+        callbacks: {
+          signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+            // User successfully signed in.
+            // Return type determines whether we continue the redirect automatically
+            // or whether we leave that to developer to handle.
+            console.log(authResult, redirectUrl);
+            console.log("verifying user");
+
+            verifyToken(authResult.credential.idToken)
+              .then((response) => {
+                console.log("verified user?", response)
+                debugger;
+
+                if (response.isValid) {
+                  window.location.href = redirectUrl || window.location.origin;
+                }
+
+              });
+            return false;
+          },
+          uiShown: function() {
+            // The widget is rendered.
+            // Hide the loader.
+            document.getElementById('firebaseui-loader').style.display = 'none';
+          }
+        },
+        signInSuccessUrl: window.location.origin,
+        signInFlow: 'popup',
         signInOptions: [
           // Leave the lines as is for the providers you want to offer your users.
           firebase.auth.GoogleAuthProvider.PROVIDER_ID
         ],
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        // tosUrl: '<your-tos-url>',
-        // // Privacy policy url/callback.
-        // privacyPolicyUrl: function() {
-        //   window.location.assign('<your-privacy-policy-url>');
-        // }
       };
 
       // Initialize the FirebaseUI Widget using Firebase.
@@ -74,6 +122,11 @@
   {/if}
 </svelte:head>
 
-<h1>Login</h1>
+<div class="login-container">
+  <h1>Login</h1>
 
-<div id="firebaseui-auth-container"></div>
+  <div id="firebaseui-loader">
+    <p>Loading...</p>
+  </div>
+  <div id="firebaseui-auth-container"></div>
+</div>

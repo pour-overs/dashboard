@@ -11,6 +11,7 @@ const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 const loginURL = "/auth/login";
+const publicURLs = ["/auth"];
 const isAuthenticated = false;
 
 polka() // You can also use Express
@@ -27,8 +28,9 @@ polka() // You can also use Express
 
   function authorization(req, res, next) {
     if (!isAuthenticated) {
+      console.log(req.method, req.url);
 
-      if (isStaticFile(req.url) || req.url.startsWith(loginURL)) {
+      if (isStaticFile(req.url) || isPublicURL(req.url)) {
         next();
       }
       else {
@@ -62,4 +64,8 @@ polka() // You can also use Express
         'Content-Length': str.length,
     });
     res.end(str);
+  }
+
+  function isPublicURL(url) {
+    return publicURLs.filter((_url) => url.startsWith(_url)).length > 0
   }
