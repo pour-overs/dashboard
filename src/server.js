@@ -3,6 +3,7 @@ import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import cookieParser from "cookie-parser";
+import setCookie from "./middleware/set-cookie.js";
 
 // initialize firebase admin sdk
 import "./services/firebase.js";
@@ -18,6 +19,7 @@ const isAuthenticated = false;
 polka() // You can also use Express
   .use(
     cookieParser(),
+    setCookie,
     authorization,
     compression({ threshold: 0 }),
     sirv('static', { dev }),
