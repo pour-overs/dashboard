@@ -3,6 +3,7 @@ import "./services/firebase.js";
 
 import sirv from 'sirv';
 import polka from 'polka';
+import helmet from 'helmet';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import cookieParser from "cookie-parser";
@@ -21,6 +22,7 @@ const publicURLs = ["/auth"];
 
 polka() // You can also use Express
   .use(
+    helmet(),
     cookieParser(),
     setCookie(),
     isAsset("static"),
