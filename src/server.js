@@ -6,7 +6,11 @@ import polka from 'polka';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import cookieParser from "cookie-parser";
+
+// middlewares
 import setCookie from "./middleware/set-cookie.js";
+import isAuthorized from "./middleware/is-authorized.js";
+import { isAsset } from "./middleware/is-asset.js";
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
@@ -19,9 +23,11 @@ polka() // You can also use Express
   .use(
     cookieParser(),
     setCookie,
+    isAsset("static"),
+    isAuthorized,
     authorization,
     compression({ threshold: 0 }),
-    sirv('static', { dev }),
+    sirv("static", { dev }),
     sapper.middleware()
   )
   .listen(PORT, err => {
@@ -30,7 +36,7 @@ polka() // You can also use Express
 
 
   function authorization(req, res, next) {
-    if (!isAuthenticated) {
+    if (!req.isAuthorized) {
 
       if (isStaticFile(req.url) || isPublicURL(req.url)) {
         next();
