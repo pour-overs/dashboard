@@ -6,7 +6,7 @@ import cookie from "cookie";
  * @param {HttpResponse} res The response object
  * @param {Function} next A function to be called to continue the middleware chain
  */
-export default (req, res, next) => {
+export default () =>  (req, res, next) => {
   res.cookie = (key, value, options) => {
     const cookieOptions = Object.assign({
       sameSite: true,

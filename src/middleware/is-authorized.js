@@ -1,7 +1,7 @@
 import { auth } from "../services/firebase.js";
 
 
-export default (req, res, next) => {
+export default () => (req, res, next) => {
   req.user = null;
   req.isAuthorized = false;
 
