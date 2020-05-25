@@ -7,14 +7,14 @@ export default (req, res, next) => {
 
   const sessionCookie = req.cookies.session;
 
-  if (!sessionCookie) {
+  if (!sessionCookie || req.isAsset) {
     return next();
   }
 
   auth.verifySessionCookie(sessionCookie)
-    .then( decoded => {
-      decoded;
-      //console.log(decoded);
+    .then( ({ uid, email, name, picture}) => {
+      req.isAuthorized = true;
+      req.user = { uid, email, name, picture };
     })
     .catch( error => {
       console.log("error verifying session cookie:", error);
