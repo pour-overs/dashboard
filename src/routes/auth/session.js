@@ -33,3 +33,21 @@ export async function post(req, res, next) {
       res.end(JSON.stringify({ isValid, }));
     });
 }
+
+export async function del(req, res, next) {
+
+  let isSignedOut = false;
+
+  res.setHeader('Content-Type', 'application/json');
+
+  if (req.user !== null) {
+    const secure = req.url.startsWith("https://");
+    const expiresIn = Date.now();
+    const options = {maxAge: expiresIn, httpOnly: true, secure, path:"/"};
+    res.cookie("session", null, options);
+
+    isSignedOut = true;
+  }
+
+  res.end(JSON.stringify({ isSignedOut }));
+}

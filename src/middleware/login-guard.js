@@ -13,7 +13,7 @@ export default (redirectURL, publicURLs) => {
     }
 
     if (!req.isAuthorized) {
-      return redirectToLogin(redirectURL, res);
+      return redirect(redirectURL, res);
     }
 
     next();

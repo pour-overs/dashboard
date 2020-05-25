@@ -1,11 +1,14 @@
 
 <script>
   import { getContext } from "svelte";
+  import GoogleButton from "./_GoogleButton.svelte";
 
   const onFirebaseLoaded = getContext("load:firebase");
   let user = null;
   let firebase = null;
   let auth = null;
+
+  let status = "Authorizing...";
 
   $: isDisabled = firebase === null;
 
@@ -24,20 +27,24 @@
   function signInWithGoogle() {
 
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-
+    status = "Authenticating...";
     auth.signInWithPopup(googleProvider)
       .then(async function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        console.log(result)
 
+        status = "Authorizing...";
         user = result.user;
 
         const idToken = await getCurrentUser();
 
-
         verifyToken(idToken)
           .then(function(response) {
             console.log(response);
+            status = "Authorized. You've been signed in! Redirecting...";
+
+            window.setTimeout(() => {
+              window.location = window.location.origin;
+            }, 1200);
+
           });
       })
       .catch(function(error) {
@@ -57,15 +64,13 @@
    * @param {string} idToken the id token related to an authenticated user's account
    */
   async function verifyToken(idToken) {
-    // Example POST method implementation:
 
-    // Default options are marked with *
     const response = await fetch(`/auth/session?id_token=${idToken}`, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      mode: 'same-origin', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      redirect: 'follow', // manual, *follow, error
+      method: 'POST',
+      mode: 'same-origin',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });
 
@@ -75,42 +80,13 @@
   }
 </script>
 
-<style>
-
-  .google-signin {
-    padding: 0.5em 1.5em;
-    background-color: #fafafa;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0.5em auto;
-    cursor: pointer;
-  }
-
-  .google-signin:hover,
-  .google-signin:active {
-    background-color: #f6f6f6;
-  }
-
-  .google-signin-icon {
-    display: inline-block;
-    margin-right: 1em;
-  }
-</style>
-
 {#if user !== null}
   <h2>Welcome {user.displayName}</h2>
-  <p>Authorizing...</p>
+  <p>{status}</p>
 
 {:else}
   <form class="signin-form" on:submit|preventDefault={signInWithGoogle} disabled={isDisabled}>
-    <button type="submit" class="google-signin">
-      <img class="google-signin-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google's G icon" width="18" />
-      Sign in with Google
-    </button>
+    <GoogleButton type="submit">Sign in with Google</GoogleButton>
   </form>
 {/if}
 

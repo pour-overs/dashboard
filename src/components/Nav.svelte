@@ -41,6 +41,7 @@
 
 <nav>
   <div class="logo">Pour Over Guides</div>
+
   <ul class="nav-items">
     <li>
       <a aria-current={segment === undefined ? 'page' : undefined} href=".">

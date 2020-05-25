@@ -12,13 +12,18 @@ import cookieParser from "cookie-parser";
 import setCookie from "./middleware/set-cookie.js";
 import isAuthorized from "./middleware/is-authorized.js";
 import { isAsset } from "./middleware/is-asset.js";
-import loginGuard from "./middleware/is-asset.js";
+import loginGuard from "./middleware/login-guard.js";
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 const loginURL = "/auth/login";
 const publicURLs = ["/auth"];
+
+const getSession = (req, res, next) => ({
+  user: req.user,
+  isAuthorized: req.isAuthorized,
+});
 
 polka() // You can also use Express
   .use(
@@ -30,7 +35,7 @@ polka() // You can also use Express
     loginGuard(loginURL, publicURLs),
     compression({ threshold: 0 }),
     sirv("static", { dev }),
-    sapper.middleware()
+    sapper.middleware({ session: getSession, })
   )
   .listen(PORT, err => {
     if (err) console.log('error', err);
