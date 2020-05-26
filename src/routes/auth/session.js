@@ -1,37 +1,87 @@
-import { auth } from "../../services/firebase.js";
-// refererence
+import { auth, firestore } from "../../services/firebase.js";
+
+// refererences
 // https://firebase.google.com/docs/auth/admin/manage-cookies
-//
+// https://firebase.google.com/docs/auth/admin/verify-id-tokens
+
+const settingsRef = firestore.collection("dashboard-settings").doc("global")
+
+function getUserFromToken(idToken) {
+  // idToken comes from the client app
+  return auth.verifyIdToken(idToken)
+    .catch(function (error) {
+      console.log("Unable to verify user's idToken");
+      return Promise.resolve(null);
+    });
+}
+
+async function isAllowedUser(emailAddress) {
+  const errorMessage = "A problem occured when fetching /dashboard-settings/global";
+  const settings = await settingsRef.get()
+    .then((document) => {
+
+      if (document.exists) {
+        return Promise.resolve(document.data());
+      }
+
+      return Promise.resolve(null);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+  if (settings === null) {
+    console.log(errorMessage);
+    return false;
+  }
+
+  if (!settings.useWhitelist) {
+    return true;
+  }
+
+  return settings.whitelist.includes(emailAddress.toLowerCase());
+}
 
 export async function post(req, res, next) {
 
   let isValid = false;
   const { id_token } = req.query;
-  const secure = req.url.startsWith("https://");
 
   if (!id_token) {
     return next();
   }
 
-  // Set session expiration to 5 days.
-  const expiresIn = 60 * 60 * 24 * 5 * 1000;
-  // Create the session cookie. This will also verify the ID token in the process.
-  // The session cookie will have the same claims as the ID token.
-  // To only allow session cookie setting on recent sign-in, auth_time in ID token
-  // can be checked to ensure user was recently signed in before creating a session cookie.
-  auth.createSessionCookie(id_token, { expiresIn })
-    .then((sessionCookie) => {
-      isValid = true;
-      // Set cookie policy for session cookie.
-      const options = {maxAge: expiresIn, httpOnly: true, secure, path:"/"};
-      res.cookie('session', sessionCookie, options);
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ isValid }));
-    }, error => {
-      console.log("Failed to create session cookie:", error)
-      res.statusCode = 401;
-      res.end(JSON.stringify({ isValid, }));
-    });
+  const user = await getUserFromToken(id_token);
+
+  if (user !== null) {
+    const userAllowed = await isAllowedUser(user.email);
+
+    if (userAllowed) {
+      const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
+      const sessionCookie = await auth.createSessionCookie(id_token, { expiresIn })
+        .catch(error => {
+          console.log("Failed to create session cookie:", error)
+          return Promise.resolve(null);
+        });
+
+      if (sessionCookie !== null) {
+        isValid = true;
+
+        const options = {
+          maxAge: expiresIn,
+          httpOnly: true,
+          secure: req.url.startsWith("https://"),
+          path: "/",
+        };
+        res.cookie('session', sessionCookie, options);
+
+        return res.json({ isValid });
+      }
+    }
+  }
+
+  res.statusCode = 401;
+  res.json({ isValid });
 }
 
 export async function del(req, res, next) {
@@ -42,9 +92,9 @@ export async function del(req, res, next) {
 
   if (req.user !== null) {
     const secure = req.url.startsWith("https://");
-    const expiresIn = Date.now();
-    const options = {maxAge: expiresIn, httpOnly: true, secure, path:"/"};
-    res.cookie("session", null, options);
+    const expiresIn = new Date(0);
+    const options = { maxAge: expiresIn, httpOnly: true, secure, path: "/" };
+    res.cookie("session", "", options);
 
     isSignedOut = true;
   }
