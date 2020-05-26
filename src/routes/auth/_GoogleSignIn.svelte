@@ -1,4 +1,3 @@
-
 <script>
   import { getContext } from "svelte";
   import GoogleButton from "./_GoogleButton.svelte";
@@ -12,40 +11,47 @@
 
   $: isDisabled = firebase === null;
 
-  onFirebaseLoaded.then((module) => {
+  onFirebaseLoaded.then(module => {
     firebase = module.firebase;
     auth = module.auth;
-  })
+  });
 
   function getCurrentUser() {
-    return firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    return firebase
+      .auth()
+      .currentUser.getIdToken(/* forceRefresh */ true)
       .catch(function(error) {
         // Handle error
       });
   }
 
   function signInWithGoogle() {
-
     const googleProvider = new firebase.auth.GoogleAuthProvider();
     status = "Authenticating...";
-    auth.signInWithPopup(googleProvider)
+    auth
+      .signInWithPopup(googleProvider)
       .then(async function(result) {
-
         status = "Authorizing...";
         user = result.user;
 
         const idToken = await getCurrentUser();
 
-        verifyToken(idToken)
-          .then(function(response) {
+        verifyToken(idToken).then(function(response) {
 
+          if (response === null) {
+            status = "Something went wrong. Please try again later."
+          }
+          else if (response.isValid) {
             status = "Authorized. You've been signed in! Redirecting...";
 
             window.setTimeout(() => {
               window.location = window.location.origin;
             }, 1200);
-
-          });
+          }
+          else {
+            status = "Your account is not authorized.";
+          }
+        });
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -64,31 +70,31 @@
    * @param {string} idToken the id token related to an authenticated user's account
    */
   async function verifyToken(idToken) {
-
     const response = await fetch(`/auth/session?id_token=${idToken}`, {
-      method: 'POST',
-      mode: 'same-origin',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      method: "POST",
+      mode: "same-origin",
+      cache: "no-cache",
+      credentials: "same-origin",
+      redirect: "follow",
+      referrerPolicy: "no-referrer"
     });
 
-    console.log(response);
+    if (response.ok) {
+      return response.json();
+    }
 
-    return response.json();
+    return Promise.resolve(null);
   }
 </script>
 
 {#if user !== null}
   <h2>Welcome {user.displayName}</h2>
   <p>{status}</p>
-
 {:else}
-  <form class="signin-form" on:submit|preventDefault={signInWithGoogle} disabled={isDisabled}>
+  <form
+    class="signin-form"
+    on:submit|preventDefault={signInWithGoogle}
+    disabled={isDisabled}>
     <GoogleButton type="submit">Sign in with Google</GoogleButton>
   </form>
 {/if}
-
-
-
