@@ -6,19 +6,19 @@
   }
 </script>
 
-
 <script>
-  import Nav from '../components/Nav.svelte';
+  import Nav from "../components/Nav.svelte";
   import SidebarLayout from "./_SidebarLayout.svelte";
+  import UserProvider from "../providers/UserProvider.svelte";
+
   export let user = null;
   export let isAuthorized = false;
   export let segment;
 </script>
 
 <style>
-
   :global(*) {
-      box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   :global(body) {
@@ -32,24 +32,6 @@
     --nav-background-color: var(--color5);
     --nav-color: var(--color2);
   }
-
-  main {
-
-  }
-
-  footer {
-    padding: 1em 1em;
-    background-color: #eee;
-  }
-
-  .text-right {
-    text-align: right;
-  }
-
-  a {
-    text-decoration: none;
-  }
-
 </style>
 
 {#if !isAuthorized}
@@ -57,16 +39,17 @@
     <slot />
   </main>
 {:else}
+  <UserProvider {user}>
+    <SidebarLayout>
 
-  <SidebarLayout>
+      <nav slot="sidebar">
+        <Nav {segment} />
+      </nav>
 
-    <nav slot="sidebar">
-      <Nav {segment}/>
-    </nav>
+      <main slot="content">
+        <slot />
+      </main>
 
-    <main slot="content">
-      <slot></slot>
-    </main>
-
-  </SidebarLayout>
+    </SidebarLayout>
+  </UserProvider>
 {/if}
