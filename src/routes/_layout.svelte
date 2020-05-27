@@ -9,22 +9,32 @@
 
 <script>
   import Nav from '../components/Nav.svelte';
-
+  import SidebarLayout from "./_SidebarLayout.svelte";
   export let user = null;
   export let isAuthorized = false;
   export let segment;
-  $: authText = isAuthorized ? "Sign-out" : "Sign-in";
 </script>
 
 <style>
+
+  :global(*) {
+      box-sizing: border-box;
+  }
+
+  :global(body) {
+    /* https://coolors.co/937b63-141516-f2f4f6-27293e-f3b61f */
+    --color1: #937b63;
+    --color2: #141516;
+    --color3: #f2f4f6;
+    --color4: #27293e;
+    --color5: #f3b61f;
+
+    --nav-background-color: var(--color5);
+    --nav-color: var(--color2);
+  }
+
   main {
-    position: relative;
-    max-width: 56em;
-    background-color: white;
-    padding: 2em;
-    margin: 0 auto;
-    box-sizing: border-box;
-    min-height: 90vh;
+
   }
 
   footer {
@@ -42,19 +52,21 @@
 
 </style>
 
-{#if segment !== "auth"}
-  <Nav {segment}/>
-{/if}
+{#if !isAuthorized}
+  <main>
+    <slot />
+  </main>
+{:else}
 
-<main>
-  <slot></slot>
-</main>
+  <SidebarLayout>
 
-{#if isAuthorized}
-  <footer>
-    <p class="text-right">
-      <a href="/auth/login">{authText}</a>
-    </p>
+    <nav slot="sidebar">
+      <Nav {segment}/>
+    </nav>
 
-  </footer>
+    <main slot="content">
+      <slot></slot>
+    </main>
+
+  </SidebarLayout>
 {/if}
