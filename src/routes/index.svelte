@@ -8,6 +8,5 @@
 	<title>{title}</title>
 </svelte:head>
 
-<h1>Pour Over Guides</h1>
+<h1>{title}</h1>
 
-<p>Hello world Hello world Hello world</p>
