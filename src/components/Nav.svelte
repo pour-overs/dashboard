@@ -1,8 +1,22 @@
 <script>
   export let segment;
+  import { getContext } from "svelte";
+  import UserCard from "./UserCard.svelte";
+
+  const user = getContext("user");
 </script>
 
 <style>
+
+  nav {
+    display: flex;
+    width: 100%;
+    flex-flow: column nowrap;
+    height: 100vh;
+    flex: 1 0 auto;
+    align-items: stretch;
+  }
+
   .logo {
     font-weight: 200;
     font-size: 1.5rem;
@@ -12,9 +26,16 @@
   }
 
   .nav-items {
+
+    display: block;
     list-style: none;
-    margin: 0 auto;
+    margin: 0em auto;
     padding: 0 0;
+    width: 100%;
+  }
+
+  .auth-items {
+    margin-top: auto;
   }
 
   [aria-current] {
@@ -50,4 +71,8 @@
       </a>
     </li>
   </ul>
+
+  <div class="auth-items">
+    <UserCard {user} />
+  </div>
 </nav>
