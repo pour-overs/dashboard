@@ -20,8 +20,8 @@
   }
 
   .user-picture {
-    width: 2em;
-    margin-right: 1em;
+    width: 1.5em;
+    margin-right: 0.5em;
     border-radius: 3px;
   }
 
