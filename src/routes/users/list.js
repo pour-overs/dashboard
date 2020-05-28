@@ -6,7 +6,7 @@ import { auth } from "../../services/firebase.js";
  * @returns {ListUsersResult} A result-object containing keys for `.users` and `.pageToken`
  * @see https://firebase.google.com/docs/reference/admin/node/admin.auth.ListUsersResult
  */
-function _listUsers(nextPageToken = undefined, count = 100) {
+function _listUsers(nextPageToken = undefined, count = 1000) {
   return auth.listUsers(count, nextPageToken)
     .catch(function(error) {
       console.log('Error listing users:', error);
@@ -16,8 +16,7 @@ function _listUsers(nextPageToken = undefined, count = 100) {
 
 
 export async function get(req, res, next) {
-  const { page } = req.params;
-
-  const { users, pageToken } = await _listUsers(page);
+  const { page } = req.query;
+  const { users, pageToken } = await _listUsers(page ? page : undefined);
   res.json({ pageToken, users });
 }

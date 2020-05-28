@@ -1,4 +1,5 @@
 <script context="module">
+
   const fetchOptions = {
     credentials: "include"
   };
@@ -13,18 +14,20 @@
 <script>
   export let users = [];
   export let pageToken = null;
+  let disableLoadMore = pageToken === null;
   $: showLoadMore = pageToken !== null;
   $: count = users.length;
 
   import UserCard from "../../components/UserCard.svelte";
 
   async function loadMore() {
+    disableLoadMore = true;
     const usersResult = await fetch(`/users/list?page=${pageToken}`, fetchOptions)
       .then(response => response.json());
 
-    pageToken = usersResult.pageToken;
+    pageToken = usersResult.pageToken || null;
+    disableLoadMore = pageToken === null;
     users = [...users, ...usersResult.users];
-
   }
 </script>
 
@@ -53,6 +56,7 @@
   }
 
 </style>
+
 <h1>Users</h1>
 
 <p class="label">
@@ -70,5 +74,5 @@
 </ul>
 
 {#if showLoadMore}
-  <button on:click={loadMore}>Load More</button>
+  <button on:click={loadMore} disabled={disableLoadMore}>Load More</button>
 {/if}
