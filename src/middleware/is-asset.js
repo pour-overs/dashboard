@@ -51,7 +51,6 @@ export const isAsset = (dir, displayFiles) =>  {
     req.isStaticFile = assets.has(req.path)
     req.isAsset = req.isStaticFile || hasAssetExtension(req.path);
 
-    console.log("is asset:", req.path, req.isAsset);
     next();
   };
 };
