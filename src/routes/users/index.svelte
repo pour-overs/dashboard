@@ -37,23 +37,35 @@
     margin: 0 0;
   }
 
-  ul li:hover {
+  .label {
+    color: #999;
+  }
+
+  .row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .row:hover {
     background-color: #eee;
   }
 
 </style>
 <h1>Users</h1>
 
-<p>
-  Showing {count}
+<p class="label">
+  {count} user{count == 1 ? "" : "s"}
 </p>
 <ul>
   {#each users as user (user.uid)}
-    <li>
+    <li class="row">
       <UserCard {...user} picture={user.photoURL} name={user.displayName} />
+      <span class="user-email">{user.email}</span>
     </li>
   {:else}
-    <li class="empty">There are no users, maybe.</li>
+    <li class="empty">There was a problem loading users. Please reload the page.</li>
   {/each}
 </ul>
 
