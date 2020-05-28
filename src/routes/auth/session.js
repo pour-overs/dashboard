@@ -1,6 +1,7 @@
 import { auth, firestore } from "../../services/firebase.js";
+import { getSettings } from "../../services/settings.js";
 
-// refererences
+// references
 // https://firebase.google.com/docs/auth/admin/manage-cookies
 // https://firebase.google.com/docs/auth/admin/verify-id-tokens
 
@@ -16,22 +17,10 @@ function getUserFromToken(idToken) {
 }
 
 async function isAllowedUser(emailAddress) {
-  const errorMessage = "A problem occured when fetching /dashboard-settings/global";
-  const settings = await settingsRef.get()
-    .then((document) => {
 
-      if (document.exists) {
-        return Promise.resolve(document.data());
-      }
-
-      return Promise.resolve(null);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  const settings = await getSettings();
 
   if (settings === null) {
-    console.log(errorMessage);
     return false;
   }
 
