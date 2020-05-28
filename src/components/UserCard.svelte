@@ -6,8 +6,9 @@
   export let name;
   export let uid;
   export let picture;
-  export let alt;
+  export let email;
   export let text = null; // name override
+  export let alt = text || name;
   export let href = `/users/${uid}`;
 
 
@@ -16,6 +17,7 @@
   if (isCurrentUser) {
     name = "You";
     href = "/account";
+    alt = text || name;
   }
 
 </script>
@@ -36,10 +38,6 @@
     width: 1.5em;
     margin-right: 0.5em;
     border-radius: 3px;
-  }
-
-  .user-name {
-
   }
 
   .user-card:hover {
