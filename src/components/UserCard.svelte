@@ -1,10 +1,23 @@
 <script>
-  export let user = null;
+  import { getContext } from "svelte";
 
-  let src = user ? user.picture : "";
-  let alt = user ? user.name : "";
+  const currentUser = getContext("user");
 
-  const href = "/account"
+  export let name;
+  export let uid;
+  export let picture;
+  export let alt;
+  export let text = null; // name override
+  export let href = `/users/${uid}`;
+
+
+  const isCurrentUser = currentUser.uid === uid;
+
+  if (isCurrentUser) {
+    name = "You";
+    href = "/account";
+  }
+
 </script>
 
 <style>
@@ -35,9 +48,8 @@
 
 </style>
 
-{#if user !== null}
-  <a class="user-card" {href} >
-    <img class="user-picture" {src} {alt} title={alt} />
-    <span class="user-name">{user.name}</span>
-  </a>
-{/if}
+
+<a class="user-card" {href} data-id={uid}>
+  <img class="user-picture" src={picture} {alt} title={alt} />
+  <span class="user-name">{text || name}</span>
+</a>

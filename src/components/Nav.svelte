@@ -70,9 +70,14 @@
         Guides
       </a>
     </li>
+    <li>
+      <a aria-current={segment === 'users' ? 'page' : undefined} href="users">
+        Users
+      </a>
+    </li>
   </ul>
 
   <div class="auth-items">
-    <UserCard {user} />
+    <UserCard {...user} text="Your Account" />
   </div>
 </nav>
