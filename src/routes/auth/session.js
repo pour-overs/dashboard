@@ -16,6 +16,10 @@ function getUserFromToken(idToken) {
     });
 }
 
+/**
+ *
+ * @param {string} emailAddress
+ */
 async function isAllowedUser(emailAddress) {
 
   const settings = await getSettings();
@@ -31,6 +35,12 @@ async function isAllowedUser(emailAddress) {
   return settings.whitelist.includes(emailAddress.toLowerCase());
 }
 
+/**
+ *
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ * @param {Function} next
+ */
 export async function post(req, res, next) {
 
   let isValid = false;

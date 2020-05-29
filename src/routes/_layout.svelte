@@ -1,7 +1,6 @@
 <script context="module">
   export async function preload(page, session) {
     const { user, isAuthorized } = session;
-    console.log(user, isAuthorized);
     return { user, isAuthorized };
   }
 </script>
