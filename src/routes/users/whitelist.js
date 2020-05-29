@@ -1,4 +1,4 @@
-import { getSettings } from "../../services/settings.js";
+import { getSettings, setWhitelist } from "../../services/settings.js";
 
 
 /**
@@ -9,7 +9,8 @@ import { getSettings } from "../../services/settings.js";
  * @param {Function} next
  */
 export async function get(req, res, next) {
-
+  const { whitelist, useWhitelist } = await getSettings();
+  return res.json(whitelist || []);
 }
 
 /**
@@ -20,6 +21,7 @@ export async function get(req, res, next) {
  * @param {Function} next
  */
 export async function post(req, res, next) {
-
-  return res.json();
+  const users = req.body;
+  await setWhitelist(users);
+  return res.json(users);
 }

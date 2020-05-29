@@ -15,6 +15,12 @@ function _listUsers(nextPageToken = undefined, count = 1000) {
 }
 
 
+/**
+ * @method GET
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ * @param {Function} next
+ */
 export async function get(req, res, next) {
   const { page } = req.query;
   const { users, pageToken } = await _listUsers(page ? page : undefined);
