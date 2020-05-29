@@ -1,8 +1,4 @@
-import { firestore } from "../../services/firebase.js";
-
-// references
-// https://firebase.google.com/docs/auth/admin/manage-cookies
-// https://firebase.google.com/docs/auth/admin/verify-id-tokens
+import { firestore } from "./firebase.js";
 
 const settingsRef = firestore.collection("dashboard-settings").doc("global")
 
@@ -31,4 +27,12 @@ export async function getSettings() {
   }
 
   return settings;
+}
+
+/**
+ * Sets the list of whitelisted users to the parameter `users`
+ * @param {string[]} users A list of string email addresses
+ */
+export function setWhitelist(users = []) {
+  return settingsRef.update({ whitelist: users, });
 }
