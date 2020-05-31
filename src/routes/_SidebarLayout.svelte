@@ -37,11 +37,6 @@
     }
   }
 
-  .really-tall {
-    border: 1px solid #0ff;
-    min-height: 120vh;
-  }
-
 </style>
 
 <div class="layout">
