@@ -1,5 +1,5 @@
 <script>
-  // https://material.io/resources/icons/?icon=recent_actors&style=baseline
+
   import { getContext } from "svelte";
   let theme = getContext("iconStyle") || {};
 
