@@ -6,11 +6,11 @@
 
     // todo: perform fetches in parallel
     const { users, pageToken } = await this.fetch(
-      "/users/list?page=",
+      "/api/users?page=",
       fetchOptions
     ).then(response => response.json());
 
-    const whitelist = await this.fetch("/users/whitelist", fetchOptions).then(response => response.json())
+    const whitelist = await this.fetch("/api/whitelist", fetchOptions).then(response => response.json())
     return { users, pageToken, whitelist };
   }
 </script>
@@ -34,7 +34,7 @@
   async function loadMore() {
     disableLoadMore = true;
     const usersResult = await fetch(
-      `/users/list?page=${pageToken}`,
+      `/api/users?page=${pageToken}`,
       fetchOptions
     ).then(response => response.json());
 
@@ -44,7 +44,7 @@
   }
 
   async function updateWhitelist(list) {
-    whitelist = await fetch("/users/whitelist", {
+    whitelist = await fetch("/api/whitelist", {
       ...fetchOptions,
       method: "POST",
       headers: {
