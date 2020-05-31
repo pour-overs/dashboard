@@ -1,4 +1,17 @@
+import { createGuide } from "../../../services/guides.js";
 
-export async function get(req, res, next) {
-    res.json();
+/**
+ * @param {IncomingMessage} req
+ * @param {ServerResponse} res
+ * @param {Function} next
+ */
+export async function post(req, res, next) {
+
+  if (!req.user) {
+    return next();
+  }
+
+  const createdId = await createGuide(req.user.uid);
+
+  res.json({ createdId });
 }

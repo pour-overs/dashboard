@@ -1,6 +1,39 @@
+<script context="module">
+
+  export async function preload(page, session) {
+
+    // assert we use the path `/guides` not `/guides/`
+    if (page.path.endsWith("/")) {
+      const url = page.path.substring(0, page.path.length - 1);
+      this.redirect(301, url);
+    }
+  }
+
+</script>
+
 <script>
   export let guides = [];
 
+
+  async function createGuide() {
+
+    const response = await fetch("/api/guides/create", {
+      credentials: "include",
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      console.error(response);
+      return;
+    }
+
+    const { createdId } = await response.json();
+
+    if (createdId) {
+      window.location = `${window.location}/${createdId}`;
+    }
+
+  }
 </script>
 
 <style>
@@ -30,13 +63,12 @@
 </style>
 
 <aside class="actions">
-  <button type="button" class="button-link">Create Guide</button>
+  <button type="button" class="button-link" on:click={createGuide}>Create Guide</button>
 </aside>
 
 <h1>Guides</h1>
 
 <p>Lists all Pour Over Guides.</p>
-
 
 <table>
   <thead>

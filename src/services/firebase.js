@@ -11,6 +11,7 @@ admin.initializeApp({
 export const auth = admin.auth();
 
 export const firestore = admin.firestore();
+export const firestoreFields = admin.firestore;
 
 export const storage = admin.storage();
 

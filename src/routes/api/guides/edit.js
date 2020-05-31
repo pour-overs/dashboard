@@ -1,6 +1,5 @@
 
 /**
- *
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -11,7 +10,6 @@ export async function get(req, res, next) {
 
 
 /**
- *
  * @param {*} req
  * @param {*} res
  * @param {*} next
