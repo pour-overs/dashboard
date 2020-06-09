@@ -7,8 +7,20 @@ const timestamp = () => FieldValue.serverTimestamp();
 const guidesRef = firestore.collection("guides");
 
 
-export async function listGuides() {
+export async function listGuides(userId) {
+  const snapshot = await guidesRef
+    .orderBy('lastModified', 'desc')
+    // .where("owner", "==", userId)
+    .get();
 
+  if (snapshot.empty) {
+    return [];
+  }
+
+  return snapshot.docs.map(doc => {
+    const guide = doc.data();
+    return { id: doc.id, ...guide };
+  });
 }
 
 
@@ -18,14 +30,9 @@ export async function listGuides() {
  */
 export async function createGuide(userId) {
 
-  const createdAt = timestamp();
+  const guide = _createGuide(userId);
 
-  const ref = await guidesRef.add({
-    createdAt,
-    lastModified: createdAt,
-    owner: userId,
-    title: "New Guide",
-  })
+  const ref = await guidesRef.add(guide);
 
   return ref.id;
 }
@@ -44,7 +51,35 @@ export async function deleteGuide(guideID) {
  * Fetches a single guide by ID
  * @param {string} guideID The id of a Guide
  */
-export async function getByID(guideID) {
+export async function getByID(guideId) {
 
+  const document = await guidesRef
+    .doc(guideId)
+    .get();
+
+  if (document.exists) {
+    return { id: guideId, ...document.data(), };
+  }
 }
 
+
+/**
+ * Creates and returns a new guide based on the necessary fields
+ */
+function _createGuide(userId) {
+
+  const createdAt = timestamp();
+
+  return {
+    createdAt,
+    lastModified: createdAt,
+    owner: userId,
+    title: "",
+    isPublished: false,
+    introduction: {
+      content: "",
+      youtubeUrl: "",
+      heroImg: "",
+    },
+  }
+}

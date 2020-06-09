@@ -20,9 +20,9 @@
     }
 
     main {
-      max-width: var(--content-width);
+      /* max-width: var(--content-width); */
       border-top: none;
-      padding: 10vh 0;
+      padding: 10vh 2em;
       margin: 0 auto;
       min-height: 100vh;
     }

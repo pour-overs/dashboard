@@ -17,7 +17,10 @@ export default () => (req, res, next) => {
       req.user = { uid, email, name, picture };
     })
     .catch( error => {
-      console.log("error verifying session cookie:", error);
+      console.log("error verifying session cookie:", error.code);
+      if (error.code === "auth/session-cookie-expired") {
+        req.sessionExpired = true;
+      }
     })
     .finally(() => next());
 

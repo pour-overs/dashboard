@@ -1,3 +1,5 @@
+import { getByID } from "../../../services/guides.js";
+
 
 /**
  * @param {*} req
@@ -5,7 +7,15 @@
  * @param {*} next
  */
 export async function get(req, res, next) {
-  res.json();
+
+  const guideId = req.params.id
+
+  if (guideId) {
+    const guide = await getByID(guideId);
+    return res.json(guide);
+  }
+
+  res.end("Missing ID");
 }
 
 

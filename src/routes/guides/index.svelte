@@ -6,6 +6,16 @@
     if (page.path.endsWith("/")) {
       const url = page.path.substring(0, page.path.length - 1);
       this.redirect(301, url);
+      return;
+    }
+
+    const response = await this.fetch("/api/guides/", {
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      const guides = await response.json();
+      return { guides };
     }
   }
 
@@ -13,7 +23,7 @@
 
 <script>
   export let guides = [];
-
+  console.log(guides);
 
   async function createGuide() {
 
@@ -86,9 +96,10 @@
     {#each guides as guide}
       <tr>
         <td>{guide.title}</td>
-        <td>{guide.slug}</td>
-        <td>{guide.isPublished}</td>
-        <td>{guide.stepsCount}</td>
+        <td>{guide.slug ? guide.slug : "—"}</td>
+        <td>—</td>
+        <td>{guide.isPublished ? "yes" : "no"}</td>
+        <td>{guide.steps ? guide.steps : "—"}</td>
         <td>
           <a href={`/guides/${guide.id}`}>Edit</a>
         </td>
