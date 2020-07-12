@@ -38,7 +38,7 @@
     <slot />
   </main>
 {:else}
-  <UserProvider {user}>
+  <UserProvider {user} {isAuthorized} >
     <SidebarLayout>
 
       <nav slot="sidebar">
