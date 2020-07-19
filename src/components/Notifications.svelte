@@ -1,16 +1,22 @@
 <script>
-  import { notifications, loading, isLoading, clearNotification } from "../stores/notifications.js";
+  import {
+    notifications,
+    loading,
+    isLoading,
+    clearNotification
+  } from "../stores/notifications.js";
+
+  import Icon from "./Icon.svelte";
 
   $: hasNotification = $notifications !== null;
   $: notification = $notifications;
-
 </script>
 
 <style>
   .notifications {
     position: fixed;
     top: 0.5em;
-    right: 0.5em;
+    right: 1em;
   }
 
   .notification {
@@ -32,16 +38,18 @@
 
   .close-icon {
     display: inline-block;
-    margin-left: 0.5em;
+    transform: translateX(0.5em);
     opacity: 0.5;
   }
-
 </style>
 
 <div class="notifications">
   {#if hasNotification}
     <div class="notification" on:click={clearNotification}>
-      {notification} <span class="close-icon">&times;</span>
+      {notification}
+      <span class="close-icon">
+        <Icon icon="close" />
+      </span>
     </div>
   {/if}
 </div>

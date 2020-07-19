@@ -71,7 +71,7 @@
     form.isPublished = !form.isPublished;
     save(e);
     const state = form.isPublished ? "was published" : "has been unpublished";
-    notify(`"${form.title}" ${state}.`, 10000);
+    notify(`"${form.title}" ${state}.`, null);
   }
 
   function hasFormChanged() {
