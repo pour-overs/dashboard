@@ -75,7 +75,13 @@ export async function getByID(guideId) {
     .get();
 
   if (document.exists) {
-    return { id: guideId, ...document.data(), };
+    const data = { id: guideId, ...document.data(), };
+
+    // convert these into datetime strings for parsing on the client
+    data.lastModified.date = data.lastModified.toDate();
+    data.createdAt.date = data.createdAt.toDate();
+
+    return data;
   }
 }
 

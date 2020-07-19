@@ -15,13 +15,16 @@
 
 <script>
 
+  import DateTime from "../../components/DateTime.svelte";
   import { notify } from "../../stores/notifications.js";
 
   export let guide = null;
   let formDisabled = false;
 
-  let createdAt = new Date();
-  createdAt.seconds = guide.createdAt._seconds;
+  let createdAt = new Date(guide.createdAt.date);
+  let lastModified = new Date(guide.lastModified.date);
+
+  console.log(guide);
 
   let hasChanged = false;
 
@@ -113,11 +116,30 @@
     background-color: #fff;
     border-radius: 3px;
   }
+
+  .title {
+    display: block;
+    font-weight: 600;
+  }
+
+  .time-info {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    margin: 1em 0;
+  }
+
+
 </style>
 
-<h1>Edit Guide</h1>
+<h1>Edit <span class="title">{form.title}</span></h1>
 
-<p>Created on {createdAt.toLocaleDateString()}.</p>
+<p class="time-info">
+  Published: {form.isPublished ? "Yes" : "No"}
+  <br />
+  Created on <DateTime date={guide.createdAt.date} displayTime={false} />
+  <br />
+  Last Modified on <DateTime date={guide.lastModified.date} />
+</p>
 
 <form on:input={hasFormChanged} on:reset={() => (hasChanged = false)} disabled={formDisabled}>
 
