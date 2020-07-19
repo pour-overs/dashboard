@@ -19,9 +19,8 @@ let timeoutId = null;
  */
 export const notify = (message, duration = null) => {
   notifications.set(message);
+  clearTimer();
   if (duration !== null) {
-    clearTimer();
-
     timeoutId = window.setTimeout(() => {
       clearNotification();
     }, duration);

@@ -63,7 +63,7 @@
 
   async function saveHandler(e) {
     await save();
-    notify(`"${form.title}" was saved!`, 5000);
+    notify(`"${form.title}" was saved.`, 5000);
   }
 
   function togglePublished(e) {
