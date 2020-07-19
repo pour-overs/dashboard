@@ -7,6 +7,7 @@
 
 <script>
   import Nav from "../components/Nav.svelte";
+  import Notifications from "../components/Notifications.svelte";
   import SidebarLayout from "./_SidebarLayout.svelte";
   import UserProvider from "../providers/UserProvider.svelte";
 
@@ -52,3 +53,5 @@
     </SidebarLayout>
   </UserProvider>
 {/if}
+
+<Notifications />

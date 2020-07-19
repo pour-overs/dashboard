@@ -15,6 +15,9 @@
 </script>
 
 <script>
+
+  import { notify } from "../../stores/notifications.js";
+
   export let guide = null;
   let formDisabled = false;
 
@@ -51,19 +54,24 @@
 
     if (!response.ok) {
       console.error(response);
-      // todo: notify user
+      notify(`A network error occurred.`, 6000);
       return;
     }
 
     const writeResult = await response.json();
     hasChanged = false;
-    // todo: notify user
-    console.log("saved!", { writeResult });
+  }
+
+  async function saveHandler(e) {
+    await save();
+    notify(`"${form.title}" was saved!`, 5000);
   }
 
   function togglePublished(e) {
     form.isPublished = !form.isPublished;
     save(e);
+    const state = form.isPublished ? "was published" : "has been unpublished";
+    notify(`"${form.title}" ${state}.`, 10000);
   }
 
   function hasFormChanged() {
@@ -161,7 +169,7 @@
   <footer class="actions">
     <h2>{form.title || "Untitled"}</h2>
     <button type="button" on:click={togglePublished}>{form.isPublished ? 'Unpublish' : 'Publish'}</button>
-    <button type="button" disabled={!hasChanged} on:click={save}>Save</button>
+    <button type="button" disabled={!hasChanged} on:click={saveHandler}>Save</button>
   </footer>
 
 </form>
