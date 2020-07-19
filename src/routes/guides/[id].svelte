@@ -8,7 +8,6 @@
     if (response.ok) {
       const guide = await response.json();
 
-      console.log(guide);
       return { guide };
     }
   }

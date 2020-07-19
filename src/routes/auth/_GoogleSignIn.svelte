@@ -1,13 +1,12 @@
 <script>
   import { getContext } from "svelte";
   import GoogleButton from "./_GoogleButton.svelte";
+  import { notify } from "../../stores/notifications.js";
 
   const onFirebaseLoaded = getContext("load:firebase");
   let user = null;
   let firebase = null;
   let auth = null;
-
-  let status = "Authorizing...";
 
   $: isDisabled = firebase === null;
 
@@ -21,35 +20,36 @@
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
       .catch(function(error) {
-        // Handle error
+        notify(`Something went wrong: ${error}`, null);
       });
   }
 
   function signInWithGoogle() {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    status = "Authenticating...";
+
+    notify("Authenticating...", null);
+
     auth
       .signInWithPopup(googleProvider)
       .then(async function(result) {
-        status = "Authorizing...";
+        notify("Authorizing...", null);
         user = result.user;
-
         const idToken = await getCurrentUser();
 
         verifyToken(idToken).then(function(response) {
 
           if (response === null) {
-            status = "Something went wrong. Please try again later."
+            notify("Something went wrong. Please try again later.", null);
           }
           else if (response.isValid) {
-            status = "Authorized. You've been signed in! Redirecting...";
+            notify("Authorized. You've been signed in! Redirecting...", null);
 
             window.setTimeout(() => {
               window.location = window.location.origin;
             }, 1200);
           }
           else {
-            status = "Your account is not authorized.";
+            notify("Your account is not authorized.", null);
           }
         });
       })
@@ -89,7 +89,6 @@
 
 {#if user !== null}
   <h2>Welcome {user.displayName}</h2>
-  <p>{status}</p>
 {:else}
   <form
     class="signin-form"
