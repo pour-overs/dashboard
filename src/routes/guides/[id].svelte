@@ -16,6 +16,7 @@
 
 <script>
   export let guide = null;
+  let formDisabled = false;
 
   let createdAt = new Date();
   createdAt.seconds = guide.createdAt._seconds;
@@ -23,17 +24,46 @@
   let hasChanged = false;
 
   const form = {
+    isPublished: guide.isPublished,
     slug: guide.slug || "",
     title: guide.title || "",
     description: guide.description || "",
     introduction: {
       content: guide.introduction.content || "",
       youtubeUrl: guide.introduction.youtubeUrl || ""
-    }
+    },
   };
 
-  function save(e) {
-    console.log("Save form with", form);
+  async function save(e) {
+    console.log("Save form with:", form);
+    formDisabled = true;
+
+    const response = await fetch(`/api/guides/${guide.id}`, {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    formDisabled = false;
+
+    if (!response.ok) {
+      console.error(response);
+      // todo: notify user
+      return;
+    }
+
+    const writeResult = await response.json();
+    hasChanged = false;
+    // todo: notify user
+    console.log("saved!", { writeResult });
+  }
+
+  function togglePublished(e) {
+    form.isPublished = !form.isPublished;
+    save(e);
   }
 
   function hasFormChanged() {
@@ -82,7 +112,7 @@
 
 <p>Created on {createdAt.toLocaleDateString()}.</p>
 
-<form on:input={hasFormChanged} on:reset={() => (hasChanged = false)}>
+<form on:input={hasFormChanged} on:reset={() => (hasChanged = false)} disabled={formDisabled}>
 
   <div class="form-content">
 
@@ -130,9 +160,8 @@
 
   <footer class="actions">
     <h2>{form.title || "Untitled"}</h2>
-    <button type="button">{guide.isPublished ? 'Unpublish' : 'Publish'}</button>
+    <button type="button" on:click={togglePublished}>{form.isPublished ? 'Unpublish' : 'Publish'}</button>
     <button type="button" disabled={!hasChanged} on:click={save}>Save</button>
-    <button type="reset" disabled={!hasChanged}>Reset</button>
   </footer>
 
 </form>

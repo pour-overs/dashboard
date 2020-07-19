@@ -37,6 +37,23 @@ export async function createGuide(userId) {
   return ref.id;
 }
 
+/**
+ * Update an existing Guide
+ * @returns {Promise>string>} A promise that resolves to the newly created Guide ID
+ */
+export async function updateGuide(guideID, guideData) {
+
+  const ref = guidesRef.doc(guideID);
+
+  // update the lastModified field
+  const data = Object.assign(guideData, { lastModified: timestamp(), });
+
+  // save
+  const res = await ref.update(data);
+
+  return ref.id;
+}
+
 
 /**
  *
@@ -61,6 +78,7 @@ export async function getByID(guideId) {
     return { id: guideId, ...document.data(), };
   }
 }
+
 
 
 /**

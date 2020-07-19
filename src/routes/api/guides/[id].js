@@ -1,5 +1,9 @@
-import { getByID } from "../../../services/guides.js";
+import { getByID, updateGuide } from "../../../services/guides.js";
 
+const ERRORS = {
+  INVALID_ID: "The guide associated with that ID was not found.",
+  NO_DATA: "No guide data was sent."
+};
 
 /**
  * @param {*} req
@@ -15,7 +19,7 @@ export async function get(req, res, next) {
     return res.json(guide);
   }
 
-  res.end("Missing ID");
+  res.end(ERRORS.INVALID_ID);
 }
 
 
@@ -25,5 +29,20 @@ export async function get(req, res, next) {
  * @param {*} next
  */
 export async function post(req, res, next) {
-  res.json();
+
+  const guideId = req.params.id;
+
+  if (!guideId) {
+    return res.end(ERRORS.INVALID_ID);
+  }
+
+  const data = req.body;
+
+  if (!data) {
+    return res.end(ERRORS.NO_DATA);
+  }
+
+  const writeResult = await updateGuide(guideId, data);
+
+  return res.json(writeResult);
 }
