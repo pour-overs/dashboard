@@ -1,5 +1,5 @@
 <script>
-  export let icon;
+  export let name;
 </script>
 
 <style>
@@ -7,7 +7,8 @@
     color: inherit;
     line-height: 1.5rem;
     vertical-align: middle;
+    user-select: none;
   }
 </style>
 
-<span class="icon material-icons">{icon}</span>
+<span class="icon material-icons">{name}</span>

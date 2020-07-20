@@ -48,7 +48,7 @@
     <div class="notification" on:click={clearNotification}>
       {notification}
       <span class="close-icon">
-        <Icon icon="close" />
+        <Icon name="close" />
       </span>
     </div>
   {/if}

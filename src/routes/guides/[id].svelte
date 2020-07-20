@@ -14,8 +14,9 @@
 </script>
 
 <script>
-
   import DateTime from "../../components/DateTime.svelte";
+  import Collapsible from "../../components/Collapsible.svelte";
+
   import { notify } from "../../stores/notifications.js";
 
   export let guide = null;
@@ -23,8 +24,6 @@
 
   let createdAt = new Date(guide.createdAt.date);
   let lastModified = new Date(guide.lastModified.date);
-
-  console.log(guide);
 
   let hasChanged = false;
 
@@ -36,7 +35,7 @@
     introduction: {
       content: guide.introduction.content || "",
       youtubeUrl: guide.introduction.youtubeUrl || ""
-    },
+    }
   };
 
   async function save(e) {
@@ -47,9 +46,9 @@
       credentials: "include",
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     });
 
     formDisabled = false;
@@ -95,12 +94,8 @@
     padding: 0.5em 0.5em;
   }
 
-  .form-group {
-    padding: 1em 1em;
-    border: 1px solid #eee;
-    border-radius: 3px;
-    margin: 1em auto 2em auto;
-    max-width: 120em;
+  h2 {
+    margin: 0 0;
   }
 
   .actions {
@@ -127,70 +122,94 @@
     font-size: 0.8em;
     margin: 1em 0;
   }
-
-
 </style>
 
-<h1>Edit <span class="title">{form.title}</span></h1>
+<h1>
+  Edit
+  <span class="title">{form.title}</span>
+</h1>
 
-<p class="time-info">
-  Published: {form.isPublished ? "Yes" : "No"}
-  <br />
-  Created on <DateTime date={guide.createdAt.date} displayTime={false} />
-  <br />
-  Last Modified on <DateTime date={guide.lastModified.date} />
-</p>
+<Collapsible>
 
-<form on:input={hasFormChanged} on:reset={() => (hasChanged = false)} disabled={formDisabled}>
+  <h2 slot="title">Status: {form.isPublished ? "Published" : "Draft"}</h2>
+
+  <div slot="content">
+
+    <p class="time-info">
+      Published: {form.isPublished ? 'Yes' : 'No'}
+      <br />
+      Created on
+      <DateTime date={guide.createdAt.date} displayTime={false} />
+      <br />
+      Last Modified on
+      <DateTime date={guide.lastModified.date} />
+    </p>
+
+    <p>
+      <button type="button" on:click={togglePublished}>
+        {form.isPublished ? 'Unpublish' : 'Publish'}
+      </button>
+    </p>
+  </div>
+</Collapsible>
+
+<form
+  on:input={hasFormChanged}
+  on:reset={() => (hasChanged = false)}
+  disabled={formDisabled}>
 
   <div class="form-content">
 
-    <h2>Meta</h2>
+    <Collapsible collapsed={false} >
+      <h2 slot="title">Meta</h2>
 
-    <section class="form-group">
-      <label>
-        Title
-        <input type="text" bind:value={form.title} />
-      </label>
+      <section class="form-group" slot="content">
+        <label>
+          Title
+          <input type="text" bind:value={form.title} />
+        </label>
 
-      <label>
-        Short Description
-        <textarea rows="5" bind:value={form.description} />
-      </label>
+        <label>
+          Short Description
+          <textarea rows="5" bind:value={form.description} />
+        </label>
 
-      <label>
-        Slug
-        <input type="text" bind:value={form.slug} />
-      </label>
-    </section>
+        <label>
+          Slug
+          <input type="text" bind:value={form.slug} />
+        </label>
+      </section>
 
-    <h2>Introduction</h2>
-    <section class="form-group">
+    </Collapsible>
+    <Collapsible>
+      <h2 slot="title">Introduction</h2>
+      <section class="form-group" slot="content">
 
-      <label>
-        Introductory Text
-        <textarea rows="8" bind:value={form.introduction.content} />
-      </label>
+        <label>
+          Introductory Text
+          <textarea rows="8" bind:value={form.introduction.content} />
+        </label>
 
-      <label>
-        Youtube URL
-        <input type="text" bind:value={form.introduction.youtubeUrl} />
-      </label>
-    </section>
-
-    <section class="form-group">
-      <h2>Steps</h2>
-
-      <p>There are {guide.steps ? guide.steps : 0} steps.</p>
-    </section>
+        <label>
+          Youtube URL
+          <input type="text" bind:value={form.introduction.youtubeUrl} />
+        </label>
+      </section>
+    </Collapsible>
+    <Collapsible>
+      <h2 slot="title">Steps</h2>
+      <section class="form-group" slot="content">
+        <p>There are {guide.steps ? guide.steps : 0} steps.</p>
+      </section>
+    </Collapsible>
 
   </div>
 
-
   <footer class="actions">
-    <h2>{form.title || "Untitled"}</h2>
-    <button type="button" on:click={togglePublished}>{form.isPublished ? 'Unpublish' : 'Publish'}</button>
-    <button type="button" disabled={!hasChanged} on:click={saveHandler}>Save</button>
+    <h2>{form.title || 'Untitled'}</h2>
+    <button type="button" disabled={!hasChanged} on:click={saveHandler}>
+      Save
+    </button>
   </footer>
 
 </form>
