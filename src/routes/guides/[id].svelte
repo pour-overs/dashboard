@@ -41,6 +41,7 @@
   async function save(e) {
     console.log("Save form with:", form);
     formDisabled = true;
+    notify("Saving...", null);
 
     const response = await fetch(`/api/guides/${guide.id}`, {
       credentials: "include",

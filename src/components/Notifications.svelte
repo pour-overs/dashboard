@@ -20,7 +20,9 @@
   }
 
   .notification {
-    padding: 0.5em 1em;
+    padding: 1em 1em;
+    font-size: 0.75em;
+    font-weight: 600;
     background-color: #333;
     color: #ddd;
     border-radius: 3px;
@@ -41,10 +43,31 @@
     transform: translateX(0.5em);
     opacity: 0.5;
   }
+
+
+  .spinner {
+    animation: spin 1s linear 0s infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 
 <div class="notifications">
-  {#if hasNotification}
+  {#if $loading}
+    <div class="notification">
+      <div class="spinner">
+        <Icon name="refresh" />
+      </div>
+    </div>
+  {:else if hasNotification}
     <div class="notification" on:click={clearNotification}>
       {notification}
       <span class="close-icon">
