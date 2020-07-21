@@ -20,6 +20,9 @@
   import { notify } from "../../stores/notifications.js";
 
   export let guide = null;
+
+  console.log(guide);
+
   let formDisabled = false;
 
   let createdAt = new Date(guide.createdAt.date);

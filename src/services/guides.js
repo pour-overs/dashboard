@@ -105,5 +105,6 @@ function _createGuide(userId) {
       youtubeUrl: "",
       heroImg: "",
     },
+    steps: [],
   }
 }
