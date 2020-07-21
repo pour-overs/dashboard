@@ -1,4 +1,4 @@
-import { getByID, updateGuide } from "../../../services/guides.js";
+import { getByID, updateGuide } from "@services/guides.js";
 
 const ERRORS = {
   INVALID_ID: "The guide associated with that ID was not found.",

@@ -1,6 +1,6 @@
 <script>
   import { getContext } from "svelte";
-  import UserCard from "../../components/UserCard.svelte";
+  import UserCard from "@components/UserCard.svelte";
 
   let user = getContext("user");
 </script>

@@ -6,10 +6,10 @@
 </script>
 
 <script>
-  import Nav from "../components/Nav.svelte";
-  import Notifications from "../components/Notifications.svelte";
+  import Nav from "@components/Nav.svelte";
+  import Notifications from "@components/Notifications.svelte";
   import SidebarLayout from "./_SidebarLayout.svelte";
-  import UserProvider from "../providers/UserProvider.svelte";
+  import UserProvider from "@providers/UserProvider.svelte";
 
   export let user = null;
   export let isAuthorized = false;

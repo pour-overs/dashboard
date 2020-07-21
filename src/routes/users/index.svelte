@@ -29,7 +29,7 @@
   let deletingRow = null;
   let addingRow = false;
 
-  import UserCard from "../../components/UserCard.svelte";
+  import UserCard from "@components/UserCard.svelte";
 
   async function loadMore() {
     disableLoadMore = true;

@@ -1,4 +1,4 @@
-import { listGuides } from "../../../services/guides.js";
+import { listGuides } from "@services/guides.js";
 
 
 /**

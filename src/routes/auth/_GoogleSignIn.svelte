@@ -1,7 +1,7 @@
 <script>
   import { getContext } from "svelte";
   import GoogleButton from "./_GoogleButton.svelte";
-  import { notify } from "../../stores/notifications.js";
+  import { notify } from "@stores/notifications.js";
 
   const onFirebaseLoaded = getContext("load:firebase");
   let user = null;

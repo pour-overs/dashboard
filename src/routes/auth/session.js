@@ -1,5 +1,5 @@
-import { auth, firestore } from "../../services/firebase.js";
-import { getSettings } from "../../services/settings.js";
+import { auth, firestore } from "@services/firebase.js";
+import { getSettings } from "@services/settings.js";
 
 // references
 // https://firebase.google.com/docs/auth/admin/manage-cookies

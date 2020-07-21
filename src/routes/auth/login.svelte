@@ -7,7 +7,7 @@
 
 
 <script>
-  import FirebaseProvider from "../../providers/FirebaseProvider.svelte";
+  import FirebaseProvider from "@providers/FirebaseProvider.svelte";
   import GoogleButton from "./_GoogleButton.svelte";
   import GoogleSignIn from "./_GoogleSignIn.svelte";
 

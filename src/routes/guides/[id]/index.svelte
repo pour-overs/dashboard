@@ -14,10 +14,10 @@
 </script>
 
 <script>
-  import DateTime from "../../components/DateTime.svelte";
-  import Collapsible from "../../components/Collapsible.svelte";
+  import DateTime from "@components/DateTime.svelte";
+  import Collapsible from "@components/Collapsible.svelte";
 
-  import { notify } from "../../stores/notifications.js";
+  import { notify } from "@stores/notifications.js";
 
   export let guide = null;
 

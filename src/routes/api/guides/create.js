@@ -1,4 +1,4 @@
-import { createGuide } from "../../../services/guides.js";
+import { createGuide } from "@services/guides.js";
 
 /**
  * @param {IncomingMessage} req
