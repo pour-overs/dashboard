@@ -204,6 +204,7 @@
       <h2 slot="title">Steps</h2>
       <section class="form-group" slot="content">
         <p>There are {guide.steps ? guide.steps : 0} steps.</p>
+        <a href={`/guides/${guide.id}/steps`}>Edit Steps</a>
       </section>
     </Collapsible>
 

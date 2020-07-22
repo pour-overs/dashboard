@@ -1,4 +1,5 @@
 <script>
+  // https://material.io/resources/icons/
   export let name;
 </script>
 
