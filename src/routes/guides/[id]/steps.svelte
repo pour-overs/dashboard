@@ -5,6 +5,7 @@
       credentials: "include",
       method: "GET"
     });
+
     if (response.ok) {
       const guide = await response.json();
 
@@ -19,13 +20,16 @@
   import { flip } from 'svelte/animate';
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
+  import { createEventDispatcher } from "svelte";
+  import { saveGuide } from "./_guides.js";
+  import { notify } from "@stores/notifications.js";
+
+  const dispatch = createEventDispatcher();
 
   export let guide;
   export let steps = guide.steps || [];
 
-  addEmptyStep();
-  addEmptyStep();
-  addEmptyStep();
+  let hasChanged = false;
 
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
@@ -49,6 +53,7 @@
     if (steps.length < 100) {
       const step = createStep(steps.length);
       steps = [...steps, step];
+      hasChanged = true;
     }
   }
 
@@ -61,7 +66,7 @@
       dose: 0,
       duration: 1,
       drainDuration: 0,
-      pour: "continious", // pulse|continuous
+      pour: "continuous", // pulse|continuous
     };
   }
 
@@ -79,12 +84,20 @@
         if (a.order < b.order) return -1;
         if (b.order < a.order) return 1;
       });
+
+      hasChanged = true;
   }
 
   function onStepChanged(e) {
     const step = e.detail;
     const  { id } = steps[step.order];
     steps[step.order] = { id, ...step };
+    hasChanged = true;
+  }
+
+  async function saveChanges() {
+    await saveGuide(guide.id, { steps });
+    notify(`${guide.title}'s steps have been saved.`, 2000);
   }
 
 </script>
@@ -110,8 +123,11 @@
   }
 </style>
 
+<h1>Edit Steps for <strong>{guide.title}</strong></h1>
+
 <header class="actions">
-  <a href={`/guides/${guide.id}`}>Return to {guide.title}</a>
+  <a href={`/guides/${guide.id}`}>Return to editing <strong>{guide.title}</strong>'s details</a>
+  <button type="button" disabled={!hasChanged} on:click={saveChanges}>Save Changes</button>
   <button type="button" on:click={addEmptyStep}>Add Step</button>
 </header>
 
@@ -123,6 +139,10 @@
       animate:flip={{ duration: 500 }}
     >
       <Step {...step} max={steps.length - 1} on:move={onMove} on:change={onStepChanged} />
+    </li>
+  {:else}
+    <li>
+      <p>There are no steps.</p>
     </li>
   {/each}
 </ol>

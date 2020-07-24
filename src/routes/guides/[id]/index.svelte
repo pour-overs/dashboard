@@ -18,6 +18,7 @@
   import Collapsible from "@components/Collapsible.svelte";
 
   import { notify } from "@stores/notifications.js";
+  import { saveGuide } from "./_guides.js";
 
   export let guide = null;
 
@@ -41,42 +42,31 @@
     }
   };
 
-  async function save(e) {
-    console.log("Save form with:", form);
+  async function save() {
+
     formDisabled = true;
-    notify("Saving...", null);
-
-    const response = await fetch(`/api/guides/${guide.id}`, {
-      credentials: "include",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
-
+    const result = await saveGuide(guide.id, form);
     formDisabled = false;
 
-    if (!response.ok) {
-      console.error(response);
-      notify(`A network error occurred.`, 6000);
-      return;
+    // if it was successfully saved, no new changes exist
+    if (result !== null) {
+      hasChanged = false;
     }
-
-    const writeResult = await response.json();
-    hasChanged = false;
   }
 
   async function saveHandler(e) {
     await save();
-    notify(`"${form.title}" was saved.`, 5000);
   }
 
-  function togglePublished(e) {
+  async function togglePublished(e) {
+
     form.isPublished = !form.isPublished;
-    save(e);
-    const state = form.isPublished ? "was published" : "has been unpublished";
-    notify(`"${form.title}" ${state}.`, null);
+    const result = await save();
+
+    if (result !== null ) {
+      const state = form.isPublished ? "was published" : "has been unpublished";
+      notify(`"${form.title}" ${state}.`, null);
+    }
   }
 
   function hasFormChanged() {
