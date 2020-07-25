@@ -48,26 +48,24 @@
 
 <style>
 
-  table {
-    width: 100%;
-    border: 1px solid #ddd;
-    margin: 1em auto;
+  .guides {
+
   }
 
-  thead th {
-    border-bottom: 1px solid #ddd;
-    padding: 0.5em 0;
-  }
-
-  tr.empty {
-    text-align: center;
-    color: #888;
-  }
-
-  .actions {
-    width: 100%;
+  .guide-card {
+    border: 1px solid #eee;
     padding: 1em 1em;
-    text-align: right;
+    margin: 1em 0;
+    max-width: 32em;
+    display: block;
+  }
+
+  .guide-card:hover {
+    border: 1px solid var(--color4);
+  }
+
+  .guide-card .title {
+    font-weight: 600;
   }
 
 </style>
@@ -80,6 +78,23 @@
 
 <p>Lists all Pour Over Guides.</p>
 
+<div class="guides">
+  {#each guides as guide}
+    <a class="guide-card" href={`/guides/${guide.id}`}>
+      <h2 class="title">{guide.title}</h2>
+      <p>{guide.introduction.content ? guide.introduction.content : "No introduction written."}</p>
+      <p>
+        <strong>URL:</strong> {guide.slug ? guide.slug : "not set"}
+      </p>
+      <p>
+        <strong>Steps:</strong> {guide.steps ? guide.steps.map(s => s.title).join(", ") : "None."}
+      </p>
+    </a>
+  {:else}
+    <p>There are no guides yet.</p>
+  {/each}
+</div>
+<!--
 <table>
   <thead>
     <tr>
@@ -99,7 +114,7 @@
         <td>{guide.slug ? guide.slug : "—"}</td>
         <td>—</td>
         <td>{guide.isPublished ? "yes" : "no"}</td>
-        <td>{guide.steps ? guide.steps : "—"}</td>
+        <td>{guide.steps ? guide.steps.map(s => s.title).join(", ") : "—"}</td>
         <td>
           <a href={`/guides/${guide.id}`}>Edit</a>
         </td>
@@ -113,4 +128,4 @@
     {/each}
   </tbody>
 
-</table>
+</table> -->
