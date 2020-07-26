@@ -1,5 +1,6 @@
 <script>
   import Icon from "@components/Icon.svelte";
+  import Collapsible from "@components/Collapsible.svelte";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -23,6 +24,10 @@
     dispatch("move", { previous: order, next: order + 1 });
   }
 
+  function deleteStep() {
+    dispatch("delete", { id });
+  }
+
   function saveChanges() {
     dispatch("change", {
       order,
@@ -38,16 +43,13 @@
 
 <style>
   .step {
-    border: 1px solid #eee;
     margin-bottom: 1em;
   }
 
   .step-title {
-    background-color: #f2f2f2;
     font-weight: 600;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #eee;
     width: 100%;
   }
 
@@ -56,7 +58,8 @@
   }
 
   .step-body {
-    padding: 1em 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .orderer {
@@ -71,6 +74,11 @@
     background: transparent;
     cursor: pointer;
     padding: 0.25em 0.25em;
+    color: var(--color4);
+  }
+
+  .orderer button[disabled] {
+    opacity: 0.5;
   }
 
   .orderer button[disabled]:hover {
@@ -85,115 +93,149 @@
   label {
     display: block;
     margin-top: 0.5em;
+    padding: 0.5em 0.5em 0.5em 0;
+  }
+
+  textarea,
+  input,
+  select {
+    display: block;
+    width: 100%;
+    padding: 0.25em 0.25em;
+    resize: vertical;
+  }
+
+  footer {
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    padding: 0.25em 0.5em;
   }
 
   .help {
     width: auto;
-    color: #fff;
     font-size: 0.8em;
     padding: 0.25em 0.5em;
-    background-color: var(--color1);
-    width: auto;
-    display: none;
+    background-color: var(--color3);
+    color: var(--color1);
+    display: block;
     border-radius: 3px;
+    margin: auto 1em;
   }
 
-  .show-help .help {
+  .measurement {
     display: inline-block;
+    background-color: var(--color3);
+    font-size: 0.75em;
+    padding: 0.25em 0.5em;
+    border-radius: 6px;
+    color: #888;
+    margin: auto 0.5rem;
   }
 </style>
 
 <div class="step" data-id={id}>
-  <header class="step-title">
-    <div class="orderer">
-      <button type="button" on:click={moveUp} disabled={order === 0}>
-        <Icon name="keyboard_arrow_up" />
-      </button>
+  <Collapsible padded={false}>
 
-      <button type="button" on:click={moveDown} disabled={order === max}>
-        <Icon name="keyboard_arrow_down" />
-      </button>
+    <header class="step-title" slot="title">
+      <div class="orderer">
+        <button type="button" on:click={moveUp} disabled={order === 0}>
+          <Icon name="keyboard_arrow_up" />
+        </button>
+
+        <button type="button" on:click={moveDown} disabled={order === max}>
+          <Icon name="keyboard_arrow_down" />
+        </button>
+      </div>
+
+      <h3>{title}</h3>
+
+    </header>
+    <div slot="content">
+
+      <footer>
+        <button type="button" on:click={deleteStep}>Delete Step</button>
+      </footer>
+
+      <form on:change={saveChanges} on:submit={saveChanges} class="step-body">
+
+        <label>
+          Order
+          <input type="number" name="order" disabled value={order} />
+        </label>
+        <p class="help">
+          When this step should take place. Starts counting at 0.
+        </p>
+
+        <label>
+          Title
+          <input bind:value={title} type="text" name="title" />
+        </label>
+        <p class="help">The name of this step.</p>
+
+        <label>
+          Instruction
+          <textarea bind:value={description} name="description" rows="5" />
+        </label>
+        <p class="help">
+          A sentence or two of what the user should do during this step.
+        </p>
+
+        <label>
+          Dose
+          <span class="measurement">grams</span>
+          <input bind:value={dose} type="number" name="dose" placeholder="" />
+        </label>
+        <p class="help">
+          The total amount of water poured during this step, in grams.
+        </p>
+
+        <label>
+          Duration
+          <span class="measurement">seconds</span>
+          <input
+            type="number"
+            bind:value={duration}
+            name="duration"
+            placeholder="10"
+            min="1" />
+        </label>
+        <p class="help">The amount of time the dose should be poured for.</p>
+
+        <label>
+          Drain Duration
+          <span class="measurement">seconds</span>
+          <input
+            bind:value={drainDuration}
+            type="number"
+            name="drainDuration"
+            placeholder="10"
+            min="0"
+            max="36000" />
+        </label>
+        <p class="help">
+          The amount of time to allow the pour to drain before the next step.
+        </p>
+
+        <label>
+          Pour Technique
+          <select name="pour" bind:value={pour}>
+            <option disabled="disabled" selected>Select a Pour Style</option>
+            <option value="continuous">Continuous</option>
+            <option value="pulse">Pulse</option>
+          </select>
+        </label>
+        <p class="help">
+          The technique or style that the water should be poured with.
+          <br />
+          <strong>Continuous</strong>
+          means the pour was performed until the dose was reached, while
+          <strong>pulse</strong>
+          means to cycle between short pauses and pours.
+        </p>
+
+      </form>
     </div>
 
-    <h3>{title}</h3>
-    <button>Delete (todo)</button>
-
-  </header>
-
-  <form
-    on:change={saveChanges}
-    on:submit={saveChanges}
-    class="step-body"
-    class:show-help={order === 0}>
-    <label>
-      Order
-      <input type="number" name="order" disabled value={order} />
-    </label>
-    <p class="help">When this step should take place. Starts at 0.</p>
-
-    <label>
-      Title
-      <input bind:value={title} type="text" name="title" />
-    </label>
-    <p class="help">The name of this step.</p>
-
-    <label>
-      Instruction
-      <input bind:value={description} type="text" name="description" />
-    </label>
-    <p class="help">
-      A sentence or two of what the user should do during this step.
-    </p>
-
-    <label>
-      Dose
-      <input bind:value={dose} type="number" name="dose" placeholder="" />
-    </label>
-    <p class="help">
-      The total amount of water poured during this step, in grams.
-    </p>
-
-    <label>
-      Duration
-      <input
-        type="number"
-        bind:value={duration}
-        name="duration"
-        placeholder="10"
-        min="1" />
-    </label>
-    <p class="help">The amount of time the dose should be poured for.</p>
-
-    <label>
-      Drain Duration
-      <input
-        bind:value={drainDuration}
-        type="number"
-        name="drainDuration"
-        placeholder="10"
-        min="0"
-        max="36000" />
-    </label>
-    <p class="help">
-      The amount of time to allow the pour to drain before the next step.
-    </p>
-
-    <label>
-      Pour Technique
-      <select name="pour" bind:value={pour}>
-        <option disabled="disabled" selected>Select a Pour Style</option>
-        <option value="continuous">Continuous</option>
-        <option value="pulse">Pulse</option>
-      </select>
-    </label>
-    <p class="help">
-      The technique or style that the water should be poured with.
-      <strong>Continuous</strong>
-      means the pour was done until the dose was reached, while
-      <strong>pulse</strong>
-      means to have short pauses and pours.
-    </p>
-
-  </form>
+  </Collapsible>
 
 </div>

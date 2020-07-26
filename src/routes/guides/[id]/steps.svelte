@@ -21,7 +21,7 @@
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
   import { createEventDispatcher } from "svelte";
-  import { saveGuide } from "./_guides.js";
+  import { saveGuide, createStep } from "./_guides.js";
   import { notify } from "@stores/notifications.js";
 
   const dispatch = createEventDispatcher();
@@ -57,18 +57,6 @@
     }
   }
 
-  function createStep(order) {
-    return {
-      id: order,
-      title: `Step ${order + 1}`,
-      order,
-      description: "",
-      dose: 0,
-      duration: 1,
-      drainDuration: 0,
-      pour: "continuous", // pulse|continuous
-    };
-  }
 
   function onMove(e) {
     const { next, previous } = e.detail;
@@ -88,6 +76,16 @@
       hasChanged = true;
   }
 
+  async function deleteStep(e) {
+    const { id } = e.detail;
+
+    steps = steps.filter(step => step.id !== id);
+    hasChanged = true;
+    // await saveGuide(guide.id, { steps });
+    // hasChanged = false;
+    notify(`Step removed.`, 2000);
+  }
+
   function onStepChanged(e) {
     const step = e.detail;
     const  { id } = steps[step.order];
@@ -98,6 +96,7 @@
   async function saveChanges() {
     await saveGuide(guide.id, { steps });
     notify(`${guide.title}'s steps have been saved.`, 2000);
+    hasChanged = false;
   }
 
 </script>
@@ -123,7 +122,7 @@
   }
 </style>
 
-<h1>Edit Steps for <strong>{guide.title}</strong></h1>
+<h1>Edit steps for <strong>{guide.title}</strong>{hasChanged ? "*" : ""}</h1>
 
 <header class="actions">
   <a href={`/guides/${guide.id}`}>Return to editing <strong>{guide.title}</strong>'s details</a>
@@ -138,7 +137,7 @@
       out:send={{key: step.id}}
       animate:flip={{ duration: 500 }}
     >
-      <Step {...step} max={steps.length - 1} on:move={onMove} on:change={onStepChanged} />
+      <Step {...step} max={steps.length - 1} on:move={onMove} on:delete={deleteStep} on:change={onStepChanged} />
     </li>
   {:else}
     <li>

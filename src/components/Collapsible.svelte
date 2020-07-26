@@ -3,6 +3,7 @@
   import Icon from "./Icon.svelte";
 
   export let collapsed = true;
+  export let padded = true;
 
   function toggle() {
     collapsed = !collapsed;
@@ -15,7 +16,6 @@
 <style>
 
   .collapsible {
-    padding: 0.25em 0.5em;
     border: 1px solid #eee;
     border-radius: 3px;
     margin-bottom: 0.5em;
@@ -26,6 +26,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+  }
+
+  .padded {
     padding: 0.5em 1em;
     margin: -0.25em -0.5em -0.25em -0.5em;
   }
@@ -45,7 +49,7 @@
 </style>
 
 <section class="collapsible">
-  <header class="title" class:open={!collapsed} on:click={toggle}>
+  <header class="title" class:open={!collapsed} on:click={toggle} class:padded >
     <slot name="title" />
     <Icon name={icon} />
   </header>

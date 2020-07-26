@@ -94,38 +94,3 @@
     <p>There are no guides yet.</p>
   {/each}
 </div>
-<!--
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Slug</th>
-      <th>Author</th>
-      <th>Published</th>
-      <th>Steps</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    {#each guides as guide}
-      <tr>
-        <td>{guide.title}</td>
-        <td>{guide.slug ? guide.slug : "—"}</td>
-        <td>—</td>
-        <td>{guide.isPublished ? "yes" : "no"}</td>
-        <td>{guide.steps ? guide.steps.map(s => s.title).join(", ") : "—"}</td>
-        <td>
-          <a href={`/guides/${guide.id}`}>Edit</a>
-        </td>
-      </tr>
-    {:else}
-      <tr class="empty">
-        <td colspan="6">
-          <p>There aren't any guides yet.</p>
-        </td>
-      </tr>
-    {/each}
-  </tbody>
-
-</table> -->

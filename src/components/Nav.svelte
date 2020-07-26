@@ -52,7 +52,9 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
 
-  a {
+  .nav-items a {
+    color: var(--nav-color);
+    font-weight: 200;
     text-decoration: none;
     padding: 0.5em 1em;
     display: block;
@@ -61,8 +63,9 @@
     cursor: pointer;
   }
 
-  a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  .nav-items a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--nav-color);
   }
 </style>
 
