@@ -121,16 +121,6 @@
     border-radius: 3px;
     margin: auto 1em;
   }
-
-  .measurement {
-    display: inline-block;
-    background-color: var(--color3);
-    font-size: 0.75em;
-    padding: 0.25em 0.5em;
-    border-radius: 6px;
-    color: #888;
-    margin: auto 0.5rem;
-  }
 </style>
 
 <div class="step" data-id={id}>
@@ -138,11 +128,11 @@
 
     <header class="step-title" slot="title">
       <div class="orderer">
-        <button type="button" on:click={moveUp} disabled={order === 0}>
+        <button type="button" on:click|preventDefault|stopPropagation={moveUp} disabled={order === 0}>
           <Icon name="keyboard_arrow_up" />
         </button>
 
-        <button type="button" on:click={moveDown} disabled={order === max}>
+        <button type="button" on:click|preventDefault|stopPropagation={moveDown} disabled={order === max}>
           <Icon name="keyboard_arrow_down" />
         </button>
       </div>

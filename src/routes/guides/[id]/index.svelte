@@ -14,6 +14,7 @@
 </script>
 
 <script>
+  import PageTitle from "@components/PageTitle.svelte";
   import DateTime from "@components/DateTime.svelte";
   import Collapsible from "@components/Collapsible.svelte";
 
@@ -107,7 +108,6 @@
   }
 
   .title {
-    display: block;
     font-weight: 600;
   }
 
@@ -116,12 +116,19 @@
     font-size: 0.8em;
     margin: 1em 0;
   }
+
+  .warning {
+    font-size: 0.75;
+    background-color: var(--color5);
+    padding: 0.25em 0.5em;
+    margin: 0 1em;
+    border-radius: 6px;
+  }
 </style>
 
-<h1>
-  Edit
-  <span class="title">{form.title}</span>
-</h1>
+<PageTitle title={`Edit "${form.title}"${hasChanged ? "*" : ""}`}>
+  Edit <span class="title">{form.title}</span>{hasChanged ? "*" : ""}
+</PageTitle>
 
 <Collapsible>
 
@@ -153,7 +160,6 @@
   disabled={formDisabled}>
 
   <div class="form-content">
-
     <Collapsible collapsed={false} >
       <h2 slot="title">Meta</h2>
 
@@ -191,7 +197,7 @@
       </section>
     </Collapsible>
     <Collapsible  collapsed={guide.steps.length === 0}>
-      <h2 slot="title">Steps</h2>
+      <h2 slot="title">Coffee & Steps</h2>
       <section class="form-group" slot="content">
         <p>There are {guide.steps.length} steps.</p>
         {#if guide.steps.length > 0}
@@ -202,7 +208,11 @@
           </ol>
 
         {/if}
-        <a href={`/guides/${guide.id}/steps`}>Edit Steps</a>
+
+        <a href={`/guides/${guide.id}/steps`}>Edit Coffee and Steps</a>
+        {#if hasChanged}
+          <span class="warning">You have unsaved changes</span>
+        {/if}
       </section>
     </Collapsible>
 

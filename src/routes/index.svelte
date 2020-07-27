@@ -1,14 +1,11 @@
 <script>
 	import { title } from "../config/app.config.js";
+	import PageTitle from "@components/PageTitle.svelte";
 </script>
 <style>
 </style>
 
-<svelte:head>
-	<title>{title}</title>
-</svelte:head>
-
-<h1>{title}</h1>
+<PageTitle {title}>{title}</PageTitle>
 
 <p>
 	I'm baby disrupt knausgaard whatever banh mi pitchfork, roof party irony mixtape. Unicorn try-hard photo booth salvia, cray freegan hot chicken offal venmo locavore cloud bread cliche street art twee. Sartorial craft beer humblebrag, next level cardigan flexitarian tacos fixie banjo echo park typewriter shabby chic hexagon portland fam. Enamel pin banh mi hella, cronut glossier echo park wayfarers swag heirloom squid pork belly marfa. Artisan franzen vinyl bicycle rights distillery cornhole. Jean shorts photo booth cardigan craft beer.

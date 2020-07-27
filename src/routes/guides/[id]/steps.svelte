@@ -16,6 +16,7 @@
 
 <script>
   import Collapsible from "@components/Collapsible.svelte";
+  import PageTitle from "@components/PageTitle.svelte";
   import Icon from "@components/Icon.svelte";
   import Step from "./_step.svelte";
   import Summary from "./_summary.svelte";
@@ -24,13 +25,14 @@
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
   import { createEventDispatcher } from "svelte";
-  import { saveGuide, createStep } from "./_guides.js";
+  import { saveGuide, createStep, finenessOptions } from "./_guides.js";
   import { notify } from "@stores/notifications.js";
 
   const dispatch = createEventDispatcher();
 
   export let guide;
-  export let steps = guide.steps || [];
+  let steps = guide.steps || [];
+  let coffee = guide.coffee || {};
 
   let hasChanged = false;
 
@@ -59,7 +61,6 @@
       hasChanged = true;
     }
   }
-
 
   function onMove(e) {
     const { next, previous } = e.detail;
@@ -97,7 +98,7 @@
   }
 
   async function saveChanges() {
-    await saveGuide(guide.id, { steps });
+    await saveGuide(guide.id, { steps, coffee });
     notify(`${guide.title}'s steps have been saved.`, 2000);
     hasChanged = false;
   }
@@ -123,15 +124,68 @@
     margin-bottom: 2em;
     background-color: #fff;
   }
+
+  .coffee-form select,
+  .coffee-form input,
+  .coffee-form textarea {
+    display: block;
+    width: 100%;
+  }
+
+  .coffee-form label {
+    display: block;
+    margin-bottom: 1em;
+  }
 </style>
 
-<h1>Edit steps for <strong>{guide.title}</strong>{hasChanged ? "*" : ""}</h1>
+<PageTitle title={`Edit steps for ${guide.title}${hasChanged ? "*" : ""}`}>
+  Edit steps for <strong>{guide.title}</strong>{hasChanged ? "*" : ""}
+</PageTitle>
 
 <header class="actions">
   <a href={`/guides/${guide.id}`}>Return to editing <strong>{guide.title}</strong>'s details</a>
   <button type="button" disabled={!hasChanged} on:click={saveChanges}>Save Changes</button>
   <button type="button" on:click={addEmptyStep}>Add Step</button>
 </header>
+
+<Collapsible collapsed={false}>
+  <h3 slot="title">Coffee</h3>
+  <div slot="content">
+    <form class="coffee-form"
+      on:change={saveChanges}
+      on:input={saveChanges}
+      on:submit={saveChanges}
+     >
+      <label>
+        Amount <span class="measurement">grams</span>
+        <input type="number" name="amount" />
+      </label>
+
+      <label>
+        Grind <span class="measurement">fineness</span>
+        <select name="">
+          {#each finenessOptions as option}
+            <option value={option}>{option}</option>
+          {/each}
+        </select>
+      </label>
+
+      <label>
+        Device
+        <input type="text" name="device" placeholder="Hario V60" />
+      </label>
+
+    </form>
+
+  </div>
+</Collapsible>
+
+<Collapsible collapsed={false}>
+  <h3 slot="title">Summary</h3>
+  <div slot="content">
+    <Summary steps={steps} />
+  </div>
+</Collapsible>
 
 <ol class="steps">
   {#each steps as step (step.id)}
@@ -148,12 +202,3 @@
     </li>
   {/each}
 </ol>
-
-<div class="step">
-  <Collapsible collapsed={false}>
-    <h3 slot="title">Summary</h3>
-    <div slot="content">
-      <Summary steps={steps} />
-    </div>
-  </Collapsible>
-</div>

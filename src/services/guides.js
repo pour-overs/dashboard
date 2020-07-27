@@ -106,5 +106,10 @@ function _createGuide(userId) {
       heroImg: "",
     },
     steps: [],
+    coffee: {
+      amount: 0,
+      grind: "",
+      device: ""
+    }
   }
 }

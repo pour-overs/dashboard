@@ -53,3 +53,9 @@ export function createStep(order) {
     pour: "continuous", // pulse|continuous
   };
 }
+
+export const finenessOptions = [
+  "coarse",
+  "fine",
+  "very fine"
+];

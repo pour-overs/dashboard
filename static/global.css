@@ -87,3 +87,13 @@ code {
     font-size: 16px;
   }
 }
+
+.measurement {
+  display: inline-block;
+  background-color: var(--color3);
+  font-size: 0.75em;
+  padding: 0.25em 0.5em;
+  border-radius: 6px;
+  color: #888;
+  margin: auto 0.5rem;
+}

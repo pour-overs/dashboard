@@ -16,6 +16,8 @@
 </script>
 
 <script>
+
+  import PageTitle from "@components/PageTitle.svelte";
   export let users = [];
   export let whitelist = [];
   export let pageToken = null;
@@ -130,7 +132,7 @@
   }
 </style>
 
-<h1>Users</h1>
+<PageTitle title="Users">Users</PageTitle>
 
 <p>The list of users who have authenticated with the dashboard.</p>
 

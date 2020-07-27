@@ -1,7 +1,7 @@
-<svelte:head>
-	<title>About</title>
-</svelte:head>
+<script>
+	import PageTitle from "@components/PageTitle.svelte";
+</script>
 
-<h1>About this site</h1>
+<PageTitle title="About">About</PageTitle>
 
 <p>This is the 'about' page. There's not much here.</p>
