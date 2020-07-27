@@ -28,7 +28,7 @@
     dispatch("delete", { id });
   }
 
-  function saveChanges() {
+  function changed() {
     dispatch("change", {
       order,
       title,
@@ -51,6 +51,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    padding-right: 1em;
   }
 
   .step-title h3 {
@@ -106,7 +107,6 @@
   }
 
   footer {
-    border-bottom: 1px solid #eee;
     text-align: right;
     padding: 0.25em 0.5em;
   }
@@ -156,7 +156,7 @@
         <button type="button" on:click={deleteStep}>Delete Step</button>
       </footer>
 
-      <form on:change={saveChanges} on:submit={saveChanges} class="step-body">
+      <form on:change={changed} on:submit={changed} on:input={changed} class="step-body">
 
         <label>
           Order

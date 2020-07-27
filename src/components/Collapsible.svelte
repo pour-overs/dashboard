@@ -31,7 +31,6 @@
 
   .padded {
     padding: 0.5em 1em;
-    margin: -0.25em -0.5em -0.25em -0.5em;
   }
 
   .title.open {

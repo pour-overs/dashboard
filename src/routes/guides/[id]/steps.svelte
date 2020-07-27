@@ -15,8 +15,11 @@
 </script>
 
 <script>
+  import Collapsible from "@components/Collapsible.svelte";
   import Icon from "@components/Icon.svelte";
   import Step from "./_step.svelte";
+  import Summary from "./_summary.svelte";
+
   import { flip } from 'svelte/animate';
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
@@ -135,7 +138,7 @@
     <li class="step"
       in:receive={{key: step.id}}
       out:send={{key: step.id}}
-      animate:flip={{ duration: 500 }}
+      animate:flip|local={{ duration: 500 }}
     >
       <Step {...step} max={steps.length - 1} on:move={onMove} on:delete={deleteStep} on:change={onStepChanged} />
     </li>
@@ -145,3 +148,12 @@
     </li>
   {/each}
 </ol>
+
+<div class="step">
+  <Collapsible collapsed={false}>
+    <h3 slot="title">Summary</h3>
+    <div slot="content">
+      <Summary steps={steps} />
+    </div>
+  </Collapsible>
+</div>
