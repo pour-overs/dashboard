@@ -25,14 +25,18 @@
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
   import { createEventDispatcher } from "svelte";
-  import { saveGuide, createStep, finenessOptions } from "./_guides.js";
+  import { saveGuide, createStep, grindOptions } from "./_guides.js";
   import { notify } from "@stores/notifications.js";
 
   const dispatch = createEventDispatcher();
 
   export let guide;
   let steps = guide.steps || [];
-  let coffee = guide.coffee || {};
+  let coffee = guide.coffee || {
+    amount: 0,
+    grind: grindOptions[0],
+    device: "",
+  };
 
   let hasChanged = false;
 
@@ -88,6 +92,10 @@
     // await saveGuide(guide.id, { steps });
     // hasChanged = false;
     notify(`Step removed.`, 2000);
+  }
+
+  function onCoffeeChanged() {
+    hasChanged = true;
   }
 
   function onStepChanged(e) {
@@ -152,19 +160,19 @@
   <h3 slot="title">Coffee</h3>
   <div slot="content">
     <form class="coffee-form"
-      on:change={saveChanges}
-      on:input={saveChanges}
+      on:change={onCoffeeChanged}
+      on:input={onCoffeeChanged}
       on:submit={saveChanges}
      >
       <label>
         Amount <span class="measurement">grams</span>
-        <input type="number" name="amount" />
+        <input type="number" name="amount" bind:value={coffee.amount} />
       </label>
 
       <label>
         Grind <span class="measurement">fineness</span>
-        <select name="">
-          {#each finenessOptions as option}
+        <select name="grind" bind:value={coffee.grind}>
+          {#each grindOptions as option}
             <option value={option}>{option}</option>
           {/each}
         </select>
@@ -172,7 +180,7 @@
 
       <label>
         Device
-        <input type="text" name="device" placeholder="Hario V60" />
+        <input type="text" name="device" placeholder="Hario V60" bind:value={coffee.device} />
       </label>
 
     </form>

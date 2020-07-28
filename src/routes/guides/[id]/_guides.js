@@ -54,7 +54,7 @@ export function createStep(order) {
   };
 }
 
-export const finenessOptions = [
+export const grindOptions = [
   "coarse",
   "fine",
   "very fine"
