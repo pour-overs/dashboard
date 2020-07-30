@@ -123,6 +123,7 @@
   .actions {
     position: sticky;
     top: 0rem;
+    z-index: 2;
     display: flex;
     width: 100%;
     justify-content: space-between;
