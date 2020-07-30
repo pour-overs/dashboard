@@ -128,9 +128,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 1em 1em;
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     margin-bottom: 2em;
-    background-color: #fff;
+    background-color: var(--body-bg);
   }
 
   .coffee-form select,

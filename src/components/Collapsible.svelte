@@ -16,7 +16,7 @@
 <style>
 
   .collapsible {
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     border-radius: 3px;
     margin-bottom: 0.5em;
   }
@@ -35,7 +35,7 @@
   }
 
   .title.open {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .title:hover {

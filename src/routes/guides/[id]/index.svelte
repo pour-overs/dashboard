@@ -99,11 +99,11 @@
     grid-column-gap: 0.5em;
     position: sticky;
     padding: 1em 1em;
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     margin: 1em auto;
     bottom: 0px;
     left: 0px;
-    background-color: #fff;
+    background-color: var(--body-bg);
     border-radius: 3px;
   }
 

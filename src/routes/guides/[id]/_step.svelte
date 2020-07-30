@@ -93,8 +93,7 @@
 
   label {
     display: block;
-    margin-top: 0.5em;
-    padding: 0.5em 0.5em 0.5em 0;
+    padding:  0em 0.5em 1em 0;
   }
 
   textarea,
@@ -119,7 +118,7 @@
     color: var(--color1);
     display: block;
     border-radius: 3px;
-    margin: auto 1em;
+    margin: 0 1em auto auto;
   }
 </style>
 
