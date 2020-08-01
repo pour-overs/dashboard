@@ -11,6 +11,7 @@
     padding: 0.5em 1.5em;
     background-color: #fafafa;
     border: 1px solid #bbb;
+    color: #444;
     border-radius: 3px;
     vertical-align: middle;
     display: flex;
