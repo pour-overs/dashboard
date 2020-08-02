@@ -192,7 +192,7 @@
 <Collapsible collapsed={false}>
   <h3 slot="title">Summary</h3>
   <div slot="content">
-    <Summary steps={steps} />
+    <Summary steps={steps} coffee={coffee} />
   </div>
 </Collapsible>
 

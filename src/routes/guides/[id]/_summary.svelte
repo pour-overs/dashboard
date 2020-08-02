@@ -1,5 +1,6 @@
 <script>
   export let steps = [];
+  export let coffee = { amount: 0, };
 
   $: totalTime = steps.reduce((t, s) => t + s.duration + s.drainDuration, 0);
   $: totalDose = steps.reduce((t, s) => t + s.dose, 0);
@@ -8,8 +9,7 @@
     minutes: Math.floor(totalTime / 60),
     seconds: totalTime % 60,
     get time() { return `${humanReadable.minutes}:${humanReadable.seconds}` },
-  }
-
+  };
 
 
 </script>

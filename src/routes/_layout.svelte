@@ -12,13 +12,13 @@
   import SidebarLayout from "./_SidebarLayout.svelte";
   import UserProvider from "@providers/UserProvider.svelte";
   import ThemeProvider from "@providers/ThemeProvider.svelte";
+  import IconProvider from "@providers/IconProvider.svelte";
 
   export let user = null;
   export let isAuthorized = false;
   export let segment;
 
   let isOnline = true;
-
 
   let wentOffline = false;
   $: if (!isOnline) {
@@ -40,19 +40,21 @@
   </main>
 {:else}
   <ThemeProvider>
-    <UserProvider {user} {isAuthorized}>
-      <SidebarLayout>
+    <IconProvider size="24" color="var(--body-color)">
+      <UserProvider {user} {isAuthorized}>
+        <SidebarLayout>
 
-        <nav slot="sidebar">
-          <Nav {segment} />
-        </nav>
+          <nav slot="sidebar">
+            <Nav {segment} />
+          </nav>
 
-        <main slot="content">
-          <slot />
-        </main>
+          <main slot="content">
+            <slot />
+          </main>
 
-      </SidebarLayout>
-    </UserProvider>
+        </SidebarLayout>
+      </UserProvider>
+    </IconProvider>
   </ThemeProvider>
 {/if}
 
