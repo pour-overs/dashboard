@@ -45,7 +45,9 @@ body {
   line-height: 1.5;
   color: var(--body-color);
   font-family: var(--font-body), Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
 
+body.theme--animating {
   transition: 0.8s ease-out color, 0.5s ease-out background, 0.2s ease-out border;
 }
 
