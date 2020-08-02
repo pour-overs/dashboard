@@ -6,6 +6,7 @@
 </script>
 
 <script>
+  import { notify } from "@stores/notifications.js";
   import Nav from "@components/Nav.svelte";
   import Notifications from "@components/Notifications.svelte";
   import SidebarLayout from "./_SidebarLayout.svelte";
@@ -15,11 +16,23 @@
   export let user = null;
   export let isAuthorized = false;
   export let segment;
+
+  let isOnline = true;
+
+
+  let wentOffline = false;
+  $: if (!isOnline) {
+    wentOffline = true;
+    notify("You appear to be offline.", null);
+  }
+
+  $: if (isOnline && wentOffline) {
+    wentOffline = false;
+    notify("You're online again!");
+  }
 </script>
 
-<style>
-
-</style>
+<svelte:window bind:online={isOnline} />
 
 {#if !isAuthorized}
   <main>

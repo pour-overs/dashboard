@@ -2,157 +2,97 @@
   const fetchOptions = {
     credentials: "include"
   };
+
   export async function preload(page, session) {
 
-    // todo: perform fetches in parallel
-    const { users, pageToken } = await this.fetch(
+  }
+
+  export async function loadUsers(page, session) {
+    const { users, pageToken } = await fetch(
       "/api/users?page=",
       fetchOptions
     ).then(response => response.json());
 
-    const whitelist = await this.fetch("/api/whitelist", fetchOptions).then(response => response.json())
-    return { users, pageToken, whitelist };
+    return { users, pageToken };
+  }
+
+  export async function loadWhitelist(page, session) {
+    const whitelist = await fetch("/api/whitelist", fetchOptions).then(
+      response => response.json()
+    );
+    return whitelist;
   }
 </script>
 
 <script>
-
+  import { onMount } from "svelte";
+  import { Deferred } from "@utils";
   import PageTitle from "@components/PageTitle.svelte";
-  export let users = [];
-  export let whitelist = [];
-  export let pageToken = null;
-
-  let whitelistList = null;
-  let newWhitelistEmail = null;
-  let disableLoadMore = pageToken === null;
-  $: showLoadMore = pageToken !== null;
-  $: count = users.length;
-
-  let deletingRow = null;
-  let addingRow = false;
-
   import UserCard from "@components/UserCard.svelte";
+  import UserList from "./_userlist.svelte";
+  import Whitelist from "./_whitelist.svelte";
 
-  async function loadMore() {
-    disableLoadMore = true;
-    const usersResult = await fetch(
-      `/api/users?page=${pageToken}`,
-      fetchOptions
-    ).then(response => response.json());
+  let loadingUsers = new Deferred();
+  let loadingWhitelist = new Deferred();
 
-    pageToken = usersResult.pageToken || null;
-    disableLoadMore = pageToken === null;
-    users = [...users, ...usersResult.users];
+
+  onMount(async() => {
+
+    loadUsers()
+      .then(loadingUsers.resolve)
+      .catch(loadingUsers.reject);
+
+    loadWhitelist()
+      .then(loadingWhitelist.resolve)
+      .catch(loadingWhitelist.reject);
+  })
+
+  function reloadUsers() {
+    loadingUsers = new Deferred();
+
+    loadUsers()
+      .then(loadingUsers.resolve)
+      .catch(loadingUsers.reject);
   }
 
-  async function updateWhitelist(list) {
-    whitelist = await fetch("/api/whitelist", {
-      ...fetchOptions,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(list)
-    })
-      .then(response => response.json())
-      .catch(err => Promise.resolve(whitelist));
-  }
+  function reloadWhitelist() {
+    loadingWhitelist = new Deferred();
 
-  async function addWhitelistUser() {
-    const value = newWhitelistEmail.value.toLowerCase().trim();
-
-    if (value.length > 3 && !whitelist.includes(value)) {
-      addingRow = true;
-      newWhitelistEmail.disabled = true;
-      await updateWhitelist([...whitelist, value]);
-      newWhitelistEmail.value = "";
-      newWhitelistEmail.disabled = false;
-      addingRow = false;
-    }
-  }
-
-  async function removeWhiteListUser(email) {
-    deletingRow = email;
-    await updateWhitelist(whitelist.filter(a => a !== email));
-    deletingRow = null;
+    loadWhitelist()
+      .then(loadingWhitelist.resolve)
+      .catch(loadingWhitelist.reject);
   }
 </script>
 
 <style>
-  ul {
-    list-style: none;
-    padding: 0 0;
-    margin: 0 0;
-  }
-
-  .label {
-    color: #999;
-  }
-
-  .row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .row:hover {
-    background-color: #eee;
-  }
-
-  .whitelist .row {
-    padding: 0.25em 0.5em;
-  }
-
-  .whitelist.disabled {
-    cursor: not-allowed;
-    pointer-events: none;
-    opacity: 0.7;
-  }
-
-  .row.deleting {
-    background-color: #c44;
-    color: #fff;
-    border-radius: 3px;
-  }
-
-  .row.add-user-row {
-    border: 1px solid #d2d2d2;
-    border-radius: 3px;
-    padding: 1em 1em;
-    margin: 0.5em auto;
-  }
-
   hr {
     margin: 2em auto;
     height: 1px;
     max-width: 6em;
     border: none;
-    border-bottom: 1px double #eee;
+    border-bottom: 1px double var(--border-color);
+  }
+
+  .deferred-content {
+    min-height: 40vh;
+    overflow-y: scroll;
   }
 </style>
 
 <PageTitle title="Users">Users</PageTitle>
 
-<p>The list of users who have authenticated with the dashboard.</p>
+<div class="deferred-content">
 
-<p class="label">{count} user{count == 1 ? '' : 's'}</p>
-<ul>
-  {#each users as user (user.uid)}
-    <li class="row">
-      <UserCard {...user} picture={user.photoURL} name={user.displayName} />
-      <span class="user-email">{user.email}</span>
-    </li>
-  {:else}
-    <li class="empty">
-      There was a problem loading users. Please reload the page.
-    </li>
-  {/each}
-</ul>
-
-{#if showLoadMore}
-  <button on:click={loadMore} disabled={disableLoadMore}>Load More</button>
-{/if}
+  {#await loadingUsers.promise}
+    <p>Loading Users...</p>
+  {:then data}
+    <UserList {...data} />
+  {:catch error}
+    <p>
+      Unable to load users at this time. <button on:click={reloadUsers}>Retry</button>
+    </p>
+  {/await}
+</div>
 
 <hr />
 
@@ -160,25 +100,16 @@
 
 <p>This list determines which users can log into the dashboard.</p>
 
-<ul
-  class="whitelist"
-  bind:this={whitelistList}
-  class:disabled={deletingRow !== null || addingRow}>
-  <li class="row add-user-row">
-    <label>
-      Add to Whitelist
-      <input type="email" bind:this={newWhitelistEmail} />
-    </label>
+<div class="deferred-content">
 
-    <button type="button" on:click={addWhitelistUser}>Add</button>
+  {#await loadingWhitelist.promise}
+    <p>Loading...</p>
+  {:then whitelist}
+    <Whitelist {whitelist} />
+  {:catch error}
+    <p>
+      Unable to whitelist at this time. <button on:click={reloadWhitelist}>Retry</button>
+    </p>
+  {/await}
 
-  </li>
-  {#each whitelist as email}
-    <li class="row" class:deleting={deletingRow === email}>
-      <span>{email}</span>
-      <button on:click={() => removeWhiteListUser(email)}>Remove</button>
-    </li>
-  {:else}
-    <li class="empty">No whitelisted users.</li>
-  {/each}
-</ul>
+</div>
