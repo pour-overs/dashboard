@@ -32,6 +32,8 @@ body {
   --button-bg: var(--color1);
   --button-border: var(--button-bg);
   --button-bg--hover: var(--color1--dark);
+  --button-bg--disabled: #efefef;
+  --button-color--disabled: #888;
 
   --link-color: var(--color1);
   --link-color--hover: var(--color4);
@@ -63,13 +65,16 @@ body.theme--dark {
   --font-monospace: "Roboto Mono";
   --border-color: #1c3541;
   --button-color: #a9a9a9;
-  --button-bg: #000000;
+  --button-bg: #264353;
   --button-border: #000000;
-  --button-bg--hover: var(--color2);
+  --button-bg--hover: #2d4b5b;
   --link-color: #5b92aa;
   --link-color--hover: #3b9d8f;
   --label-bg: #000000;
   --label-color: #888;
+
+  --button-bg--disabled: #1b3441;
+  --button-color--disabled: #888;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -117,18 +122,26 @@ button {
   padding: 0.5em 1.5em;
   border-radius: 3px;
   cursor: pointer;
+  transform: scale(1);
+  transition: 0.1s ease-in all;
 }
 
-button:hover {
+button:not([disabled]):hover {
   background-color: var(--button-bg--hover);
   border: 1px solid var(--button-border);
+  transform: scale(1.02);
+
 }
 
 button[disabled] {
-  background-color: var(--color3);
-  border: 1px solid var(--color3);
-  color: #888;
+  background-color: var(--button-bg--disabled);
+  border: 1px solid transparent;
+  color: var(--button-color--disabled);
   cursor: not-allowed;
+}
+
+button:focus {
+  outline: 1px solid rgba(255,255,255,0.5);
 }
 
 code {

@@ -16,7 +16,7 @@
 <p>Additionally, being able to compare, contrast, and glean interesting information from different methods.</p>
 
 
-<h3>Potential Additions</h3>
+<h3>Potential Feature Additions</h3>
 
 <ul>
 	<li>
@@ -25,5 +25,6 @@
 	<li>
 		Image uploads
 	</li>
-	<li>"Sponsered" guides?</li>
+	<li>"Sponsered"/Official guides?</li>
+	<li>Attributions</li>
 </ul>
