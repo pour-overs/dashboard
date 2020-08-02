@@ -5,9 +5,7 @@
 
   import IconProvider from "@providers/IconProvider.svelte";
 
-  import EqualizerIcon from "@icons/EqualizerIcon.svelte";
-  import LibraryBooksIcon from "@icons/LibraryBooksIcon.svelte";
-  import RecentActorsIcon from "@icons/RecentActorsIcon.svelte";
+  import Icon from "@components/Icon.svelte";
 
   const user = getContext("user");
 
@@ -78,7 +76,7 @@
       <li>
         <a aria-current={segment === undefined ? 'page' : undefined} href=".">
           <span class="icon">
-            <EqualizerIcon />
+            <Icon name="equalizer" />
           </span>
           Dashboard
         </a>
@@ -88,7 +86,7 @@
           aria-current={segment === 'guides' ? 'page' : undefined}
           href="guides">
           <span class="icon">
-            <LibraryBooksIcon />
+            <Icon name="library_books" />
           </span>
           Guides
         </a>
@@ -96,7 +94,7 @@
       <li>
         <a aria-current={segment === 'users' ? 'page' : undefined} href="users">
           <span class="icon">
-            <RecentActorsIcon />
+            <Icon name="recent_actors" />
           </span>
           Users
         </a>
