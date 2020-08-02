@@ -32,6 +32,8 @@
     border-radius: 3px;
     margin: 0em 0em;
     cursor: pointer;
+    color: var(--body-color);
+    text-decoration: none;
   }
 
   .user-picture {
@@ -41,6 +43,7 @@
   }
 
   .user-card:hover {
+    color: var(--body-color);
     background-color: rgba(255,255,255,0.3);
   }
 

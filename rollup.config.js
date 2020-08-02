@@ -19,6 +19,7 @@ const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' && /
 const entries = [
   { find: "@routes", replacement: `${__dirname}/src/routes`},
   { find: "@components", replacement: `${__dirname}/src/components`},
+  { find: "@icons", replacement: `${__dirname}/src/icons`},
   { find: "@services", replacement: `${__dirname}/src/services`},
   { find: "@stores", replacement: `${__dirname}/src/stores`},
   { find: "@providers", replacement: `${__dirname}/src/providers`},

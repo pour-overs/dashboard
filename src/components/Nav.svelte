@@ -1,15 +1,18 @@
 <script>
   export let segment;
   import { getContext } from "svelte";
-  import UserCard from "./UserCard.svelte";
+  import UserCard from "@components/UserCard.svelte";
 
-  import IconProvider from "../providers/IconProvider.svelte";
+  import IconProvider from "@providers/IconProvider.svelte";
 
-  import EqualizerIcon from "../icons/EqualizerIcon.svelte";
-  import LibraryBooksIcon from "../icons/LibraryBooksIcon.svelte";
-  import RecentActorsIcon from "../icons/RecentActorsIcon.svelte";
+  import EqualizerIcon from "@icons/EqualizerIcon.svelte";
+  import LibraryBooksIcon from "@icons/LibraryBooksIcon.svelte";
+  import RecentActorsIcon from "@icons/RecentActorsIcon.svelte";
 
   const user = getContext("user");
+
+
+
 </script>
 
 <style>
@@ -69,7 +72,7 @@
   }
 </style>
 
-<IconProvider color="var(--color2)" size="16">
+<IconProvider color="var(--nav-icon-color)" size="16">
   <nav>
     <ul class="nav-items">
       <li>

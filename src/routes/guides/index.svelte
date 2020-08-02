@@ -22,7 +22,11 @@
 </script>
 
 <script>
+
+  import PageTitle from "@components/PageTitle.svelte";
+
   export let guides = [];
+
   console.log(guides);
 
   async function createGuide() {
@@ -49,48 +53,70 @@
 <style>
 
   .guides {
-
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
   }
 
   .guide-card {
     border: 1px solid #eee;
     padding: 1em 1em;
-    margin: 1em 0;
+    margin: 0 1em 1em 0;
     max-width: 32em;
     display: block;
+    color: var(--body-color);
+    text-decoration: none;
   }
 
   .guide-card:hover {
     border: 1px solid var(--color4);
+    color: var(--body-color);
   }
 
   .guide-card .title {
     font-weight: 600;
   }
 
+  .guide-layout {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: flex-start;
+  }
+
+  aside {
+    padding: 1em 1em;
+    position: sticky;
+    top: 0;
+    border: 1px solid var(--border-color);
+  }
+
 </style>
 
-<aside class="actions">
-  <button type="button" class="button-link" on:click={createGuide}>Create Guide</button>
-</aside>
+<PageTitle title="Guides">Guides</PageTitle>
 
-<h1>Guides</h1>
+<p>Listing all Pour Over Guides.</p>
 
-<p>Lists all Pour Over Guides.</p>
+<div class="guide-layout">
 
-<div class="guides">
-  {#each guides as guide}
-    <a class="guide-card" href={`/guides/${guide.id}`}>
-      <h2 class="title">{guide.title}</h2>
-      <p>{guide.introduction.content ? guide.introduction.content : "No introduction written."}</p>
-      <p>
-        <strong>URL:</strong> {guide.slug ? guide.slug : "not set"}
-      </p>
-      <p>
-        <strong>Steps:</strong> {guide.steps ? guide.steps.map(s => s.title).join(", ") : "None."}
-      </p>
-    </a>
-  {:else}
-    <p>There are no guides yet.</p>
-  {/each}
+  <div class="guides">
+    {#each guides as guide}
+      <a class="guide-card" href={`/guides/${guide.id}`}>
+        <h2 class="title">{guide.title}</h2>
+        <p>{guide.introduction.content ? guide.introduction.content : "No introduction written."}</p>
+        <p>
+          <strong>URL:</strong> {guide.slug ? guide.slug : "not set"}
+        </p>
+        <p>
+          <strong>Steps:</strong> {guide.steps ? guide.steps.map(s => s.title).join(", ") : "None."}
+        </p>
+      </a>
+    {:else}
+      <p>There are no guides yet.</p>
+    {/each}
+  </div>
+
+  <aside class="actions">
+    <h3>Actions</h3>
+    <button type="button" class="button-link" on:click={createGuide}>Create New Guide</button>
+  </aside>
 </div>
