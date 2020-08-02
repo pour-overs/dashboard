@@ -7,10 +7,25 @@ const timestamp = () => FieldValue.serverTimestamp();
 const guidesRef = firestore.collection("guides");
 
 
-export async function listGuides(userId) {
+export async function listGuidesByUser(userId) {
   const snapshot = await guidesRef
     .orderBy('lastModified', 'desc')
-    // .where("owner", "==", userId)
+    .where("owner", "==", userId)
+    .get();
+
+  if (snapshot.empty) {
+    return [];
+  }
+
+  return snapshot.docs.map(doc => {
+    const guide = doc.data();
+    return { id: doc.id, ...guide };
+  });
+}
+
+export async function listGuides() {
+  const snapshot = await guidesRef
+    .orderBy('lastModified', 'desc')
     .get();
 
   if (snapshot.empty) {

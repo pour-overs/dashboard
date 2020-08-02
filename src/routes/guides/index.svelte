@@ -10,13 +10,14 @@
     return;
   }
 
-  async function loadGuides() {
-    const response = await fetch("/api/guides/", {
+  async function loadGuides(showAll) {
+    const response = await fetch(`/api/guides${showAll ? "?showAll" : ""}`, {
       credentials: "include"
     });
 
     if (response.ok) {
       const guides = await response.json();
+      console.log(guides);
       return guides;
     }
   }
@@ -27,20 +28,19 @@
   import { onMount } from "svelte";
   import PageTitle from "@components/PageTitle.svelte";
 
+  let listGuidesForAllUsers = false;
   let loadingGuides = new Deferred();
 
   onMount(() => {
-    loadGuides()
+    loadGuides(listGuidesForAllUsers)
       .then(loadingGuides.resolve)
       .catch(loadingGuides.reject);
-
-  })
+  });
 
   function reloadGuides() {
-
     loadingGuides = new Deferred();
 
-    loadGuides()
+    loadGuides(listGuidesForAllUsers)
       .then(loadingGuides.resolve)
       .catch(loadingGuides.reject);
   }
@@ -61,6 +61,11 @@
     if (createdId) {
       window.location = `${window.location}/${createdId}`;
     }
+  }
+
+  async function toggleGuidesView() {
+    listGuidesForAllUsers = !listGuidesForAllUsers;
+    reloadGuides();
   }
 </script>
 
@@ -84,7 +89,7 @@
   .guide-card:hover {
     border: 1px solid var(--color4);
     color: var(--body-color);
-    background-color: rgba(255,255,255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   .guide-card .title {
@@ -94,25 +99,39 @@
 
   .guide-layout {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr auto;
     align-items: flex-start;
   }
 
-  aside {
+  .actions {
     padding: 1em 1em;
     position: sticky;
     top: 0;
     border: 1px solid var(--border-color);
   }
 
-  aside h3 {
+  .actions h3 {
     margin-bottom: 1em;
+  }
+
+  .actions button {
+    margin-bottom: 0.5em;
+    display: block;
+    width: 100%;
   }
 </style>
 
 <PageTitle title="Guides">Guides</PageTitle>
 
-<p>Listing all Pour Over Guides.</p>
+{#if listGuidesForAllUsers}
+  <p>Listing all Pour Over Guides.</p>
+{:else}
+  <p>
+    Listing Pour Over Guides
+    <strong>created by you</strong>
+    .
+  </p>
+{/if}
 
 <div class="guide-layout">
 
@@ -149,8 +168,20 @@
 
   <aside class="actions">
     <h3>Actions</h3>
+
     <button type="button" class="button-link" on:click={createGuide}>
       Create New Guide
     </button>
+
+    <button type="button" class="button-link" on:click={toggleGuidesView}>
+      Show:
+      <strong>{listGuidesForAllUsers ? 'Only Mine' : 'All'}</strong>
+    </button>
+
+    <button disabled={true}>
+      Order By:
+      <strong>Last Modified</strong>
+    </button>
+
   </aside>
 </div>

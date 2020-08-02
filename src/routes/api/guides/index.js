@@ -1,4 +1,4 @@
-import { listGuides } from "@services/guides.js";
+import { listGuidesByUser, listGuides } from "@services/guides.js";
 
 
 /**
@@ -8,6 +8,12 @@ import { listGuides } from "@services/guides.js";
  * @param {Function} next
  */
 export async function get(req, res, next) {
-  const guides = await listGuides(req.user.uid);
-  res.json(guides);
+  if ("showAll" in req.query) {
+    const guides = await listGuides();
+    res.json(guides);
+  }
+  else {
+    const guides = await listGuidesByUser(req.user.uid);
+    res.json(guides);
+  }
 }
