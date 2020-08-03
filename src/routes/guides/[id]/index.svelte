@@ -160,7 +160,7 @@
   disabled={formDisabled}>
 
   <div class="form-content">
-    <Collapsible collapsed={false} >
+    <Collapsible collapsed={guide.title.length > 0} >
       <h2 slot="title">Meta</h2>
 
       <section class="form-group" slot="content">
@@ -181,7 +181,7 @@
       </section>
 
     </Collapsible>
-    <Collapsible>
+    <Collapsible collapsed={guide.introduction.content.length > 0}>
       <h2 slot="title">Introduction</h2>
       <section class="form-group" slot="content">
 

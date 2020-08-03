@@ -114,8 +114,8 @@
     width: auto;
     font-size: 0.8em;
     padding: 0.25em 0.5em;
-    background-color: var(--color3);
-    color: var(--color1);
+    background-color: var(--label-bg);
+    color: var(--label-color);
     display: block;
     border-radius: 3px;
     margin: 0 1em auto auto;

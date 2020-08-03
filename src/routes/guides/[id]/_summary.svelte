@@ -1,6 +1,14 @@
 <script>
+  import { buildSummary } from "@services/summary.js";
+
   export let steps = [];
-  export let coffee = { amount: 0, };
+  export let coffee = null;
+
+  let summary = null;
+
+  $: if (steps.length > 0 && coffee && typeof coffee.amount !== "undefined" && coffee.amount > 0) {
+    summary = buildSummary(steps, coffee);
+  }
 
   $: totalTime = steps.reduce((t, s) => t + s.duration + s.drainDuration, 0);
   $: totalDose = steps.reduce((t, s) => t + s.dose, 0);
@@ -8,23 +16,20 @@
   $: humanReadable = {
     minutes: Math.floor(totalTime / 60),
     seconds: totalTime % 60,
-    get time() { return `${humanReadable.minutes}:${humanReadable.seconds}` },
+    get time() {
+      return `${humanReadable.minutes}:${humanReadable.seconds}`;
+    }
   };
 
-
+  $: ratio =
+    coffee.amount > 0
+      ? `${coffee.amount / coffee.amount}:${(totalDose / coffee.amount).toFixed(
+          2
+        )}`
+      : "Missing Coffee Amount.";
 </script>
 
 <style>
-  .measurement {
-    display: inline-block;
-    background-color: var(--color3);
-    font-size: 0.75em;
-    padding: 0.25em 0.5em;
-    border-radius: 6px;
-    color: #888;
-    margin: auto 0.5rem;
-  }
-
   dl {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -33,18 +38,44 @@
   dt {
     font-weight: 600;
   }
-
 </style>
 
-<div>
-  <dl>
-    <dt>Total Steps</dt>
-    <dd>{steps.length}</dd>
-    <dt>Total Duration</dt>
-    <dd>{humanReadable.time} <span class="measurement">m:s</span></dd>
-    <dt>Total Dose</dt>
-    <dd>{totalDose}<span class="measurement">grams</span></dd>
-  </dl>
+{#if summary !== null}
+  <div>
+    <h4>Totals</h4>
+    <dl>
+      <dt>Total Steps</dt>
+      <dd>{summary.totalSteps}</dd>
+      <dt>Total Duration</dt>
+      <dd>
+        {summary.humanReadable.time}
+        <span class="measurement">m:s</span>
+      </dd>
+      <dt>Total Dose</dt>
+      <dd>
+        {summary.totalDose}
+        <span class="measurement">grams</span>
+      </dd>
+      <dt>Ratio</dt>
+      <dd>
+        {summary.ratio}
+        <span class="measurement">coffee:water</span>
+      </dd>
+    </dl>
 
-</div>
+    <h4>Water to Step distribution</h4>
+    <ol class="water">
+      {#each summary.waterDistribution as point}
+        <li>
+          {point.label} pours {point.value} of
+          total water.
+        </li>
+      {/each}
+    </ol>
 
+    <h4>Graph</h4>
+    <p>todo</p>
+  </div>
+{:else}
+  <p>More information is needed for a valid summary.</p>
+{/if}
