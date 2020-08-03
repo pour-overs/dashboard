@@ -5,7 +5,7 @@
 
   let user = getContext("user");
 
-    $: isDarkMode = $theme === THEMES.DARK_MODE;
+  $: isDarkMode = $theme === THEMES.DARK_MODE;
 
   function toggleDarkMode() {
     theme.update( t => t === THEMES.DEFAULT ? THEMES.DARK_MODE : THEMES.DEFAULT);
