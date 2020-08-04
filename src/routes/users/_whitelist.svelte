@@ -1,5 +1,9 @@
 <script>
 
+  const fetchOptions = {
+    credentials: "include"
+  };
+
   export let whitelist = [];
 
   let whitelistList = null;
