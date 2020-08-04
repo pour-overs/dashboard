@@ -27,7 +27,7 @@
     justify-content: space-between;
     align-items: center;
     padding-right: 0.5em;
-
+    background-color: var(--selectable-bg);
   }
 
   .padded {
@@ -39,7 +39,7 @@
   }
 
   .title:hover {
-    background-color: rgba(0,0,0,0.05);
+    background-color: var(--selectable-bg--hover);
   }
 
   .content {
