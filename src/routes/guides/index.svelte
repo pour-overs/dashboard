@@ -143,7 +143,7 @@
         <a class="guide-card" href={`/guides/${guide.id}`}>
           <h2 class="title">{guide.title}</h2>
           <p>
-            {guide.introduction.content ? guide.introduction.content : 'No introduction written.'}
+            {guide.description}
           </p>
           <p>
             <strong>URL:</strong>
