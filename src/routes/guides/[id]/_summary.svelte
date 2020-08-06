@@ -1,5 +1,6 @@
 <script>
   import { buildSummary } from "@services/summary.js";
+  import SimpleGraph from "./_simplegraph.svelte";
 
   export let steps = [];
   export let coffee = null;
@@ -9,24 +10,6 @@
   $: if (steps.length > 0 && coffee && typeof coffee.amount !== "undefined" && coffee.amount > 0) {
     summary = buildSummary(steps, coffee);
   }
-
-  $: totalTime = steps.reduce((t, s) => t + s.duration + s.drainDuration, 0);
-  $: totalDose = steps.reduce((t, s) => t + s.dose, 0);
-
-  $: humanReadable = {
-    minutes: Math.floor(totalTime / 60),
-    seconds: totalTime % 60,
-    get time() {
-      return `${humanReadable.minutes}:${humanReadable.seconds}`;
-    }
-  };
-
-  $: ratio =
-    coffee.amount > 0
-      ? `${coffee.amount / coffee.amount}:${(totalDose / coffee.amount).toFixed(
-          2
-        )}`
-      : "Missing Coffee Amount.";
 </script>
 
 <style>
@@ -42,6 +25,7 @@
 
 {#if summary !== null}
   <div>
+    <SimpleGraph data={summary.timeline} />
     <h4>Totals</h4>
     <dl>
       <dt>Total Steps</dt>
@@ -72,9 +56,6 @@
         </li>
       {/each}
     </ol>
-
-    <h4>Graph</h4>
-    <p>todo</p>
   </div>
 {:else}
   <p>More information is needed for a valid summary.</p>

@@ -56,7 +56,6 @@ export const buildSummary = (steps, coffee) => {
         }
 
         const point = {
-          i,
           time: currentTime,
           isDraining,
           dose: isDraining ? 0 : rate,
