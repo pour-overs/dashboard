@@ -114,8 +114,15 @@ select {
   color: var(--body-color);
 }
 
+input:hover,
+textarea:hover,
+select:hover {
+  border: 1px solid var(--color1--dark);
+}
+
 label {
   font-weight: 600;
+  cursor: pointer;
 }
 
 button {

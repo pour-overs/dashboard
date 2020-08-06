@@ -24,6 +24,7 @@
 
   .graph {
     position: relative;
+    overflow: hidden;
   }
 
   .x-axis,
@@ -41,7 +42,7 @@
   .y-axis {
     position: absolute;
     left: 1em;
-    bottom: calc(50% - 2em);
+    top: calc(50% - 2em);
     transform: rotate(-90deg);
     transform-origin: 0 center;
   }
@@ -51,6 +52,8 @@
     padding: 1em 0 0 0;
     width: 100%;
     margin: 0.5em auto;
+    min-height: 15em;
+    min-width: 16em;
   }
 </style>
 
@@ -58,10 +61,10 @@
   <div class="graph">
 
     <svg viewbox={`0 0 ${width} ${height}`}>
-      <polyline {points} fill="none" stroke="var(--color5)" />
+      <polyline  fill="none" stroke="var(--color5)" stroke-width="1" {points} />
     </svg>
     <div class="x-axis">Time (s)</div>
-    <div class="y-axis">Poured Water (g)</div>
+    <div class="y-axis">Water (g)</div>
   </div>
 {:else}
   <p>No data.</p>
