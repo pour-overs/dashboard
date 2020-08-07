@@ -1,59 +1,39 @@
 <script>
   export let segment;
   import { getContext } from "svelte";
-  import UserCard from "@components/UserCard.svelte";
 
   import IconProvider from "@providers/IconProvider.svelte";
-
   import Icon from "@components/Icon.svelte";
-
-  const user = getContext("user");
-
-
 
 </script>
 
 <style>
-  nav {
-    display: flex;
-    width: 100%;
-    flex-flow: column nowrap;
-    height: 100vh;
-    flex: 1 0 auto;
-    align-items: stretch;
-  }
 
-  .logo {
-    font-weight: 200;
-    font-size: 1.5rem;
-    padding: 2rem 2rem;
-    text-align: center;
+  .nav-items {
+    padding: 0.5em 0;
     margin: 0 0;
+    display: flex;
+    justify-content: space-evenly;
+    flex: 1 0 auto;
+    align-items: center;
+    list-style: none;
   }
 
   .icon {
     display: inline-block;
-    margin-right: 1em;
     padding-top: 4px;
   }
 
-  .nav-items {
-    display: block;
-    list-style: none;
-    margin: 0em auto;
-    padding: 0 0;
-    width: 100%;
-  }
-
-  .auth-items {
-    margin-top: auto;
+  .text {
+    display: none;
   }
 
   [aria-current] {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--selectable-bg);
   }
 
   .nav-items a {
+    text-align: center;
     color: var(--nav-color);
     font-weight: 200;
     text-decoration: none;
@@ -68,6 +48,38 @@
     background-color: rgba(255, 255, 255, 0.15);
     color: var(--nav-color);
   }
+
+
+  @media (min-width: 56em) {
+
+    nav {
+      display: flex;
+      width: 100%;
+      flex-flow: column nowrap;
+      height: 100vh;
+      flex: 1 0 auto;
+      align-items: stretch;
+    }
+
+    .nav-items {
+      display: block;
+      margin: 0em auto;
+      padding: 0 0;
+      width: 100%;
+    }
+
+    .nav-items a {
+      text-align: left;
+    }
+
+    .text {
+      display: inline;
+    }
+
+    .icon {
+      margin-right: 1em;
+    }
+  }
 </style>
 
 <IconProvider color="var(--nav-icon-color)" size="16">
@@ -78,7 +90,7 @@
           <span class="icon">
             <Icon name="equalizer" />
           </span>
-          Dashboard
+          <span class="text">Dashboard</span>
         </a>
       </li>
       <li>
@@ -88,7 +100,7 @@
           <span class="icon">
             <Icon name="library_books" />
           </span>
-          Guides
+          <span class="text">Guides</span>
         </a>
       </li>
       <li>
@@ -96,13 +108,17 @@
           <span class="icon">
             <Icon name="recent_actors" />
           </span>
-          Users
+          <span class="text">Users</span>
+        </a>
+      </li>
+      <li>
+        <a aria-current={segment === 'account' ? 'page' : undefined} href="account">
+          <span class="icon">
+            <Icon name="account_box" />
+          </span>
+          <span class="text">Account</span>
         </a>
       </li>
     </ul>
-
-    <div class="auth-items">
-      <UserCard {...user} text="Your Account" />
-    </div>
   </nav>
 </IconProvider>

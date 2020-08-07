@@ -8,21 +8,21 @@
   }
   main {
     width: 100%;
-    padding: 2em 2em;
+    padding: 2em 1em;
   }
 
 
   @media screen and (min-width: 56em) {
     .layout {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(14rem, 25%) 1fr;
       justify-content: space-between;
       flex: 0 1 auto;
     }
 
     main {
-      /* max-width: var(--content-width); */
       border-top: none;
-      padding: 10vh 2em;
+      padding: 5vh 2em;
       margin: 0 auto;
       min-height: 100vh;
     }

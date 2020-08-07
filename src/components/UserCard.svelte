@@ -28,7 +28,7 @@
     display: flex;
     align-items: center;
     padding: 0.5em 0.5em;
-    background-color: rgba(255,255,255,0.2);
+    background-color: transparent;
     border-radius: 3px;
     margin: 0em 0em;
     cursor: pointer;
@@ -38,13 +38,13 @@
 
   .user-picture {
     width: 1.5em;
-    margin-right: 0.5em;
+    margin-right: 1em;
     border-radius: 3px;
   }
 
   .user-card:hover {
     color: var(--body-color);
-    background-color: rgba(255,255,255,0.3);
+    background-color: var(--selectable-bg--hover);
   }
 
 </style>
