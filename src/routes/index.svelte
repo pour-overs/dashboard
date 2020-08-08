@@ -44,6 +44,6 @@
 	<li>
 		Image uploads
 	</li>
-	<li>"Sponsered"/Official guides?</li>
+	<li>"Sponsored"/Official guides?</li>
 	<li>Attributions</li>
 </ul>
