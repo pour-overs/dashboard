@@ -42,6 +42,8 @@ body {
   --label-bg: var(--color3);
   --label-color: #888;
 
+  --warning-color: var(--color5);
+
   background-color: var(--body-bg);
   margin: 0;
   font-size: 14px;
@@ -78,6 +80,7 @@ body.theme--dark {
 
   --button-bg--disabled: #1b3441;
   --button-color--disabled: #888;
+  --warning-color: #56420f;
 }
 
 h1, h2, h3, h4, h5, h6 {

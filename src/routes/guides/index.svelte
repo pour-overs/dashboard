@@ -17,7 +17,6 @@
 
     if (response.ok) {
       const guides = await response.json();
-      console.log(guides);
       return guides;
     }
   }
@@ -97,10 +96,12 @@
     font-weight: 600;
   }
 
-  .guide-layout {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: flex-start;
+  @media (min-width: 50em) {
+    .guide-layout {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: flex-start;
+    }
   }
 
   .actions {

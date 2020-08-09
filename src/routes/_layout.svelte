@@ -7,7 +7,9 @@
 
 <script>
   import { notify } from "@stores/notifications.js";
+
   import Nav from "@components/Nav.svelte";
+  import Breadcrumbs from "@components/Breadcrumbs.svelte";
   import Notifications from "@components/Notifications.svelte";
   import SidebarLayout from "./_SidebarLayout.svelte";
   import UserProvider from "@providers/UserProvider.svelte";
@@ -49,6 +51,7 @@
           </nav>
 
           <main slot="content">
+            <Breadcrumbs />
             <slot />
           </main>
 

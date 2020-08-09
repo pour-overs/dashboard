@@ -44,7 +44,6 @@
   };
 
   async function save() {
-
     formDisabled = true;
     const result = await saveGuide(guide.id, form);
     formDisabled = false;
@@ -60,11 +59,10 @@
   }
 
   async function togglePublished(e) {
-
     form.isPublished = !form.isPublished;
     const result = await save();
 
-    if (result !== null ) {
+    if (result !== null) {
       const state = form.isPublished ? "was published" : "has been unpublished";
       notify(`"${form.title}" ${state}.`, null);
     }
@@ -97,6 +95,7 @@
     display: grid;
     grid-template-columns: 1fr auto auto auto;
     grid-column-gap: 0.5em;
+    align-items: center;
     position: sticky;
     padding: 1em 1em;
     border: 1px solid var(--border-color);
@@ -118,21 +117,32 @@
   }
 
   .warning {
-    font-size: 0.75;
-    background-color: var(--color5);
-    padding: 0.25em 0.5em;
-    margin: 0 1em;
+    font-size: 0.75em;
+    background-color: var(--warning-color);
+    padding: 0.25em 1em;
+    margin: 0em 0;
+    display: block;
     border-radius: 6px;
+  }
+
+  .steps-group {
+    display: flex;
+    justify-content: space-between;
   }
 </style>
 
-<PageTitle title={`Edit "${form.title}"${hasChanged ? "*" : ""}`}>
-  Edit <span class="title">{form.title}</span>{hasChanged ? "*" : ""}
+<PageTitle
+  title={`Edit "${form.title}"${hasChanged ? '*' : ''}`}
+  useAsBreadcrumb={true}
+  crumb={form.title}>
+  Edit
+  <span class="title">{form.title}</span>
+  {hasChanged ? '*' : ''}
 </PageTitle>
 
 <Collapsible>
 
-  <h2 slot="title">Status: {form.isPublished ? "Published" : "Draft"}</h2>
+  <h2 slot="title">Status: {form.isPublished ? 'Published' : 'Draft'}</h2>
 
   <div slot="content">
 
@@ -160,7 +170,7 @@
   disabled={formDisabled}>
 
   <div class="form-content">
-    <Collapsible collapsed={guide.title.length > 0} >
+    <Collapsible collapsed={guide.title.length > 0}>
       <h2 slot="title">Meta</h2>
 
       <section class="form-group" slot="content">
@@ -196,23 +206,31 @@
         </label>
       </section>
     </Collapsible>
-    <Collapsible  collapsed={guide.steps.length === 0}>
+    <Collapsible collapsed={guide.steps.length === 0}>
       <h2 slot="title">Coffee & Steps</h2>
-      <section class="form-group" slot="content">
-        <p>There are {guide.steps.length} steps.</p>
-        {#if guide.steps.length > 0}
-          <ol>
-            {#each guide.steps as step}
-              <li>{step.title}</li>
-            {/each}
-          </ol>
+      <section class="form-group steps-group" slot="content">
+        <div class="steps-overview">
+          {#if guide.steps.length === 1}
+            <p>There is {guide.steps.length} step.</p>
+          {:else}
+            <p>There are {guide.steps.length} steps.</p>
+          {/if}
 
-        {/if}
+          {#if guide.steps.length > 0}
+            <ol>
+              {#each guide.steps as step}
+                <li>{step.title}</li>
+              {/each}
+            </ol>
+          {/if}
+        </div>
 
-        <a href={`/guides/${guide.id}/steps`}>Edit Coffee and Steps</a>
-        {#if hasChanged}
-          <span class="warning">You have unsaved changes</span>
-        {/if}
+        <div>
+          <p>
+            <a href={`/guides/${guide.id}/steps`}>Edit Coffee and Steps</a>
+          </p>
+        </div>
+
       </section>
     </Collapsible>
 
@@ -220,6 +238,13 @@
 
   <footer class="actions">
     <h2>{form.title || 'Untitled'}</h2>
+
+    <div>
+      {#if hasChanged}
+        <span class="warning">You have unsaved changes</span>
+      {/if}
+    </div>
+
     <button type="button" disabled={!hasChanged} on:click={saveHandler}>
       Save
     </button>
