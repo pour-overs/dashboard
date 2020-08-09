@@ -43,6 +43,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 0 0 0.5em 0;
+    flex-flow: row wrap;
   }
 
   .row:hover {

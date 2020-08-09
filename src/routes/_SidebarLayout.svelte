@@ -22,7 +22,7 @@
 
     main {
       border-top: none;
-      padding: 5vh 2em;
+      padding: 5vh 2em 10vh 2em;
       margin: 0 auto;
       min-height: 100vh;
     }
