@@ -51,9 +51,6 @@
 
 </style>
 
-
-<p>The list of users who have authenticated with the dashboard.</p>
-
 <p class="label">{count} user{count == 1 ? '' : 's'}</p>
 <ul>
   {#each users as user (user.uid)}

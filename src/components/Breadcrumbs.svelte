@@ -16,17 +16,12 @@
 
   export let currentPath = "/";
 
+  // trigger a breadcrumb update whenever the path or labels change
   $: crumbs = buildCrumbs(currentPath, $labels);
 
   page.subscribe(({ path }) => {
     currentPath = path;
   });
-
-  // fire a change when the labels change too
-  // labels.subscribe( () => {
-  //   console.log("labels changed");
-  //   crumbs = buildCrumbs(currentPath);
-  // });
 
   function buildCrumbs(path) {
 

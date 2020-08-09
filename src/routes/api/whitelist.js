@@ -1,4 +1,4 @@
-import { getSettings, setWhitelist } from "../../services/settings.js";
+import { getSettings, setWhitelist } from "@services/settings.js";
 
 
 /**

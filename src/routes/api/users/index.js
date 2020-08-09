@@ -1,4 +1,4 @@
-import { auth } from "../../services/firebase.js";
+import { auth } from "@services/firebase.js";
 
 /**
  * Fetches a list of `count` users, paged by paramter nextPageToken

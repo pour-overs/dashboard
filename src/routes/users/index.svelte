@@ -81,6 +81,8 @@
 
 <PageTitle title="Users">Users</PageTitle>
 
+<p>The list of users who have authenticated with the dashboard.</p>
+
 <div class="deferred-content">
 
   {#await loadingUsers.promise}

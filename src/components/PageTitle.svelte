@@ -17,7 +17,6 @@
     }
 
     labels.update(registry => {
-      console.log(`Registering "${path}" to "${label}"`);
       registry[path] = label;
       return registry;
     });
@@ -26,7 +25,7 @@
 
 <style>
   h1 {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
   }
 </style>
 
