@@ -13,11 +13,23 @@
 </script>
 
 <style>
+
   .notifications {
+    position: sticky;
+    top: 0.5em;
+    margin-bottom: 1em;
+  }
+
+@media (min-width: 50em) {
+  .notifications {
+    z-index: 9999;
     position: fixed;
     top: 0.5em;
     right: 1em;
+    margin: 0 0;
   }
+}
+
 
   .notification {
     padding: 1em 1em;
@@ -27,6 +39,9 @@
     color: #ddd;
     border-radius: 3px;
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .notification:hover {

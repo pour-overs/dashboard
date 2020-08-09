@@ -51,6 +51,7 @@
           </nav>
 
           <main slot="content">
+            <Notifications />
             <Breadcrumbs />
             <slot />
           </main>
@@ -61,4 +62,4 @@
   </ThemeProvider>
 {/if}
 
-<Notifications />
+
