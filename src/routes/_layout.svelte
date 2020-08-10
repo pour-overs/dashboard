@@ -40,6 +40,7 @@
   <main>
     <slot />
   </main>
+  <Notifications />
 {:else}
   <ThemeProvider>
     <IconProvider size="24" color="var(--body-color)">

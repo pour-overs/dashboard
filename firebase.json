@@ -4,11 +4,21 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
+    "target": "production",
     "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "pouroverguides-dashboard",
+          "region": "us-west1"
+        }
+      }
     ]
   }
 }
