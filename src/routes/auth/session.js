@@ -1,6 +1,9 @@
 import { auth, firestore } from "@services/firebase.js";
 import { getSettings } from "@services/settings.js";
 
+// https://firebase.google.com/docs/hosting/manage-cache#using_cookies
+const SESSION_COOKIE_NAME = "__session";
+
 // references
 // https://firebase.google.com/docs/auth/admin/manage-cookies
 // https://firebase.google.com/docs/auth/admin/verify-id-tokens
@@ -72,7 +75,7 @@ export async function post(req, res, next) {
           secure: req.url.startsWith("https://"),
           path: "/",
         };
-        res.cookie('session', sessionCookie, options);
+        res.cookie(SESSION_COOKIE_NAME, sessionCookie, options);
 
         return res.json({ isValid });
       }
@@ -93,7 +96,7 @@ export async function del(req, res, next) {
     const secure = req.url.startsWith("https://");
     const expiresIn = new Date(0);
     const options = { maxAge: expiresIn, httpOnly: true, secure, path: "/" };
-    res.cookie("session", "", options);
+    res.cookie(SESSION_COOKIE_NAME, "", options);
 
     isSignedOut = true;
   }

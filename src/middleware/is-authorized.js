@@ -1,11 +1,13 @@
-import { auth } from "../services/firebase.js";
+import { auth } from "@services/firebase.js";
 
+// https://firebase.google.com/docs/hosting/manage-cache#using_cookies
+const SESSION_COOKIE_NAME = "__session";
 
 export default () => (req, res, next) => {
   req.user = null;
   req.isAuthorized = false;
 
-  const sessionCookie = req.cookies.session;
+  const sessionCookie = req.cookies[SESSION_COOKIE_NAME];
 
   if (!sessionCookie || req.isAsset) {
     return next();
