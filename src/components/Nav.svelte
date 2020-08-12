@@ -119,6 +119,14 @@
           <span class="text">Account</span>
         </a>
       </li>
+      <li>
+        <a aria-current={segment === 'deploys' ? 'page' : undefined} href="deploys">
+          <span class="icon">
+            <Icon name="cloud_done" />
+          </span>
+          <span class="text">Deploys</span>
+        </a>
+      </li>
     </ul>
   </nav>
 </IconProvider>
