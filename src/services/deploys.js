@@ -4,7 +4,7 @@ const FieldValue = firestoreFields.FieldValue;
 const timestamp = () => FieldValue.serverTimestamp();
 
 
-const deploysRef = firestore.collection("guides");
+const deploysRef = firestore.collection("deploys");
 
 /**
  * Create a new deploy and associate to the userId
@@ -12,23 +12,39 @@ const deploysRef = firestore.collection("guides");
  */
 export async function createDeploy(userId) {
 
-  const guide = _createDeploy(userId);
+  const deployItem = _createDeploy(userId);
 
-  const ref = await deploysRef.add(guide);
+  const ref = await deploysRef.add(deployItem);
 
   return ref.id;
 }
 
+export async function listDeploys() {
+  const snapshot = await deploysRef
+    .orderBy('lastModified', 'desc')
+    .get();
 
-function _createDeploy(userId) {
+  if (snapshot.empty) {
+    return [];
+  }
+
+  return snapshot.docs.map(doc => {
+    const deploy = doc.data();
+    return { id: doc.id, ...deploy };
+  });
+}
+
+
+
+function _createDeploy(userId, label) {
 
   const createdAt = timestamp();
 
   return {
     createdAt,
+    label,
     lastModified: createdAt,
     initiatedBy: userId,
-    label: "",
     isComplete: false,
   }
 }
