@@ -1,11 +1,38 @@
+<script context="module">
+
+
+  async function loadDeploys() {
+    const response = await fetch(`/api/deploys`, {
+      credentials: "include"
+    });
+
+    if (response.ok) {
+      const deploys = await response.json();
+      return deploys;
+    }
+  }
+</script>
+
 <script>
+  import { Deferred } from "@utils";
+  import { onMount } from "svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
+
+  let loadingDeploys = new Deferred();
+
+  onMount(() => {
+    loadDeploys()
+      .then(loadingDeploys.resolve)
+      .catch(loadingDeploys.reject);
+  });
 
   let hasActiveDeploy = false;
 
   let deployName = "";
   $: isDeployable = deployName.length >= 2;
+
+
 
   async function createDeploy() {
 
