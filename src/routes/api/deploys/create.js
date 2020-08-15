@@ -5,7 +5,7 @@ const ERRORS = {
 };
 
 export async function post(req, res, next) {
-  debugger;
+
   if (!req.user) {
     return next();
   }
