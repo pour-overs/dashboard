@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "GOOGLE_APPLICATION_CREDENTIALS=firebase-admin-service-key.json sapper dev",
-    "debug": "node --inspect node_modules/sapper/dist/cli.js dev",
+    "dev:node": "GOOGLE_APPLICATION_CREDENTIALS=firebase-admin-service-key.json node --inspect node_modules/sapper/dist/cli.js dev",
     "build": "sapper build --legacy",
     "export": "sapper export public/ --legacy",
     "start": "node __sapper__/build",

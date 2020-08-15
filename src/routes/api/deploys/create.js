@@ -5,7 +5,7 @@ const ERRORS = {
 };
 
 export async function post(req, res, next) {
-
+  debugger;
   if (!req.user) {
     return next();
   }
@@ -16,7 +16,7 @@ export async function post(req, res, next) {
     return res.end(ERRORS.NO_DATA);
   }
 
-  const createdId = await createDeploy(req.user.uid, body.label);
+  const createdId = await createDeploy(req.user.uid, data.label);
 
   res.json({ createdId });
 }

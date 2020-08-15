@@ -10,9 +10,9 @@ const deploysRef = firestore.collection("deploys");
  * Create a new deploy and associate to the userId
  * @returns {Promise<string>} A promise that resolves to the newly created Deploy ID
  */
-export async function createDeploy(userId) {
+export async function createDeploy(userId, label) {
 
-  const deployItem = _createDeploy(userId);
+  const deployItem = _createDeploy(userId, label);
 
   const ref = await deploysRef.add(deployItem);
 

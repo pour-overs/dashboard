@@ -4,6 +4,7 @@
 
   export let collapsed = true;
   export let padded = true;
+  export let disabled = false;
 
   function toggle() {
     collapsed = !collapsed;
@@ -30,6 +31,11 @@
     background-color: var(--selectable-bg);
   }
 
+  .disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
   .padded {
     padding: 0.5em 0.5em;
   }
@@ -48,7 +54,7 @@
   }
 </style>
 
-<section class="collapsible">
+<section class="collapsible" class:disabled>
   <header class="title" class:open={!collapsed} on:click={toggle} class:padded >
     <slot name="title" />
     <Icon name={icon} />
