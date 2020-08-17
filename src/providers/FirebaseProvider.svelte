@@ -18,7 +18,7 @@
 
   onMount(async () => {
 
-    const module = await import("../services/firebase-client.js");
+    const module = await import("@services/firebase-client.js");
     firebaseModule = module;
     isLoaded = true;
 

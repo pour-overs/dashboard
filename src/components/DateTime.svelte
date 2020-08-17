@@ -1,6 +1,6 @@
 <script>
   export let date = undefined;
-  export let relative = false;
+  // export let relative = false;
   export let displayTime = true;
   export let displayDate = true;
 

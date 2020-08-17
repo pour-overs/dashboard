@@ -182,3 +182,42 @@ code {
   margin: auto 0.5rem;
   font-weight: 400;
 }
+
+.spinner {
+  display: inline-block;
+  animation: spin 1s ease-in 0s infinite reverse;
+}
+
+.flash-fade {
+  animation : colorize 1s ease-in-out infinite alternate;
+}
+
+.loading-spinner {
+  display: inline-block;
+  animation: spin 1s ease-in 0s infinite reverse, colorize 1.2s ease-in-out infinite alternate;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  transform-origin: center center;
+}
+
+
+@keyframes colorize {
+  from {
+    color: var(--border-color);
+  }
+
+  to {
+    color: var(--color4);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

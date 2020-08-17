@@ -33,7 +33,30 @@ export async function listDeploys() {
     return { id: doc.id, ...deploy };
   });
 }
+/**
+ * Fetches a single Deploy by ID
+ * @param {string} deployId The id of a Guide
+ */
+export async function getByID(deployId) {
 
+  const document = await deploysRef
+    .doc(deployId)
+    .get();
+
+  if (document.exists) {
+    const data = { id: deployId, ...document.data(), };
+
+    // convert these into datetime strings for parsing on the client
+    data.lastModified.date = data.lastModified.toDate();
+    data.createdAt.date = data.createdAt.toDate();
+
+    return data;
+  }
+}
+
+export async function updateDeploy() {
+  // todo
+}
 
 
 function _createDeploy(userId, label) {

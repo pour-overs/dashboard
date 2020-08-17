@@ -59,20 +59,6 @@
     opacity: 0.5;
   }
 
-
-  .spinner {
-    animation: spin 1s linear 0s infinite;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
 </style>
 
 <div class="notifications">
