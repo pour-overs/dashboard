@@ -38,22 +38,17 @@
   import { Deferred } from "@utils";
   import { goto } from "@sapper/app";
   import { onMount } from "svelte";
+
   import DeployHistory from "./_DeployHistory.svelte";
+  import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
 
   let deploys = [];
   let loadingDeploys = new Deferred();
-  $: isLoadingDeploys = loadingDeploys.promise.status === "pending";
+  let isLoadingDeploys = true;
 
-  onMount(() => {
-    loadDeploys()
-      .then((_deploys) => {
-        deploys = _deploys || [];
-        loadingDeploys.resolve(_deploys);
-      })
-      .catch(loadingDeploys.reject);
-  });
+  onMount(() => initLoadDeploys());
 
   let activeDeploy = null;
   $: hasActiveDeploy = activeDeploy !== null;
@@ -71,6 +66,29 @@
       notify("There was an issue creating a deploy.");
     }
   }
+
+  function initLoadDeploys() {
+    isLoadingDeploys = true;
+    return loadDeploys()
+      .then(_deploys => {
+        deploys = _deploys || [];
+        activeDeploy = deploys.find(d => !d.isComplete) || null;
+        isLoadingDeploys = false;
+        loadingDeploys.resolve(_deploys);
+      })
+      .catch(() => {
+        notify("Could not load deploy data.", 5000);
+
+        loadingDeploys.reject();
+      });
+  }
+
+  async function reloadDeploys() {
+    notify("Refreshing Deploys...");
+    loadingDeploys = new Deferred();
+    await initLoadDeploys();
+    notify("Done", 1000);
+  }
 </script>
 
 <style>
@@ -80,60 +98,74 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  form[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .deploy-history {
+    display: grid;
+    grid-template-columns: 1fr minmax(8em, 20%);
+  }
+
+  .deploy-history .actions {
+    padding: 0 0.5em;
+    text-align: right;
+  }
 </style>
 
 <PageTitle title="Deploys">Deploys</PageTitle>
 
-<Collapsible disabled={isLoadingDeploys}>
-  <h3 slot="title">Deploy Status</h3>
-  <div slot="content">
-    {#if isLoadingDeploys}
-      <p>Loading...</p>
-    {:else if hasActiveDeploy}
-      <p>A deploy is active.</p>
-    {:else}
-      <p>No active deploy.</p>
-    {/if}
-
-  </div>
-</Collapsible>
-
-<Collapsible collapsed={false} disabled={isLoadingDeploys}>
+<Collapsible
+  collapsed={isLoadingDeploys || hasActiveDeploy}
+  disabled={isLoadingDeploys}>
   <h3 slot="title">New Deploy</h3>
   <div slot="content">
+
     <p>
       A deploy will push any currently published guides to the public website.
     </p>
 
-    <form
-      class="deploy-form"
-      on:submit|preventDefault={createDeploy}
-      disabled={hasActiveDeploy}>
-
-      <label>
-        Deploy Label
-        <input
-          type="text"
-          name="deploy-label"
-          placeholder="Enter a name"
-          bind:value={deployName} />
-      </label>
-      <button type="submit" disabled={!isDeployable}>Start</button>
-    </form>
+    {#if hasActiveDeploy}
+      <Warning>
+        <strong>
+          A new deploy cannot be created while another deploy is active.
+        </strong>
+        <br />
+        Please wait for the current deploy to complete.
+      </Warning>
+    {:else}
+      <form class="deploy-form" on:submit|preventDefault={createDeploy}>
+        <label>
+          Deploy Label
+          <input
+            disabled={hasActiveDeploy}
+            type="text"
+            name="deploy-label"
+            placeholder="Enter a name"
+            bind:value={deployName} />
+        </label>
+        <button type="submit" disabled={!isDeployable}>Start</button>
+      </form>
+    {/if}
   </div>
 
 </Collapsible>
 
-<Collapsible>
+<Collapsible collapsed={false}>
   <h3 slot="title">Deploy History</h3>
-  <div slot="content">
-    <div class="actions">
-      <button type="button">Refresh</button>
+  <div slot="content" class="deploy-history">
+    <div>
+
+      {#if isLoadingDeploys}
+        <p>Loading...</p>
+      {:else}
+        <DeployHistory {deploys} />
+      {/if}
     </div>
-    {#if isLoadingDeploys}
-      <p>Loading...</p>
-    {:else}
-      <DeployHistory {deploys} />
-    {/if}
+    <aside class="actions">
+      <button type="button" on:click={reloadDeploys}>Refresh</button>
+    </aside>
   </div>
 </Collapsible>
