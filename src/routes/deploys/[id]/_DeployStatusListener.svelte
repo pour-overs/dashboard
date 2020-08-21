@@ -31,6 +31,9 @@
         if (isValid) {
           console.log({ snapshot: value });
           deployStatus = value.status;
+          if (value.isComplete) {
+            dispatch("complete");
+          }
         }
       },
       onError

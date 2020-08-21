@@ -1,4 +1,4 @@
-import { firestore, firestoreFields } from "./firebase.js";
+import { firestore, firestoreFields } from "@services/firebase.js";
 
 const FieldValue = firestoreFields.FieldValue;
 const timestamp = () => FieldValue.serverTimestamp();
