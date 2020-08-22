@@ -28,7 +28,7 @@ export default (redirectURL, publicURLs) => {
  */
 const redirect = (redirectURL, res) => {
   const str = `Redirecting to ${redirectURL}`;
-  res.writeHead(302, {
+  res.writeHead(307, {
       Location: redirectURL,
       'Content-Type': 'text/plain',
       'Content-Length': str.length,
