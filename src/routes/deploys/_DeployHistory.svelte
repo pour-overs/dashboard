@@ -20,10 +20,20 @@
     display: grid;
     grid-template-columns: 2em auto 1fr;
     grid-column-gap: 1em;
+    text-decoration: none;
   }
 
-  .deploy a {
+  .time {
+    color: var(--body-color);
+  }
 
+  .deploy:hover {
+    border: 1px solid var(--link-color--hover);
+  }
+
+  .title {
+    font-weight: 600;
+    color: var(--color1);
   }
 
 </style>
@@ -32,8 +42,8 @@
 
 <ol class="deploy-list">
   {#each deploys as deploy}
-    <li class="deploy">
-
+    <li>
+      <a class="deploy" href={`/deploys/${deploy.id}`}>
         {#if deploy.isComplete}
           <Icon name="cloud_done" color="var(--color4)" />
         {:else}
@@ -42,7 +52,7 @@
           </span>
         {/if}
 
-        <a href={`/deploys/${deploy.id}`}>{deploy.label}</a>
+        <div class="title">{deploy.label}</div>
 
         <div class="time">
           {#if deploy.isComplete}
@@ -53,7 +63,7 @@
             <DateTime date={new Date(deploy.createdAt.date)} />
           {/if}
         </div>
-
+</a>
     </li>
   {:else}
     <li class="empty">No deploys yet.</li>
