@@ -46,4 +46,5 @@
 	</li>
 	<li>"Sponsored"/Official guides?</li>
 	<li>Attributions</li>
+	<li>Nice art</li>
 </ul>

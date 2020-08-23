@@ -56,10 +56,10 @@
 
         <div class="time">
           {#if deploy.isComplete}
-            Completed at
+            Completed on
             <DateTime date={new Date(deploy.lastModified.date)} />
           {:else}
-            Started at
+            Started on
             <DateTime date={new Date(deploy.createdAt.date)} />
           {/if}
         </div>
