@@ -53,7 +53,6 @@
         {/if}
 
         <div class="title">{deploy.label}</div>
-
         <div class="time">
           {#if deploy.isComplete}
             Completed on
