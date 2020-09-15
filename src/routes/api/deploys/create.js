@@ -16,7 +16,7 @@ export async function post(req, res, next) {
     return res.end(ERRORS.NO_DATA);
   }
 
-  const createdId = await createDeploy(req.user.uid, data.label);
+  const createdId = await createDeploy(req.user.uid, data.target, data.branchName);
 
   res.json({ createdId });
 }

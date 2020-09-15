@@ -1,10 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import {
-    cloudBuildTriggers,
-    productionKey,
-    dashboardKey
-  } from "@config/app.config.js";
+  import { cloudBuildTriggers, cloudBuildTargets, productionKey, dashboardKey } from "@config/app.config.js";
   import Warning from "@components/Warning.svelte";
 
   // don't display the dashboard as an option — there'd likely not be a point in it.
@@ -37,10 +33,7 @@
     padding: 1em 0;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    align-items: center;
-  }
-
-  fieldset {
+    align-items: flex-start;
   }
 
   .actions {
@@ -90,7 +83,7 @@
     {#if selectedTarget === cloudBuildTriggers.get(productionKey)}
       <Warning>This is a deploy to production.</Warning>
     {:else if selectedTarget === cloudBuildTriggers.get(dashboardKey)}
-      <Warning>This is a deploy to the dashboard.</Warning>
+      <Warning>This is a deploy to the dashboard. Likely not needed.</Warning>
     {:else if branchName !== defaultBranch}
       <Warning>
         "{defaultBranch}" is the default branch — Verify the branch you typed exists
@@ -102,7 +95,13 @@
   </div>
 
   <fieldset class="actions">
-    <button type="submit" disabled={!isDeployable}>Start</button>
+    <button type="submit" disabled={!isDeployable}>
+    {#if selectedTarget === null}
+      Deploy to...
+    {:else}
+      Deploy to {cloudBuildTargets.get(selectedTarget)}
+      {/if}
+    </button>
   </fieldset>
 
 </form>
