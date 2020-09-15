@@ -8,17 +8,32 @@
   */
   export let deploys = [];
 
-  export const STATUS = {
-    UNKNOWN:    "UNKNOWN",
-    QUEUED:     "QUEUED",
-    WORKING:    "WORKING",
-    SUCCESS:    "SUCCESS",
-    FAILURE:    "FAILURE",
-    ERROR:      "ERROR",
-    TIMEOUT:    "TIMEOUT",
-    CANCELLED:  "CANCELLED",
-  };
+  export let displayFailedBuilds = true;
+  export let displayUnknownBuilds = true;
 
+  $: deployList = deploys.filter( d => {
+    
+    if (d.status === STATUS.UNKNOWN && !displayUnknownBuilds) {
+      return false;
+    }
+
+    if (d.status === STATUS.FAILURE && !displayFailedBuilds) {
+      return false;
+    }
+    
+    return true;
+  })
+
+  export const STATUS = {
+    UNKNOWN: "UNKNOWN",
+    QUEUED: "QUEUED",
+    WORKING: "WORKING",
+    SUCCESS: "SUCCESS",
+    FAILURE: "FAILURE",
+    ERROR: "ERROR",
+    TIMEOUT: "TIMEOUT",
+    CANCELLED: "CANCELLED"
+  };
 </script>
 
 <style>
@@ -43,6 +58,10 @@
     color: var(--body-color);
   }
 
+  .time p {
+    margin: 0 0;
+  }
+
   .deploy:hover {
     border: 1px solid var(--link-color--hover);
   }
@@ -52,7 +71,7 @@
     color: var(--color3);
   }
 
-  .build-id {
+  .detail {
     color: var(--link-color);
     font-family: var(--font-monospace);
     display: block;
@@ -76,15 +95,13 @@
     display: block;
     line-height: 1em;
   }
-
-
 </style>
 
 <p>There has been {deploys.length} deploy{deploys.length === 1 ? '' : 's'}.</p>
 
 <ol class="deploy-list">
 
-  {#each deploys as deploy, index}
+  {#each deployList as deploy, index}
     <li>
       <a class="deploy" href={`/deploys/${deploy.id}`}>
 
@@ -102,24 +119,28 @@
 
         <div class="title">
           {deploy.name}
-          <div class="build-id">
-            {deploy.id}
-          </div>
+          <div class="detail">{deploy.id}</div>
         </div>
 
-        <div class="time">
-          {#if deploy.status === STATUS.SUCCESS}
-            Completed on
-            <DateTime date={new Date(deploy.finishTime.date)} />
+
+        <div class="time detail">
+          
+          <div><strong>Status:</strong> {deploy.status}</div>
+
+          {#if deploy.status === STATUS.QUEUED || deploy.status === STATUS.WORKING}
+            <p>
+              <strong>Started:</strong>
+              <DateTime date={new Date(deploy.createTime.date)} />
+            </p>
           {:else}
-            Started on
-            <DateTime date={new Date(deploy.createTime.date)} />
+            <p>
+              <strong>Finished:</strong>
+              <DateTime date={new Date(deploy.finishTime.date)} />
+            </p>
           {/if}
         </div>
 
-        <div class="build-index">
-          {deploys.length - index}
-        </div>
+        <div class="build-index">{deploys.length - index}</div>
 
       </a>
     </li>

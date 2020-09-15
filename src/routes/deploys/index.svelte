@@ -116,6 +116,7 @@
     top: 0.5rem;
     right: 1rem;
     margin-right: 2rem;
+    z-index: 1;
   }
 </style>
 

@@ -49,11 +49,11 @@ export async function runBuild(triggerId, branchName) {
  * 
  * @param {int} [pageSize=10] the number of builds that should be returned
  */
-export async function listBuilds(pageSize = 10) {
+export async function listBuilds() {
   const projectId = PROJECT_ID;
 
   /* IListBuildsResponse */
-  const [builds] = await cloudBuild.listBuilds({ projectId, pageSize, });
+  const [builds] = await cloudBuild.listBuilds({ projectId });
 
   return builds || [];
 }
