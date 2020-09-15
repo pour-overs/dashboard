@@ -34,6 +34,7 @@
     TIMEOUT: "TIMEOUT",
     CANCELLED: "CANCELLED"
   };
+
 </script>
 
 <style>
@@ -46,7 +47,6 @@
   .deploy {
     border: 1px solid var(--border-color);
     padding: 1em 1em;
-    margin: 0 0 1em 0;
     display: grid;
     grid-template-columns: 2em 1fr 1fr 6em;
     grid-column-gap: 1em;
@@ -68,15 +68,19 @@
 
   .title {
     font-weight: 600;
-    color: var(--color3);
+    color: var(--body-color);
   }
 
   .detail {
-    color: var(--link-color);
+    color: var(--body-color);
     font-family: var(--font-monospace);
     display: block;
     opacity: 0.5;
     font-size: 0.7em;
+  }
+
+  .build-id {
+    color: var(--link-color);
   }
 
   .build-index {
@@ -95,6 +99,21 @@
     display: block;
     line-height: 1em;
   }
+
+  .deploy--hover {
+    opacity: 0;
+    height: 0;
+    padding: 0 0.5rem;
+    color: var(--body-color);
+    transition: 0.1s ease-in-out all;
+    margin-bottom: 0.5rem;
+  }
+
+  .deploy:hover .deploy--hover {
+    opacity: 1;
+    height: 1em;
+    transition: 0.1s ease-in-out all;
+  }
 </style>
 
 <p>There has been {deploys.length} deploy{deploys.length === 1 ? '' : 's'}.</p>
@@ -103,7 +122,7 @@
 
   {#each deployList as deploy, index}
     <li>
-      <a class="deploy" href={`/deploys/${deploy.id}`}>
+      <a class="deploy" href={deploy.url} target="_blank">
 
         <div class="deploy-icon">
           {#if deploy.status === STATUS.SUCCESS}
@@ -118,8 +137,9 @@
         </div>
 
         <div class="title">
-          {deploy.name}
-          <div class="detail">{deploy.id}</div>
+          {deploy.name} 
+          <span class="deploy--hover"><Icon name="open_in_new" size="16" /></span>
+          <div class="detail build-id">{deploy.id}</div>
         </div>
 
 
@@ -141,7 +161,6 @@
         </div>
 
         <div class="build-index">{deploys.length - index}</div>
-
       </a>
     </li>
   {:else}

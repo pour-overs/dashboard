@@ -48,6 +48,7 @@ export async function listDeploys() {
     build.createTime.date = toDate(build.createTime);
     build.startTime.date = toDate(build.startTime);
     build.finishTime.date = toDate(build.finishTime);
+    build.url = `https://console.cloud.google.com/cloud-build/builds/${build.id}?project=${build.projectId}`;
 
     let label = cloudBuildTriggers.get(build.buildTriggerId);
     if (typeof label === "undefined") {
