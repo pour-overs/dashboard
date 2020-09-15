@@ -117,7 +117,7 @@
 
         <div class="deploy-icon">
           {#if deploy.status === STATUS.SUCCESS}
-            <Icon name="cloud_done" color="var(--color3)" />
+            <Icon name="cloud_done" color="var(--link-color--hover)" />
           {:else if deploy.status === STATUS.QUEUED || deploy.status === STATUS.WORKING}
             <span class="loading-spinner">
               <Icon name="sync" color="var(--color4)" />
@@ -130,7 +130,13 @@
         <div class="title">
           {deploy.name} 
           <span class="deploy--hover"><Icon name="open_in_new" size="16" /></span>
-          <div class="detail build-id">{deploy.id}</div>
+          <div class="detail build-id">
+            {#if deploy.status === STATUS.FAILURE && deploy.statusDetail.length > 0}
+              Reason: {deploy.statusDetail}
+            {:else}
+              {deploy.id}
+            {/if}
+          </div>
         </div>
 
 
