@@ -38,7 +38,9 @@
   import { Deferred } from "@utils";
   import { goto } from "@sapper/app";
   import { onMount } from "svelte";
+  import { STATUS } from "./_deploy-status.js";
 
+  import CreateDeploy from "./_CreateDeploy.svelte";
   import DeployHistory from "./_DeployHistory.svelte";
   import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
@@ -53,27 +55,18 @@
   let activeDeploy = null;
   $: hasActiveDeploy = activeDeploy !== null;
 
-  let deployName = "";
-  $: isDeployable = deployName.length >= 2;
-
-  async function createDeploy() {
-    notify(`Creating new deploy...`);
-    const createdId = await newDeploy(deployName);
-    if (createdId) {
-      goto(`${window.location}/${createdId}`);
-      notify(`New Deploy: ${deployName}`, 2000);
-    } else {
-      notify("There was an issue creating a deploy.");
-    }
-  }
-
   function initLoadDeploys() {
     isLoadingDeploys = true;
     return loadDeploys()
       .then(_deploys => {
         deploys = _deploys || [];
         console.log(deploys);
-        activeDeploy = deploys.find(d => !d.isComplete) || null;
+        
+        let mostRecentDeploy = deploys[0] || null;
+        if (mostRecentDeploy !== null && mostRecentDeploy.isActive) {
+          activeDeploy = mostRecentDeploy;
+        }
+
         isLoadingDeploys = false;
         loadingDeploys.resolve(_deploys);
       })
@@ -90,20 +83,13 @@
     await initLoadDeploys();
     notify("Done", 1000);
   }
+
+  async function deployStarted(e) {
+    const { triggerID } = e.detail;
+  }
 </script>
 
 <style>
-  .deploy-form {
-    padding: 1em 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  form[disabled] {
-    pointer-events: none;
-    opacity: 0.5;
-  }
 
   .deploy-history {
     grid-template-columns: 1fr minmax(8em, 20%);
@@ -141,18 +127,7 @@
         Please wait for the current deploy to complete.
       </Warning>
     {:else}
-      <form class="deploy-form" on:submit|preventDefault={createDeploy}>
-        <label>
-          Deploy Label
-          <input
-            disabled={hasActiveDeploy}
-            type="text"
-            name="deploy-label"
-            placeholder="Enter a name"
-            bind:value={deployName} />
-        </label>
-        <button type="submit" disabled={!isDeployable}>Start</button>
-      </form>
+      <CreateDeploy on:deploy={deployStarted} />
     {/if}
   </div>
 

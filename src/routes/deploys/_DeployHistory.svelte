@@ -2,6 +2,7 @@
   import Collapsible from "@components/Collapsible.svelte";
   import Icon from "@components/Icon.svelte";
   import DateTime from "@components/DateTime.svelte";
+  import { STATUS } from "./_deploy-status.js";
 
   /** @type {List<IBuild>} 
     https://googleapis.dev/nodejs/cloudbuild/latest/google.devtools.cloudbuild.v1.IBuild.html 
@@ -22,18 +23,7 @@
     }
     
     return true;
-  })
-
-  export const STATUS = {
-    UNKNOWN: "UNKNOWN",
-    QUEUED: "QUEUED",
-    WORKING: "WORKING",
-    SUCCESS: "SUCCESS",
-    FAILURE: "FAILURE",
-    ERROR: "ERROR",
-    TIMEOUT: "TIMEOUT",
-    CANCELLED: "CANCELLED"
-  };
+  });
 
 </script>
 
@@ -52,6 +42,7 @@
     grid-column-gap: 1em;
     text-decoration: none;
     align-items: center;
+    margin-bottom: 0.5rem;
   }
 
   .time {

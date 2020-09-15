@@ -43,6 +43,7 @@ body {
   --label-color: #888;
 
   --warning-color: var(--color5);
+  --input-border: var(--border-color);
 
   background-color: var(--body-bg);
   margin: 0;
@@ -81,6 +82,7 @@ body.theme--dark {
   --button-bg--disabled: #1b3441;
   --button-color--disabled: #888;
   --warning-color: #56420f;
+  --input-border: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -112,9 +114,18 @@ a[href]:hover {
 input,
 textarea,
 select {
-  background: transparent;
+  border-radius: 6px;
+  background: var(--selectable-bg);
   border: 1px solid var(--border-color);
   color: var(--body-color);
+  padding: 0.25rem 0.5rem;
+  line-height: 1.5rem;
+}
+
+fieldset {
+  border: var(--border-color);
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
 }
 
 input:hover,

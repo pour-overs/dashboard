@@ -43,6 +43,8 @@ export async function runBuild(triggerId, branchName) {
       `step:\n\tname: ${step.name}\n\tstatus: ${STATUS_LOOKUP[build.status]}`
     );
   }
+  
+  return build;
 }
 
 /**

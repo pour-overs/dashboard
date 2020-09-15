@@ -12,7 +12,7 @@ export async function post(req, res, next) {
 
   const data = req.body;
 
-  if (!data || !data.label) {
+  if (!data || !data.target) {
     return res.end(ERRORS.NO_DATA);
   }
 
