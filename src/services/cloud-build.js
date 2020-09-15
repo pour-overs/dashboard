@@ -15,7 +15,7 @@ const STATUS_LOOKUP = [
 
 
 // Creates a client
-export const client = new CloudBuildClient();
+export const cloudBuild = new CloudBuildClient();
 
 /**
  * 
@@ -25,7 +25,7 @@ export async function runBuild(triggerId, branchName) {
   // Starts a build against the branch provided.
   const projectId = PROJECT_ID;
 
-  const [resp] = await cb.runBuildTrigger({
+  const [resp] = await cloudBuild.runBuildTrigger({
     projectId,
     triggerId,
     source: {
@@ -35,6 +35,9 @@ export async function runBuild(triggerId, branchName) {
     },
   });
 
+  console.info(`triggered build for ${triggerId}`);
+  const [build] = await resp.promise();
+
   for (const step of build.steps) {
     console.info(
       `step:\n\tname: ${step.name}\n\tstatus: ${STATUS_LOOKUP[build.status]}`
@@ -42,3 +45,15 @@ export async function runBuild(triggerId, branchName) {
   }
 }
 
+/**
+ * 
+ * @param {int} [pageSize=10] the number of builds that should be returned
+ */
+export async function listBuilds(pageSize = 10) {
+  const projectId = PROJECT_ID;
+
+  /* IListBuildsResponse */
+  const [builds] = await cloudBuild.listBuilds({ projectId, pageSize, });
+
+  return builds || [];
+}

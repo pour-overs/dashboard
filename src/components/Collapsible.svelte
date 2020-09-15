@@ -4,6 +4,7 @@
 
   export let collapsed = true;
   export let padded = true;
+  export let sticky = true;
   export let disabled = false;
 
   function toggle() {
@@ -52,10 +53,17 @@
     border: 1px solid transparent;
     padding: 0.5em 0.5em;
   }
+
+  .sticky {
+    z-index: 1;
+    position: sticky;
+    top: 0rem;
+    backdrop-filter: blur(8px);
+  }
 </style>
 
 <section class="collapsible" class:disabled>
-  <header class="title" class:open={!collapsed} on:click={toggle} class:padded >
+  <header class="title" class:open={!collapsed} on:click={toggle} class:padded class:sticky>
     <slot name="title" />
     <Icon name={icon} />
   </header>

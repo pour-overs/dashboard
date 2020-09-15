@@ -25,7 +25,7 @@ const publicURLs = ["/auth"];
 
 const getSession = (req, res, next) => ({
   user: req.user,
-  isAuthorized: req.isAuthorized,
+  isAuthorized: req.isAuthorized
 });
 
 polka() // You can also use Express

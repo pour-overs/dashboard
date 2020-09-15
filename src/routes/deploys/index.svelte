@@ -72,6 +72,7 @@
     return loadDeploys()
       .then(_deploys => {
         deploys = _deploys || [];
+        console.log(deploys);
         activeDeploy = deploys.find(d => !d.isComplete) || null;
         isLoadingDeploys = false;
         loadingDeploys.resolve(_deploys);
@@ -105,13 +106,16 @@
   }
 
   .deploy-history {
-    display: grid;
     grid-template-columns: 1fr minmax(8em, 20%);
   }
 
   .deploy-history .actions {
     padding: 0 0.5em;
     text-align: right;
+    position: sticky;
+    top: 0.5rem;
+    right: 1rem;
+    margin-right: 2rem;
   }
 </style>
 
@@ -156,16 +160,15 @@
 <Collapsible collapsed={false}>
   <h3 slot="title">Deploy History</h3>
   <div slot="content" class="deploy-history">
+    <aside class="actions">
+      <button type="button" on:click={reloadDeploys}>Refresh</button>
+    </aside>
     <div>
-
       {#if isLoadingDeploys}
         <p>Loading...</p>
       {:else}
         <DeployHistory {deploys} />
       {/if}
     </div>
-    <aside class="actions">
-      <button type="button" on:click={reloadDeploys}>Refresh</button>
-    </aside>
   </div>
 </Collapsible>

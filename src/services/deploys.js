@@ -1,5 +1,11 @@
 import { firestore, database, firestoreFields } from "@services/firebase.js";
 
+import { cloudBuildTriggers } from "@config/app.config.js";
+import { listBuilds, runBuild } from "@services/cloud-build.js";
+
+const { NODE_ENV } = process.env;
+const isDev = NODE_ENV === 'development';
+
 const FieldValue = firestoreFields.FieldValue;
 const timestamp = () => FieldValue.serverTimestamp();
 
@@ -31,7 +37,26 @@ export async function createDeploy(userId, label) {
   return ref.id;
 }
 
+/**
+ * 
+ */
 export async function listDeploys() {
+
+  const builds = await listBuilds();
+
+  builds.forEach( build => {
+    build.createTime.date = toDate(build.createTime);
+    build.startTime.date = toDate(build.startTime);
+    build.finishTime.date = toDate(build.finishTime);
+
+    let label = cloudBuildTriggers.get(build.buildTriggerId);
+    if (typeof label === "undefined") {
+      label = "Unknown Build";
+    }
+    build.name = label;
+  });
+
+  return builds;
   const snapshot = await deploysRef
     .orderBy('lastModified', 'desc')
     .get();
@@ -118,4 +143,17 @@ function _createDeploy(userId, label) {
     initiatedBy: userId,
     isComplete: false,
   }
+}
+
+
+/**
+ * Convert a Google ITimestamp into a Date for the specified time
+ * @param {google.protobuf.ITimestamp} timestamp
+ * @see https://googleapis.dev/nodejs/cloudbuild/latest/google.protobuf.ITimestamp.html
+ * @returns {Date} A date object
+ */
+function toDate(timestamp) {
+  const seconds = parseInt(timestamp.seconds, 10);
+  let date = new Date(seconds * 1000);
+  return date;
 }
