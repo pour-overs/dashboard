@@ -4,19 +4,20 @@ const ERRORS = {
   NO_DATA: "A label is required."
 };
 
-export async function post(req, res, next) {
 
+export async function post(req, res, next) {
+  
   if (!req.user) {
     return next();
   }
 
   const data = req.body;
 
-  if (!data || !data.target) {
+  if (!data || !data.triggerId || !data.branchName) {
     return res.end(ERRORS.NO_DATA);
   }
 
-  const createdId = await createDeploy(req.user.uid, data.target, data.branchName);
+  const { triggerId } = await createDeploy(data.triggerId, data.branchName);
 
-  res.json({ createdId });
+  res.json({ triggerId });
 }

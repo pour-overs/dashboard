@@ -2,7 +2,7 @@ import { CloudBuildClient } from "@google-cloud/cloudbuild";
 
 const PROJECT_ID = "pour-over-guides";
 
-const STATUS_LOOKUP = [
+export const STATUS_LOOKUP = [
   "UNKNOWN",
   "Queued",
   "Working",
@@ -25,7 +25,7 @@ export async function runBuild(triggerId, branchName) {
   // Starts a build against the branch provided.
   const projectId = PROJECT_ID;
 
-  const [resp] = await cloudBuild.runBuildTrigger({
+  const [longRunningOperation] = await cloudBuild.runBuildTrigger({
     projectId,
     triggerId,
     source: {
@@ -35,16 +35,7 @@ export async function runBuild(triggerId, branchName) {
     },
   });
 
-  console.info(`triggered build for ${triggerId}`);
-  const [build] = await resp.promise();
-
-  for (const step of build.steps) {
-    console.info(
-      `step:\n\tname: ${step.name}\n\tstatus: ${STATUS_LOOKUP[build.status]}`
-    );
-  }
-  
-  return build;
+  return longRunningOperation;
 }
 
 /**

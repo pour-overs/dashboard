@@ -1,3 +1,26 @@
+<script context="module">
+  import { notify } from "@stores/notifications.js";
+  async function newDeploy(triggerId, branchName = "master") {
+    const response = await fetch(`/api/deploys/create`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ branchName, triggerId })
+    });
+
+    if (!response.ok) {
+      console.error(response);
+      notify(response.statusText);
+      return;
+    }
+
+    await response.json();
+
+    return { triggerId, };
+  }
+</script>
 <script>
   import { createEventDispatcher } from "svelte";
   import { cloudBuildTriggers, cloudBuildTargets, productionKey, dashboardKey } from "@config/app.config.js";
@@ -14,15 +37,17 @@
   let branchName = "master";
   let selectedTarget = null;
   $: isDeployable = branchName.length >= 2 && selectedTarget !== null;
+  $: selectedTargetName = selectedTarget === null ? "" :  cloudBuildTargets.get(selectedTarget);
 
   async function createDeploy() {
-    notify(`Creating new deploy...`);
-    const { triggerId, createdId } = await newDeploy(deployName);
+    notify(`Triggering a deploy to ${selectedTargetName}`, 4000);
+
+    const { triggerId } = await newDeploy(selectedTarget, branchName);
 
     if (triggerId) {
       dispatch("deploy", { triggerId });
-      notify(`New Deploy: ${deployName}`, 2000);
-    } else {
+    } 
+    else {
       notify("There was an issue creating a deploy.");
     }
   }
@@ -99,7 +124,7 @@
     {#if selectedTarget === null}
       Deploy to...
     {:else}
-      Deploy to {cloudBuildTargets.get(selectedTarget)}
+      Deploy to {selectedTargetName}
       {/if}
     </button>
   </fieldset>

@@ -11,27 +11,6 @@
       return deploys;
     }
   }
-
-  async function newDeploy(label) {
-    const response = await fetch(`/api/deploys/create`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ label })
-    });
-
-    if (!response.ok) {
-      console.error(response);
-      notify(response);
-      return;
-    }
-
-    const { createdId } = await response.json();
-
-    return createdId;
-  }
 </script>
 
 <script>
@@ -64,7 +43,7 @@
         
         let mostRecentDeploy = deploys[0] || null;
         if (mostRecentDeploy !== null && mostRecentDeploy.isActive) {
-          activeDeploy = mostRecentDeploy;
+          activeDeploy = mostRecentDeploy.triggerId;
         }
 
         isLoadingDeploys = false;
@@ -85,7 +64,8 @@
   }
 
   async function deployStarted(e) {
-    const { triggerID } = e.detail;
+    const { triggerId } = e.detail;
+    activeDeploy = triggerId;
   }
 </script>
 

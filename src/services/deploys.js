@@ -1,6 +1,6 @@
 import { firestore, database, firestoreFields } from "@services/firebase.js";
 import { cloudBuildTriggers, cloudBuildTargets } from "@config/app.config.js";
-import { listBuilds, runBuild } from "@services/cloud-build.js";
+import { listBuilds, runBuild, STATUS_LOOKUP } from "@services/cloud-build.js";
 
 const { NODE_ENV } = process.env;
 const isDev = NODE_ENV === 'development';
@@ -10,30 +10,47 @@ const timestamp = () => FieldValue.serverTimestamp();
 
 const realTimeDeployRef = database.ref("deploys");
 const deploysRef = firestore.collection("deploys");
+const useRealTimeDatabase = true;
 
 /**
  * Create a new deploy and associate to the userId
  * @returns {Promise<string>} A promise that resolves to the newly created Deploy ID
  */
-export async function createDeploy(userId, label) {
+export async function createDeploy(triggerId, branchName) {
 
-  const deployItem = _createDeploy(userId, label);
+  console.log(`Triggered build for trigger: ${triggerId}`);
+  /** @type google.devtools.cloudbuild.v1. IBuild */
+  const longRunningOperation = await runBuild(triggerId, branchName);
 
-  const ref = await deploysRef.add(deployItem);
+  // "web job" status tracker
+  // @todo find out if a cloud function is more appropriate
+  if (useRealTimeDatabase) {
 
-  // creating a deploy also creates a rtdb entry for tracking the deploy
-  await realTimeDeployRef
-    .child(ref.id)
-    .set({
-      id: ref.id,
-      isComplete: false,
-      status: "Triggering",
-    })
-    .catch(function(error) {
-      console.log("Unable to set real time database entry", error);
-    });
+    console.log(`Using RTDB to track trigger: ${triggerId}`);
 
-  return ref.id;
+    await setRealTimeDBEntry(triggerId, false, "Triggering");
+  
+      
+      // not awaiting — "webjob" style
+      const start = Date.now();
+      console.log("Starting LongRunningOperation.")
+      longRunningOperation.promise()
+        .then(async ([build]) => {
+          console.log(`Build complete (from trigger: ${triggerId}, buildID: ${build.id})`);
+          debugger;
+          const statusText = STATUS_LOOKUP[build.status];
+          await setRealTimeDBEntry(triggerId, true, `Status: ${statusText}`);
+          
+          for (const step of build.steps) {
+            console.info(`step:\n\tname: ${step.name}\n\tstatus: ${statusText}`);
+          }
+
+          const end = Date.now();
+          console.log(`Ending LongRunningOperation. Duration: ${end - start}`);
+        });
+  }
+
+  return { triggerId };
 }
 
 /**
@@ -46,7 +63,10 @@ export async function listDeploys() {
   builds.forEach( build => {
     build.createTime.date = toDate(build.createTime);
     build.startTime.date = toDate(build.startTime);
-    build.finishTime.date = toDate(build.finishTime);
+
+    if (build.finishTime !== null) {
+      build.finishTime.date = toDate(build.finishTime);
+    }
     build.url = `https://console.cloud.google.com/cloud-build/builds/${build.id}?project=${build.projectId}`;
 
     build.isActive = ["WORKING", "QUEUED"].includes(build.status);
@@ -71,4 +91,14 @@ function toDate(timestamp) {
   const seconds = parseInt(timestamp.seconds, 10);
   let date = new Date(seconds * 1000);
   return date;
+}
+
+
+async function setRealTimeDBEntry(triggerId, isComplete, status) {
+  return await realTimeDeployRef
+    .child(triggerId)
+    .set({ triggerId, isComplete, status, })
+    .catch(function(error) {
+      console.log("Unable to set real time database entry", error);
+    });
 }
