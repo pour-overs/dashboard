@@ -30,7 +30,6 @@ export async function createDeploy(triggerId, branchName) {
 
     await setRealTimeDBEntry(triggerId, false, "Triggering");
   
-      
       // not awaiting — "webjob" style
       const start = Date.now();
       console.log("Starting LongRunningOperation.")
@@ -42,12 +41,19 @@ export async function createDeploy(triggerId, branchName) {
           await setRealTimeDBEntry(triggerId, true, `Status: ${statusText}`);
           
           for (const step of build.steps) {
-            console.info(`step:\n\tname: ${step.name}\n\tstatus: ${statusText}`);
+            console.log(`step:\n\tname: ${step.name}\n\tstatus: ${statusText}`);
           }
 
           const end = Date.now();
           console.log(`Ending LongRunningOperation. Duration: ${end - start}`);
-        });
+        })
+        .catch(async (err) => {
+          console.log(`Ending LongRunningOperation. Duration: ${end - start}`);
+          console.log(`Long running operation failed. trigger: ${triggerId})`);
+          console.error(err);
+          await setRealTimeDBEntry(triggerId, true, `Long running operation failed. ${err}`)
+          .catch(() => console.err("Failed to set RTDB"));
+        })
   }
 
   return { triggerId };
