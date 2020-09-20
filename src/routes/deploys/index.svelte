@@ -21,6 +21,8 @@
 
   import CreateDeploy from "./_CreateDeploy.svelte";
   import DeployHistory from "./_DeployHistory.svelte";
+  import ActiveDeploy from "./_ActiveDeploy.svelte";
+  import FirebaseProvider from "@providers/FirebaseProvider.svelte";
   import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
@@ -40,10 +42,10 @@
       .then(_deploys => {
         deploys = _deploys || [];
         console.log(deploys);
-        
+
         let mostRecentDeploy = deploys[0] || null;
         if (mostRecentDeploy !== null && mostRecentDeploy.isActive) {
-          activeDeploy = mostRecentDeploy.triggerId;
+          activeDeploy = mostRecentDeploy.buildTriggerId;
         }
 
         isLoadingDeploys = false;
@@ -67,6 +69,12 @@
     const { triggerId } = e.detail;
     activeDeploy = triggerId;
   }
+
+  async function activeDeployCompleted() {
+    notify("Deploy complete", 4000)
+    activeDeploy = null;
+    await reloadDeploys();
+  }
 </script>
 
 <style>
@@ -75,22 +83,39 @@
     grid-template-columns: 1fr minmax(8em, 20%);
   }
 
-  .deploy-history .actions {
-    padding: 0 0.5em;
+  .deploy-history-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .deploy-history-title .actions {
     text-align: right;
-    position: sticky;
-    top: 0.5rem;
-    right: 1rem;
     margin-right: 2rem;
-    z-index: 1;
   }
 </style>
 
 <PageTitle title="Deploys">Deploys</PageTitle>
 
-<Collapsible
-  collapsed={isLoadingDeploys || hasActiveDeploy}
-  disabled={isLoadingDeploys}>
+
+
+
+<Collapsible collapsed={!hasActiveDeploy}>
+  <h3 slot="title">Active Deploy</h3>
+  <div slot="content">
+    <FirebaseProvider>
+      {#if hasActiveDeploy}
+        <ActiveDeploy id={activeDeploy} on:complete={activeDeployCompleted} />
+      {:else}
+        <p>Currently there isn't an active deploy.</p>
+      {/if}
+    </FirebaseProvider>
+
+  </div>
+</Collapsible>
+
+<Collapsible disabled={isLoadingDeploys} collapsed={false}>
   <h3 slot="title">New Deploy</h3>
   <div slot="content">
 
@@ -114,11 +139,14 @@
 </Collapsible>
 
 <Collapsible collapsed={false}>
-  <h3 slot="title">Deploy History</h3>
+  <h3 slot="title" class="deploy-history-title">
+      Deploy History
+      <aside class="actions">
+        <button type="button" on:click={reloadDeploys}>Refresh</button>
+      </aside>
+  </h3>
   <div slot="content" class="deploy-history">
-    <aside class="actions">
-      <button type="button" on:click={reloadDeploys}>Refresh</button>
-    </aside>
+
     <div>
       {#if isLoadingDeploys}
         <p>Loading...</p>

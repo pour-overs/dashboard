@@ -4,8 +4,8 @@
   import DateTime from "@components/DateTime.svelte";
   import { STATUS } from "./_deploy-status.js";
 
-  /** @type {List<IBuild>} 
-    https://googleapis.dev/nodejs/cloudbuild/latest/google.devtools.cloudbuild.v1.IBuild.html 
+  /** @type {List<IBuild>}
+    https://googleapis.dev/nodejs/cloudbuild/latest/google.devtools.cloudbuild.v1.IBuild.html
   */
   export let deploys = [];
 
@@ -13,7 +13,7 @@
   export let displayUnknownBuilds = true;
 
   $: deployList = deploys.filter( d => {
-    
+
     if (d.status === STATUS.UNKNOWN && !displayUnknownBuilds) {
       return false;
     }
@@ -21,7 +21,7 @@
     if (d.status === STATUS.FAILURE && !displayFailedBuilds) {
       return false;
     }
-    
+
     return true;
   });
 
@@ -128,7 +128,7 @@
         </div>
 
         <div class="title">
-          {deploy.name} 
+          {deploy.name}
           <span class="deploy--hover"><Icon name="open_in_new" size="16" /></span>
           <div class="detail build-id">
             {#if deploy.status === STATUS.FAILURE && deploy.statusDetail.length > 0}
@@ -141,7 +141,7 @@
 
 
         <div class="time detail">
-          
+
           <div><strong>Status:</strong> {deploy.status}</div>
 
           {#if deploy.status === STATUS.QUEUED || deploy.status === STATUS.WORKING}
