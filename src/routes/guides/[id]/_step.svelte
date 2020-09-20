@@ -16,6 +16,8 @@
 
   export let max;
 
+  let sticky = false;
+
   function moveUp() {
     dispatch("move", { previous: order, next: order - 1 });
   }
@@ -123,7 +125,7 @@
 </style>
 
 <div class="step" data-id={id}>
-  <Collapsible padded={false}>
+  <Collapsible padded={false} {sticky}>
 
     <header class="step-title" slot="title">
       <div class="orderer">

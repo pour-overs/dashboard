@@ -11,35 +11,18 @@
       return deploys;
     }
   }
-
-  async function newDeploy(label) {
-    const response = await fetch(`/api/deploys/create`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ label })
-    });
-
-    if (!response.ok) {
-      console.error(response);
-      notify(response);
-      return;
-    }
-
-    const { createdId } = await response.json();
-
-    return createdId;
-  }
 </script>
 
 <script>
   import { Deferred } from "@utils";
   import { goto } from "@sapper/app";
   import { onMount } from "svelte";
+  import { STATUS } from "./_deploy-status.js";
 
+  import CreateDeploy from "./_CreateDeploy.svelte";
   import DeployHistory from "./_DeployHistory.svelte";
+  import ActiveDeploy from "./_ActiveDeploy.svelte";
+  import FirebaseProvider from "@providers/FirebaseProvider.svelte";
   import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
@@ -53,26 +36,18 @@
   let activeDeploy = null;
   $: hasActiveDeploy = activeDeploy !== null;
 
-  let deployName = "";
-  $: isDeployable = deployName.length >= 2;
-
-  async function createDeploy() {
-    notify(`Creating new deploy...`);
-    const createdId = await newDeploy(deployName);
-    if (createdId) {
-      goto(`${window.location}/${createdId}`);
-      notify(`New Deploy: ${deployName}`, 2000);
-    } else {
-      notify("There was an issue creating a deploy.");
-    }
-  }
-
   function initLoadDeploys() {
     isLoadingDeploys = true;
     return loadDeploys()
       .then(_deploys => {
         deploys = _deploys || [];
-        activeDeploy = deploys.find(d => !d.isComplete) || null;
+        console.log(deploys);
+
+        let mostRecentDeploy = deploys[0] || null;
+        if (mostRecentDeploy !== null && mostRecentDeploy.isActive) {
+          activeDeploy = mostRecentDeploy.buildTriggerId;
+        }
+
         isLoadingDeploys = false;
         loadingDeploys.resolve(_deploys);
       })
@@ -89,37 +64,58 @@
     await initLoadDeploys();
     notify("Done", 1000);
   }
+
+  async function deployStarted(e) {
+    const { triggerId } = e.detail;
+    activeDeploy = triggerId;
+  }
+
+  async function activeDeployCompleted() {
+    notify("Deploy complete", 4000)
+    activeDeploy = null;
+    await reloadDeploys();
+  }
 </script>
 
 <style>
-  .deploy-form {
-    padding: 1em 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  form[disabled] {
-    pointer-events: none;
-    opacity: 0.5;
-  }
 
   .deploy-history {
-    display: grid;
     grid-template-columns: 1fr minmax(8em, 20%);
   }
 
-  .deploy-history .actions {
-    padding: 0 0.5em;
+  .deploy-history-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .deploy-history-title .actions {
     text-align: right;
+    margin-right: 2rem;
   }
 </style>
 
 <PageTitle title="Deploys">Deploys</PageTitle>
 
-<Collapsible
-  collapsed={isLoadingDeploys || hasActiveDeploy}
-  disabled={isLoadingDeploys}>
+
+
+
+<Collapsible collapsed={!hasActiveDeploy}>
+  <h3 slot="title">Active Deploy</h3>
+  <div slot="content">
+    <FirebaseProvider>
+      {#if hasActiveDeploy}
+        <ActiveDeploy id={activeDeploy} on:complete={activeDeployCompleted} />
+      {:else}
+        <p>Currently there isn't an active deploy.</p>
+      {/if}
+    </FirebaseProvider>
+
+  </div>
+</Collapsible>
+
+<Collapsible disabled={isLoadingDeploys} collapsed={false}>
   <h3 slot="title">New Deploy</h3>
   <div slot="content">
 
@@ -136,36 +132,27 @@
         Please wait for the current deploy to complete.
       </Warning>
     {:else}
-      <form class="deploy-form" on:submit|preventDefault={createDeploy}>
-        <label>
-          Deploy Label
-          <input
-            disabled={hasActiveDeploy}
-            type="text"
-            name="deploy-label"
-            placeholder="Enter a name"
-            bind:value={deployName} />
-        </label>
-        <button type="submit" disabled={!isDeployable}>Start</button>
-      </form>
+      <CreateDeploy on:deploy={deployStarted} />
     {/if}
   </div>
 
 </Collapsible>
 
 <Collapsible collapsed={false}>
-  <h3 slot="title">Deploy History</h3>
+  <h3 slot="title" class="deploy-history-title">
+      Deploy History
+      <aside class="actions">
+        <button type="button" on:click={reloadDeploys}>Refresh</button>
+      </aside>
+  </h3>
   <div slot="content" class="deploy-history">
-    <div>
 
+    <div>
       {#if isLoadingDeploys}
         <p>Loading...</p>
       {:else}
         <DeployHistory {deploys} />
       {/if}
     </div>
-    <aside class="actions">
-      <button type="button" on:click={reloadDeploys}>Refresh</button>
-    </aside>
   </div>
 </Collapsible>
