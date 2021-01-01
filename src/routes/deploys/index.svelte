@@ -47,6 +47,9 @@
         if (mostRecentDeploy !== null && mostRecentDeploy.isActive) {
           activeDeploy = mostRecentDeploy.buildTriggerId;
         }
+        else {
+          activeDeploy = null;
+        }
 
         isLoadingDeploys = false;
         loadingDeploys.resolve(_deploys);
