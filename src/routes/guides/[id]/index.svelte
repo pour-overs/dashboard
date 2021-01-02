@@ -17,6 +17,8 @@
   import PageTitle from "@components/PageTitle.svelte";
   import DateTime from "@components/DateTime.svelte";
   import Collapsible from "@components/Collapsible.svelte";
+  import ImageSelect from "@components/ImageSelect.svelte";
+  import FirebaseProvider from "@providers/FirebaseProvider.svelte";
 
   import { notify } from "@stores/notifications.js";
   import { saveGuide } from "./_guides.js";
@@ -39,7 +41,8 @@
     description: guide.description || "",
     introduction: {
       content: guide.introduction.content || "",
-      youtubeUrl: guide.introduction.youtubeUrl || ""
+      youtubeUrl: guide.introduction.youtubeUrl || "",
+      image: guide.introduction.image || "",
     }
   };
 
@@ -204,6 +207,11 @@
           Youtube URL
           <input type="text" bind:value={form.introduction.youtubeUrl} />
         </label>
+
+        <FirebaseProvider>
+          <ImageSelect label="Hero Image" bind:value={form.introduction.image} />
+        </FirebaseProvider>
+
       </section>
     </Collapsible>
     <Collapsible collapsed={guide.steps.length === 0}>

@@ -1,5 +1,5 @@
 <script>
-  export const path = "images";
+  import { storageImagePath as path } from "@config/app.config.js";
 
   import { getContext, onMount } from "svelte";
   import Icon from "@components/Icon.svelte";
