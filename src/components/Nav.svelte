@@ -1,9 +1,13 @@
 <script>
+
   export let segment;
-  import { getContext } from "svelte";
 
   import IconProvider from "@providers/IconProvider.svelte";
   import Icon from "@components/Icon.svelte";
+  import routes from "@config/nav.config.js";
+
+  const defaultSegment = routes[0].segment;
+  const isActive = (current, route) => current === route;
 
 </script>
 
@@ -85,48 +89,18 @@
 <IconProvider color="var(--nav-icon-color)" size="16">
   <nav>
     <ul class="nav-items">
-      <li>
-        <a aria-current={segment === undefined ? 'page' : undefined} href=".">
-          <span class="icon">
-            <Icon name="equalizer" />
-          </span>
-          <span class="text">Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a
-          aria-current={segment === 'guides' ? 'page' : undefined}
-          href="guides">
-          <span class="icon">
-            <Icon name="library_books" />
-          </span>
-          <span class="text">Guides</span>
-        </a>
-      </li>
-      <li>
-        <a aria-current={segment === 'users' ? 'page' : undefined} href="users">
-          <span class="icon">
-            <Icon name="recent_actors" />
-          </span>
-          <span class="text">Users</span>
-        </a>
-      </li>
-      <li>
-        <a aria-current={segment === 'account' ? 'page' : undefined} href="account">
-          <span class="icon">
-            <Icon name="account_box" />
-          </span>
-          <span class="text">Account</span>
-        </a>
-      </li>
-      <li>
-        <a aria-current={segment === 'deploys' ? 'page' : undefined} href="deploys">
-          <span class="icon">
-            <Icon name="cloud_done" />
-          </span>
-          <span class="text">Deploys</span>
-        </a>
-      </li>
+    {#key segment}
+      {#each routes as route}
+        <li>
+          <a aria-current={isActive(segment || defaultSegment, route.segment) ? 'page' : undefined} href={route.segment}>
+            <span class="icon">
+              <Icon name={route.icon} />
+            </span>
+            <span class="text">{route.label}</span>
+          </a>
+        </li>
+      {/each}
+      {/key}
     </ul>
   </nav>
 </IconProvider>

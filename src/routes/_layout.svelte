@@ -6,6 +6,8 @@
 </script>
 
 <script>
+
+  import { fade } from 'svelte/transition';
   import { notify } from "@stores/notifications.js";
 
   import Nav from "@components/Nav.svelte";
@@ -54,7 +56,11 @@
           <main slot="content">
             <Notifications />
             <Breadcrumbs />
-            <slot />
+            {#key segment}
+              <div in:fade >
+                <slot />
+              </div>
+            {/key}
           </main>
 
         </SidebarLayout>
