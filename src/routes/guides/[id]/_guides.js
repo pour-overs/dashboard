@@ -17,7 +17,7 @@ export async function saveGuide(id, guideData) {
     return null;
   }
 
-  notify(`Saved ${guideData.title || "guide"}`);
+  notify(`Saved changes to "${guideData.title || "guide"}"`);
   return await response.json();
 }
 

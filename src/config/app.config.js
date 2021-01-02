@@ -2,7 +2,7 @@ export const title = "Pour Over Guides";
 
 /**
  * The Google Cloud Build triggerID's for the various environments
- * 
+ *
  * https://console.cloud.google.com/cloud-build/triggers/edit/74781781-b39e-4823-b8b6-f5f1c40440fd?project=pour-over-guides
  */
 
@@ -24,3 +24,5 @@ entries.forEach( ([key, id]) => {
   cloudBuildTargets.set(id, key);
 });
 
+
+export const storageImagePath = "images";
