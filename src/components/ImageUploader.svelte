@@ -95,7 +95,6 @@
 
         const selectedFile = fileInput.files[0];
         const value = selectedFile.name;
-        console.log(selectedFile, filename);
 
         if (selectedFile.type === "") {
             notify("The file must be an image.");
