@@ -6,6 +6,9 @@ const timestamp = () => FieldValue.serverTimestamp();
 
 const wikiRef = firestore.collection("wiki");
 
+export async function getByID() {
+
+}
 
 export async function listWikis() {
 
