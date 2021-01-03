@@ -29,17 +29,17 @@ export async function createDeploy(triggerId, branchName) {
     console.log(`Using RTDB to track trigger: ${triggerId}`);
 
     await setRealTimeDBEntry(triggerId, false, "Triggering");
-  
+
       // not awaiting — "webjob" style
       const start = Date.now();
       console.log("Starting LongRunningOperation.")
-      longRunningOperation.promise()
+      longRunningOperation()
         .then(async ([build]) => {
           console.log(`Build complete (from trigger: ${triggerId}, buildID: ${build.id})`);
           debugger;
           const statusText = STATUS_LOOKUP[build.status];
           await setRealTimeDBEntry(triggerId, true, `Status: ${statusText}`);
-          
+
           for (const step of build.steps) {
             console.log(`step:\n\tname: ${step.name}\n\tstatus: ${statusText}`);
           }
@@ -60,7 +60,7 @@ export async function createDeploy(triggerId, branchName) {
 }
 
 /**
- * 
+ *
  */
 export async function listDeploys() {
 

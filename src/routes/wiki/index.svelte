@@ -43,7 +43,7 @@
   Wiki
 </PageTitle>
 
-{#await loadingPages.promise}
+{#await loadingPages}
   <p>Loading...</p>
 {:then pages}
   <ul>

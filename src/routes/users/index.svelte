@@ -85,7 +85,7 @@
 
 <div class="deferred-content">
 
-  {#await loadingUsers.promise}
+  {#await loadingUsers}
     <p>Loading Users...</p>
   {:then data}
     <UserList {...data} />
@@ -104,7 +104,7 @@
 
 <div class="deferred-content">
 
-  {#await loadingWhitelist.promise}
+  {#await loadingWhitelist}
     <p>Loading...</p>
   {:then whitelist}
     <Whitelist {whitelist} />

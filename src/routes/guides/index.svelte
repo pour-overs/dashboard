@@ -137,7 +137,7 @@
 <div class="guide-layout">
 
   <div class="guides">
-    {#await loadingGuides.promise}
+    {#await loadingGuides}
       <p>Loading...</p>
     {:then guides}
       {#each guides as guide}
