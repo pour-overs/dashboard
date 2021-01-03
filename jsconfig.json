@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "strict": false,
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es5",
+        "module":"ES2020",
+        "baseUrl": "./src",
+        "paths": {
+            "@routes/*": ["routes/*"],
+            "@components/*": ["components/*"],
+            "@icons/*": ["icons/*"],
+            "@services/*": ["services/*"],
+            "@stores/*": ["stores/*"],
+            "@providers/*": ["providers/*"],
+            "@utils/*": ["utils/*.js"],
+            "@config/*": ["config/*"]
+          }
+    },
+    "include": ["src/**/*"]
+}
