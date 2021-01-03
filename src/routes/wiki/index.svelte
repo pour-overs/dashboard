@@ -39,7 +39,7 @@
 </style>
 
 
-<PageTitle>
+<PageTitle title="Wiki">
   Wiki
 </PageTitle>
 

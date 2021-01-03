@@ -2,6 +2,7 @@
   import { getContext } from "svelte";
   import { theme, THEMES } from "@stores/theme.js";
   import UserCard from "@components/UserCard.svelte";
+  import PageTitle from "@components/PageTitle.svelte";
 
   export let ownPage = true;
   let user = getContext("user");
@@ -21,7 +22,7 @@
 </style>
 
 {#if ownPage}
-  <h1>Your Account</h1>
+  <PageTitle title="Your Account">Your Account</PageTitle>
 {:else}
   <h2>Your Account</h2>
 {/if}
