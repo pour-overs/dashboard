@@ -12,7 +12,10 @@ const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
-const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning);
+const onwarn = (warning, onwarn) =>
+  (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
+  (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  onwarn(warning);
 
 
 // the locations we can import from
@@ -39,9 +42,10 @@ export default {
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
       svelte({
-        dev,
-        hydratable: true,
-        emitCss: true
+        compilerOptions: {
+          dev,
+          hydratable: true,
+        }
       }),
       resolve({
         browser: true,
@@ -71,6 +75,8 @@ export default {
       })
     ],
 
+    preserveEntrySignatures: false,
+
     onwarn,
   },
 
@@ -84,8 +90,12 @@ export default {
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
       svelte({
-        generate: 'ssr',
-        dev
+        compilerOptions: {
+          dev,
+          generate: 'ssr',
+          hydratable: true
+        },
+        emitCss: false
       }),
       resolve({
         dedupe: ['svelte']
@@ -95,6 +105,7 @@ export default {
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules || Object.keys(process.binding('natives'))
     ),
+    preserveEntrySignatures: 'strict',
 
     onwarn,
   },
@@ -111,6 +122,8 @@ export default {
       commonjs(),
       !dev && terser()
     ],
+
+    preserveEntrySignatures: false,
 
     onwarn,
   }

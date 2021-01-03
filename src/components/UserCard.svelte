@@ -6,7 +6,7 @@
   export let name;
   export let uid;
   export let picture;
-  export let email;
+  //export let email;
   export let text = null; // name override
   export let alt = text || name;
   export let href = `/users/${uid}`;

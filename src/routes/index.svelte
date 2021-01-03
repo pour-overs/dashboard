@@ -14,11 +14,6 @@
     color: var(--color1);
   }
 
-  hr {
-    margin: 4rem auto;
-    opacity: 0.5;
-  }
-
   h2 {
     margin-top: 2rem;
   }
