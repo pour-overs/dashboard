@@ -3,6 +3,7 @@
   import { theme, THEMES } from "@stores/theme.js";
   import UserCard from "@components/UserCard.svelte";
 
+  export let ownPage = true;
   let user = getContext("user");
 
   $: isDarkMode = $theme === THEMES.DARK_MODE;
@@ -15,11 +16,15 @@
 
 <style>
   h2 {
-    margin-bottom: 1em;
+    margin-top: 4rem;
   }
 </style>
 
-<h1>Your Account</h1>
+{#if ownPage}
+  <h1>Your Account</h1>
+{:else}
+  <h2>Your Account</h2>
+{/if}
 <p>
   You're logged in as {user.name}.
   <a href="/auth/login">Sign out</a>
