@@ -16,7 +16,7 @@
 
 <style>
   h2 {
-    margin-top: 4rem;
+    margin-top: 2rem;
   }
 </style>
 
@@ -32,7 +32,10 @@
 
 <h2>Settings</h2>
 
-<button on:click={toggleDarkMode}>{isDarkMode ? "Disable" : "Enable"} Dark Mode</button>
+<p>
+  <button on:click={toggleDarkMode}>{isDarkMode ? "Disable" : "Enable"} Dark Mode</button>
+</p>
+
 
 
 

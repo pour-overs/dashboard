@@ -7,12 +7,6 @@
 
   const user = getContext("user");
 
-  $: isDarkMode = $theme === THEMES.DARK_MODE;
-
-  function toggleDarkMode() {
-    theme.update( t => t === THEMES.DEFAULT ? THEMES.DARK_MODE : THEMES.DEFAULT);
-  }
-
 </script>
 <style>
 
@@ -31,7 +25,7 @@
 </style>
 
 <PageTitle {title}>
-  Welcome, <span class="text-primary">{user.name.split(" ")[0]}!</span>
+  Welcome, <span class="text-primary">{user.name.split(" ")[0]}</span>!
 </PageTitle>
 <p>
   This is the dashboard for the Pour Over Guides website. Here you can create, edit, and publish guides and wiki pages.
