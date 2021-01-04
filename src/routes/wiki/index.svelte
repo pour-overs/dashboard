@@ -36,6 +36,10 @@
     margin: 0 0;
   }
 
+  .actions {
+    margin-bottom: 1rem;
+  }
+
 </style>
 
 
@@ -43,16 +47,23 @@
   Wiki
 </PageTitle>
 
-{#await loadingPages}
-  <Loading text="Loading Wiki Pages" />
-{:then pages}
-  <ul>
-    {#each pages as page}
-      <li>{page}</li>
-    {:else}
-      <li>
-        <p>No wiki pages exist yet.</p>
-      </li>
-    {/each}
-  </ul>
-{/await}
+<CollectionLayout.Layout sidebar="right">
+  <CollectionLayout.Collection></CollectionLayout.Collection>
+    {#await loadingPages}
+      <Loading text="Loading Wiki Pages" />
+    {:then pages}
+      <ul>
+        {#each pages as page}
+          <li>{page}</li>
+        {:else}
+          <li>
+            <p>No wiki pages exist yet.</p>
+          </li>
+        {/each}
+      </ul>
+    {/await}
+  <CollectionLayout.Sidebar>
+    <h3 class="actions">Actions</h3>
+    <a class="button" href="wiki/create">Create Wiki Page</a>
+  </CollectionLayout.Sidebar>
+</CollectionLayout.Layout>
