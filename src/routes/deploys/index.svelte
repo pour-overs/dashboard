@@ -26,6 +26,7 @@
   import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
+  import Loading from "@components/Loading.svelte";
 
   let deploys = [];
   let loadingDeploys = new Deferred();
@@ -152,7 +153,7 @@
 
     <div>
       {#if isLoadingDeploys}
-        <p>Loading...</p>
+        <Loading text="Loading deploy history" />
       {:else}
         <DeployHistory {deploys} />
       {/if}

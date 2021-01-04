@@ -18,4 +18,13 @@ export class Deferred extends Promise {
       this.reject = reject;
     }
   }
+
+  /**
+   * Sets the state of this deferred to resolve or reject with the parameter Promise
+   * @param {Promise} promise A promise that this deferred should resolve or reject with
+   */
+  settleWith(promise) {
+    promise.then(this.resolve);
+    promise.catch(this.reject);
+  }
 }

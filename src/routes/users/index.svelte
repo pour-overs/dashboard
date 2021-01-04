@@ -31,36 +31,25 @@
   import UserCard from "@components/UserCard.svelte";
   import UserList from "./_userlist.svelte";
   import Whitelist from "./_whitelist.svelte";
+  import Loading from "@components/Loading.svelte";
 
   let loadingUsers = new Deferred();
   let loadingWhitelist = new Deferred();
 
 
   onMount(async() => {
-
-    loadUsers()
-      .then(loadingUsers.resolve)
-      .catch(loadingUsers.reject);
-
-    loadWhitelist()
-      .then(loadingWhitelist.resolve)
-      .catch(loadingWhitelist.reject);
+    loadingUsers.settleWith(loadUsers());
+    loadingWhitelist.settleWith(loadWhitelist());
   })
 
   function reloadUsers() {
     loadingUsers = new Deferred();
-
-    loadUsers()
-      .then(loadingUsers.resolve)
-      .catch(loadingUsers.reject);
+    loadingUsers.settleWith(loadUsers());
   }
 
   function reloadWhitelist() {
     loadingWhitelist = new Deferred();
-
-    loadWhitelist()
-      .then(loadingWhitelist.resolve)
-      .catch(loadingWhitelist.reject);
+    loadingWhitelist.settleWith(loadWhitelist());
   }
 </script>
 
@@ -86,7 +75,7 @@
 <div class="deferred-content">
 
   {#await loadingUsers}
-    <p>Loading Users...</p>
+    <Loading text="Loading Users" />
   {:then data}
     <UserList {...data} />
   {:catch error}
@@ -105,7 +94,7 @@
 <div class="deferred-content">
 
   {#await loadingWhitelist}
-    <p>Loading...</p>
+    <Loading text="Loading" />
   {:then whitelist}
     <Whitelist {whitelist} />
   {:catch error}

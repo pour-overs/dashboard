@@ -212,6 +212,9 @@ code {
   transform-origin: center center;
 }
 
+/*
+  Animations
+*/
 
 @keyframes colorize {
   from {

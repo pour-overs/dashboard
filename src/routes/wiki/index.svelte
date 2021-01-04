@@ -18,13 +18,12 @@
   import { Deferred } from "@utils";
   import { onMount } from "svelte";
   import PageTitle from "@components/PageTitle.svelte";
+  import Loading from "@components/Loading.svelte";
 
   let loadingPages = new Deferred();
 
   onMount(() => {
-    loadWikiPages()
-      .then(loadingPages.resolve)
-      .catch(loadingPages.reject);
+    loadingPages.settleWith(loadWikiPages());
   });
 </script>
 
@@ -44,7 +43,7 @@
 </PageTitle>
 
 {#await loadingPages}
-  <p>Loading...</p>
+  <Loading text="Loading Wiki Pages" />
 {:then pages}
   <ul>
     {#each pages as page}

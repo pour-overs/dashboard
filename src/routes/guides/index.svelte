@@ -23,25 +23,26 @@
 </script>
 
 <script>
+  import { fade } from "svelte/transition";
   import { Deferred } from "@utils";
   import { onMount } from "svelte";
   import PageTitle from "@components/PageTitle.svelte";
+  import CollectionLayout from "@components/layouts/CollectionLayout";
+  import Loading from "@components/Loading.svelte";
 
   let listGuidesForAllUsers = false;
   let loadingGuides = new Deferred();
 
   onMount(() => {
-    loadGuides(listGuidesForAllUsers)
-      .then(loadingGuides.resolve)
-      .catch(loadingGuides.reject);
+    const promise = loadGuides(listGuidesForAllUsers);
+    loadingGuides.settleWith(promise);
   });
 
   function reloadGuides() {
     loadingGuides = new Deferred();
 
-    loadGuides(listGuidesForAllUsers)
-      .then(loadingGuides.resolve)
-      .catch(loadingGuides.reject);
+    const promise = loadGuides(listGuidesForAllUsers);
+    loadingGuides.settleWith(promise);
   }
 
   async function createGuide() {
@@ -96,21 +97,6 @@
     font-weight: 600;
   }
 
-  @media (min-width: 50em) {
-    .guide-layout {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: flex-start;
-    }
-  }
-
-  .actions {
-    padding: 1em 1em;
-    position: sticky;
-    top: 0;
-    border: 1px solid var(--border-color);
-  }
-
   .actions h3 {
     margin-bottom: 1em;
   }
@@ -129,35 +115,33 @@
 {:else}
   <p>
     Listing Pour Over Guides
-    <strong>created by you</strong>
-    .
+    <strong>created by you</strong>.
   </p>
 {/if}
 
-<div class="guide-layout">
-
-  <div class="guides">
+<CollectionLayout.Layout sidebar="right" loading={loadingGuides}>
+  <CollectionLayout.Collection>
     {#await loadingGuides}
-      <p>Loading...</p>
+      <Loading text="Loading Guides" />
     {:then guides}
-      {#each guides as guide}
-        <a class="guide-card" href={`/guides/${guide.id}`}>
-          <h2 class="title">{guide.title}</h2>
-          <p>
-            {guide.description}
-          </p>
-          <p>
-            <strong>URL:</strong>
-            {guide.slug ? guide.slug : 'not set'}
-          </p>
-          <p>
-            <strong>Steps:</strong>
-            {guide.steps ? guide.steps.map(s => s.title).join(', ') : 'None.'}
-          </p>
-        </a>
-      {:else}
-        <p>There are no guides yet.</p>
-      {/each}
+      <div class="guides" transition:fade>
+        {#each guides as guide}
+          <a class="guide-card" href={`/guides/${guide.id}`}>
+            <h2 class="title">{guide.title}</h2>
+            <p>{guide.description}</p>
+            <p>
+              <strong>URL:</strong>
+              {guide.slug ? guide.slug : 'not set'}
+            </p>
+            <p>
+              <strong>Steps:</strong>
+              {guide.steps ? guide.steps.map(s => s.title).join(', ') : 'None.'}
+            </p>
+          </a>
+        {:else}
+          <p>There are no guides yet.</p>
+        {/each}
+      </div>
     {:catch error}
       <p>
         Unable to load guides.
@@ -165,24 +149,25 @@
       </p>
     {/await}
 
-  </div>
+  </CollectionLayout.Collection>
+  <CollectionLayout.Sidebar>
+    <div class="actions">
+      <h3>Actions</h3>
 
-  <aside class="actions">
-    <h3>Actions</h3>
+      <button type="button" class="button-link" on:click={createGuide}>
+        Create New Guide
+      </button>
 
-    <button type="button" class="button-link" on:click={createGuide}>
-      Create New Guide
-    </button>
+      <button type="button" class="button-link" on:click={toggleGuidesView}>
+        Show:
+        <strong>{listGuidesForAllUsers ? 'Only Mine' : 'All'}</strong>
+      </button>
 
-    <button type="button" class="button-link" on:click={toggleGuidesView}>
-      Show:
-      <strong>{listGuidesForAllUsers ? 'Only Mine' : 'All'}</strong>
-    </button>
+      <button disabled={true}>
+        Order By:
+        <strong>Last Modified</strong>
+      </button>
 
-    <button disabled={true}>
-      Order By:
-      <strong>Last Modified</strong>
-    </button>
-
-  </aside>
-</div>
+    </div>
+  </CollectionLayout.Sidebar>
+</CollectionLayout.Layout>
