@@ -27,7 +27,7 @@
   import { Deferred } from "@utils";
   import { onMount } from "svelte";
   import PageTitle from "@components/PageTitle.svelte";
-  import CollectionLayout from "@components/layouts/CollectionLayout";
+  import CollectionLayout from "@components/layouts/CollectionLayout/index.js";
   import Loading from "@components/Loading.svelte";
 
   let listGuidesForAllUsers = false;

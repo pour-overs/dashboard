@@ -14,11 +14,11 @@ const useRealTimeDatabase = true;
 
 /**
  * Create a new deploy and associate to the userId
- * @returns {Promise<string>} A promise that resolves to the newly created Deploy ID
+ * @returns {Promise<any>} A promise that resolves to the newly created Deploy ID
  */
 export async function createDeploy(triggerId, branchName) {
 
-  console.log(`Triggered build for trigger: ${triggerId}`);
+  console.log(`Triggered build for trigger "${triggerId}" on "${branchName}"`);
   /** @type google.devtools.cloudbuild.v1. IBuild */
   const longRunningOperation = await runBuild(triggerId, branchName);
 
@@ -33,7 +33,7 @@ export async function createDeploy(triggerId, branchName) {
       // not awaiting — "webjob" style
       const start = Date.now();
       console.log("Starting LongRunningOperation.")
-      longRunningOperation()
+      longRunningOperation.promise()
         .then(async ([build]) => {
           console.log(`Build complete (from trigger: ${triggerId}, buildID: ${build.id})`);
           debugger;
