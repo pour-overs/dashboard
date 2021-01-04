@@ -63,6 +63,7 @@ export default {
           }]
         ],
         plugins: [
+          "@babel/plugin-syntax-import-meta",
           '@babel/plugin-syntax-dynamic-import',
           ['@babel/plugin-transform-runtime', {
             useESModules: true
