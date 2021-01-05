@@ -2,6 +2,7 @@
   import "codemirror/lib/codemirror.css";
   import "codemirror/theme/base16-dark.css";
   import "codemirror/theme/neo.css";
+  import "@css/custom-simplescrollbars.css";
 
   import { onMount, setContext } from "svelte";
   import Loading from "@components/Loading.svelte";
@@ -13,10 +14,14 @@
 
   onMount(async () => {
     
-    const [module, mode] = await Promise.all([import("codemirror"), import("codemirror/mode/markdown/markdown.js"), import("codemirror/mode/gfm/gfm.js")]);
+    const [module] = await Promise.all([
+      import("codemirror"),
+      import("codemirror/mode/markdown/markdown.js"),
+      import("codemirror/mode/gfm/gfm.js"),
+      import("codemirror/addon/scroll/simplescrollbars.js"),
+    ]);
 
     CodeMirror = module.default;
-    mode; // ?
     isLoading = false;
 
     return () => {

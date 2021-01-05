@@ -41,7 +41,7 @@ export async function listGuides() {
 
 /**
  * Create a new guide
- * @returns {Promise>string>} A promise that resolves to the newly created Guide ID
+ * @returns {Promise<string>} A promise that resolves to the newly created Guide ID
  */
 export async function createGuide(userId) {
 

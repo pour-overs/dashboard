@@ -28,6 +28,7 @@ const entries = [
   { find: "@providers", replacement: `${__dirname}/src/providers`},
   { find: "@utils", replacement: `${__dirname}/src/utils.js`},
   { find: "@config", replacement: `${__dirname}/src/config`},
+  { find: "@css", replacement: `${__dirname}/src/css`},
 ];
 
 

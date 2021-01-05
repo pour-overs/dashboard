@@ -1,44 +1,74 @@
-<script>
-  import { onMount, getContext } from "svelte";
-  import { THEMES, theme as userTheme } from "@stores/theme.js";
+<script context="module">
 
-  let CodeMirror = null;
-  const getCodeMirror = getContext("getCodeMirror");
-  
   const CODEMIRROR_THEME = {
     LIGHT: "neo",
     DARK: "base16-dark",
   }
 
+  export const defaultValue = `# Hello!
 
-  $: theme = $userTheme === THEMES.DEFAULT ? CODEMIRROR_THEME.LIGHT : CODEMIRROR_THEME.DARK;
+This is the initial value of a page. You should definitely update this.
+This editor supports **markdown**! Any markdown you enter will be converted into HTML.`;
+
+
+</script>
+
+<script>
+  import { onMount, getContext, createEventDispatcher, tick } from "svelte";
+  import { THEMES, theme as userTheme } from "@stores/theme.js";
+
+  let CodeMirror = null;
+  const getCodeMirror = getContext("getCodeMirror");
+  const dispatch = createEventDispatcher();
+  
+  export const reset = async () => {
+    if (instance) {
+      instance.setValue(defaultValue);
+      instance.getDoc().clearHistory();
+      await tick();
+      instance.refresh();
+    }
+  };
+
+  export let value = defaultValue;
 
   let editor = null;
-  let api = null;
+  let instance = null;
+
+  $: theme = $userTheme === THEMES.DEFAULT ? CODEMIRROR_THEME.LIGHT : CODEMIRROR_THEME.DARK;
 
   onMount(async () => {
     
     CodeMirror = getCodeMirror();
     initializeEditor();
 
+    instance.on("update", () => {
+      value = instance.getValue();
+      dispatch("change", value);
+    });
+
     return () => {
       CodeMirror = null;
       editor = null;
-      api = null;
+      instance.off("update");
+      instance = null;
     }
   });
 
   function initializeEditor() {
 
-    api = CodeMirror.fromTextArea(editor, {
+    instance = CodeMirror.fromTextArea(editor, {
       lineNumbers: true,
       mode: { name: "gfm", gitHubSpice: true, },
       theme: theme,
       spellcheck: true,
       lineWrapping: true,
+      scrollbarStyle: "simple",
     });
 
-    api.setSize("100%", "40vmax");
+    instance.setValue(value);
+
+    instance.setSize("100%", "30vmax");
   }
 
 </script>
@@ -56,9 +86,5 @@
   Page Content
 </label>
   <div class="container">
-    <textarea bind:this={editor} id="editor"># Hello!
-
-This is the initial value of a page. You should definitely update this.
-This editor supports **markdown**! Any markdown you enter will be converted into HTML.
-</textarea>
+    <textarea bind:this={editor} id="editor"></textarea>
 </div>

@@ -1,7 +1,8 @@
-import { listWikis } from "@services/wikis.js";
+import { listAllWikiPages } from "@services/wikis.js";
 
 
 export async function get(req, res, next) {
-  return res.json([]);
+  const wikis = await listAllWikiPages();
+  return res.json(wikis);
 }
 

@@ -1,20 +1,7 @@
-<script context="module">
-
-  async function loadWikiPages() {
-    const response = await fetch(`/api/wiki`, {
-      credentials: "include"
-    });
-
-    if (response.ok) {
-      const pages = await response.json();
-      return pages;
-    }
-  }
-
-</script>
-
 <script>
-
+  import { productionDomain } from "@config/app.config.js";
+  import Icon from "@components/Icon.svelte";
+  import { listAllWikiPages } from "./_wikis.js";
   import { Deferred } from "@utils";
   import { onMount } from "svelte";
   import CollectionLayout from "@components/layouts/CollectionLayout/index.js";
@@ -24,7 +11,7 @@
   let loadingPages = new Deferred();
 
   onMount(() => {
-    loadingPages.settleWith(loadWikiPages());
+    loadingPages.settleWith(listAllWikiPages());
   });
 </script>
 
@@ -34,10 +21,33 @@
     list-style: none;
     padding: 0 0;
     margin: 0 0;
+    height: 100%;
+    border: 1px solid var(--border-color);
+    border-right: none;
   }
 
   .actions {
-    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wiki-page-item {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .wiki-page-item:hover {
+    background-color: var(--selectable-bg);
+  }
+
+  .wiki-page-actions a {
+    padding: 0 1rem;
+  }
+
+  .actions {
+    margin-bottom: 0.5rem;
   }
 
 </style>
@@ -54,7 +64,20 @@
     {:then pages}
       <ul>
         {#each pages as page}
-          <li>{page}</li>
+          <li class="wiki-page-item">
+              <Icon name="article" color="var(--button-color)" size={16} />
+              <a href={`/wiki/${page.slug}`}>{page.title}</a>
+              <div class="wiki-page-actions">
+                <a href={`${productionDomain}/wiki/${page.slug}`} target="_blank"  title="Open Page">
+                  <Icon name="open_in_new" size={16} color="var(--link-color)" />
+                  <!-- View -->
+                </a>
+                <a href={`/wiki/${page.slug}`} title="Edit Page">
+                  <Icon name="edit" size={16} color="var(--link-color)" />
+                  <!-- Edit -->
+                </a>
+              </div>
+          </li>
         {:else}
           <li>
             <p>No wiki pages exist yet.</p>
