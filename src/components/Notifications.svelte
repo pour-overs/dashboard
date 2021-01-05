@@ -1,4 +1,5 @@
 <script>
+  import { fly } from "svelte/transition";
   import {
     notifications,
     loading,
@@ -24,8 +25,10 @@
   .notifications {
     z-index: 9999;
     position: fixed;
-    top: 0.5em;
-    right: 1em;
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+    left: 14rem;
     margin: 0 0;
   }
 }
@@ -69,11 +72,13 @@
       </div>
     </div>
   {:else if hasNotification}
-    <div class="notification" on:click={clearNotification}>
-      {notification}
-      <span class="close-icon">
-        <Icon name="close" />
-      </span>
-    </div>
+    {#key notification}
+      <div class="notification" on:click={clearNotification} transition:fly={{ y: 100, }}>
+        {notification}
+        <span class="close-icon">
+          <Icon name="close" />
+        </span>
+      </div>
+    {/key}
   {/if}
 </div>
