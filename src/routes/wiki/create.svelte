@@ -6,14 +6,18 @@
   const title = "Create Wiki Page";
 
   const createWiki = async () => {};
+
   
   let form = {
     title: "",
     slug: "",
-  }
+    content: "",
+  };
+
+  $: disabled = form.title.length > 0 && form.slug.title > 0;
 
   function updateSlug() {
-    form.slug = encodeURIComponent(form.title.toLowerCase().replaceAll(" ", "-"));
+    form.slug = encodeURIComponent(form.title.trim().toLowerCase().replaceAll(" ", "-"));
   }
 
 </script>
@@ -32,6 +36,10 @@
     padding: 0.5em 0.5em;
   }
 
+  footer {
+    text-align: right;
+  }
+
 </style>
 
 <PageTitle {title} crumb={title} useAsBreadcrumb={true}>{title}</PageTitle>
@@ -40,14 +48,14 @@
   <fieldset>
     <label>
       Page Title
-      <input type="text" name="title" bind:value={form.title} on:change={updateSlug} />
+      <input type="text" name="title" bind:value={form.title} on:change={updateSlug} on:input={updateSlug} />
     </label>
   </fieldset>
 
   <fieldset>
     <label>
       Slug
-      <input type="text" name="slug" readonly bind:value={form.slug} />
+      <input type="text" name="slug" bind:value={form.slug} />
     </label>
   </fieldset>
 
@@ -57,4 +65,8 @@
     </CodeMirrorProvider>
   </fieldset>
 
+
+  <footer>
+    <button type="submit" {disabled}>Create Wiki Page</button>
+  </footer>
 </form>
