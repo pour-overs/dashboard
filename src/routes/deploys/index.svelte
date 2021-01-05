@@ -146,7 +146,7 @@
   <h3 slot="title" class="deploy-history-title">
       Deploy History
       <aside class="actions">
-        <button type="button" on:click={reloadDeploys}>Refresh</button>
+        <button type="button" on:click|stopPropagation={reloadDeploys}>Refresh</button>
       </aside>
   </h3>
   <div slot="content" class="deploy-history">
