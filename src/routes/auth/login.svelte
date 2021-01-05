@@ -47,8 +47,10 @@
 
   .login-container {
     text-align: center;
-    padding: 1em 1em;
+    padding: 10vh 10vw;
     margin: auto auto;
+    display: grid;
+    place-content: center;
   }
 </style>
 

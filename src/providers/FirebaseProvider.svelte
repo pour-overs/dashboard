@@ -1,5 +1,6 @@
 <script>
   import { onMount, setContext } from "svelte";
+  import Loading from "@components/Loading.svelte";
 
   /*
 
@@ -30,5 +31,5 @@
 {#if isLoaded}
   <slot />
 {:else}
-  <p>Loading...</p>
+  <Loading text="Loading" />
 {/if}

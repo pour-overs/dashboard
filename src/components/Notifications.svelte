@@ -26,10 +26,11 @@
     z-index: 9999;
     position: fixed;
     top: auto;
-    bottom: 1rem;
-    right: 1rem;
-    left: 14rem;
+    bottom: 2rem;
+    right: 25%;
+    left: 25%;
     margin: 0 0;
+    width: 60%;
   }
 }
 
