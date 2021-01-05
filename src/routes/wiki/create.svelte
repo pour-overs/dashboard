@@ -27,7 +27,7 @@
     notify("Creating wiki page...");
 
     try {
-      let response = await createWiki(wiki);
+      let response = await createWikiPage(wiki);
     } catch (err) {
       notify(err.message);
       isLoading = false;
