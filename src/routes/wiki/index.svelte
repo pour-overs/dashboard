@@ -33,7 +33,7 @@
 
   .wiki-page-item {
     display: grid;
-    grid-template-columns: 2rem 1fr auto;
+    grid-template-columns: 2rem 1fr 2fr auto;
     padding: 0.5rem 1rem;
     border-bottom: 1px solid var(--border-color);
   }
@@ -48,6 +48,17 @@
 
   .actions {
     margin-bottom: 0.5rem;
+  }
+
+  .title {
+    text-transform: capitalize;
+  }
+
+  .slug {
+    color: var(--button-color--disabled);
+    padding-left: 1rem;
+    font-size: 0.8rem;
+    font-family: var(--font-monospace);
   }
 
 </style>
@@ -66,7 +77,10 @@
         {#each pages as page}
           <li class="wiki-page-item">
               <Icon name="article" color="var(--border-color)" size={16} />
-              <a href={`/wiki/${page.slug}`}>{page.title}</a>
+
+              <a class="title" href={`/wiki/${page.slug}`}>{page.title}</a>
+              <span class="slug">/wiki/{page.slug}</span>
+
               <div class="wiki-page-actions">
                 <a href={`${productionDomain}/wiki/${page.slug}`} target="_blank"  title="Open Page">
                   <Icon name="open_in_new" size={16} color="var(--link-color)" />
