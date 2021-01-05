@@ -39,7 +39,7 @@
   }
 
   .wiki-page-item:hover {
-    background-color: var(--selectable-bg);
+    background-color: var(--selectable-bg--hover);
   }
 
   .wiki-page-actions a {
@@ -65,7 +65,7 @@
       <ul>
         {#each pages as page}
           <li class="wiki-page-item">
-              <Icon name="article" color="var(--button-color)" size={16} />
+              <Icon name="article" color="var(--border-color)" size={16} />
               <a href={`/wiki/${page.slug}`}>{page.title}</a>
               <div class="wiki-page-actions">
                 <a href={`${productionDomain}/wiki/${page.slug}`} target="_blank"  title="Open Page">
