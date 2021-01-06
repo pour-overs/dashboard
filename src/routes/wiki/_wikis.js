@@ -1,3 +1,37 @@
+import marked from "marked";
+
+export const defaultContent = `# Hello!
+
+This is the initial value of a page. You should definitely update this.
+This editor supports **markdown**! Any markdown you enter will be converted into HTML.`;
+
+export function defaultWiki() {
+  return {
+    title: "",
+    slug: "",
+    content: defaultContent,
+  }
+}
+
+/**
+ *
+ * @param {string} markdown
+ * @returns {string} Parsed markdown as HTML or an error message
+ */
+export function parseMarkdown(markdown) {
+
+  marked.setOptions({
+    gfm: true,
+ });
+
+  try {
+    return marked(markdown);
+  }
+  catch (err) {
+    return err.message;
+  }
+}
+
 export async function pageExists(slug) {
   const response = await fetch(`/api/wiki/${slug}`, {
     credentials: "include",
@@ -32,6 +66,19 @@ export async function listAllWikiPages() {
   if (response.ok) {
     const pages = await response.json();
     return pages;
+  }
+}
+
+export async function getBySlug(slug) {
+  const isoFetch = this.fetch || fetch;
+
+  const response = await isoFetch(`/api/wiki/${slug}`, {
+    credentials: "include",
+    method: "GET",
+  });
+
+  if (response.ok) {
+    return await response.json();
   }
 }
 

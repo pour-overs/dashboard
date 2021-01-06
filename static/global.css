@@ -124,7 +124,7 @@ select {
 
 fieldset {
   border: var(--border-color);
-  padding: 0.5rem 1rem;
+  padding: 0 0;
   margin-bottom: 0.5rem;
 }
 

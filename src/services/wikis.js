@@ -7,7 +7,7 @@ const timestamp = () => FieldValue.serverTimestamp();
 const wikiRef = firestore.collection("wiki");
 
 /**
- * 
+ *
  * @param {string} slug The identifier of the wiki page
  */
 export async function pageExists(slug) {
@@ -19,10 +19,10 @@ export async function pageExists(slug) {
 }
 
 /**
- * 
+ *
  * @param {string} slug The identifier of the wiki page
  */
-export async function getByID(slug) {
+export async function getBySlug(slug) {
   const document = await wikiRef
     .doc(slug)
     .get();

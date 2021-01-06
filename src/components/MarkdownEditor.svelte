@@ -5,11 +5,6 @@
     DARK: "base16-dark",
   }
 
-  export const defaultValue = `# Hello!
-
-This is the initial value of a page. You should definitely update this.
-This editor supports **markdown**! Any markdown you enter will be converted into HTML.`;
-
 
 </script>
 
@@ -20,7 +15,7 @@ This editor supports **markdown**! Any markdown you enter will be converted into
   let CodeMirror = null;
   const getCodeMirror = getContext("getCodeMirror");
   const dispatch = createEventDispatcher();
-  
+
   export const reset = async () => {
     if (instance) {
       instance.setValue(defaultValue);
@@ -30,6 +25,7 @@ This editor supports **markdown**! Any markdown you enter will be converted into
     }
   };
 
+  export let defaultValue = "";
   export let value = defaultValue;
 
   let editor = null;
@@ -38,7 +34,7 @@ This editor supports **markdown**! Any markdown you enter will be converted into
   $: theme = $userTheme === THEMES.DEFAULT ? CODEMIRROR_THEME.LIGHT : CODEMIRROR_THEME.DARK;
 
   onMount(async () => {
-    
+
     CodeMirror = getCodeMirror();
     initializeEditor();
 
