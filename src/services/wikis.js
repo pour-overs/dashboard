@@ -1,4 +1,5 @@
 import { firestore, firestoreFields } from "@services/firebase.js";
+import { uuid } from "@utils";
 
 const FieldValue = firestoreFields.FieldValue;
 const timestamp = () => FieldValue.serverTimestamp();
@@ -12,19 +13,19 @@ const wikiRef = firestore.collection("wiki");
  */
 export async function pageExists(slug) {
   const document = await wikiRef
-    .doc(slug)
+    .where("slug", "==", slug)
     .get();
 
-  return document.exists;
+  return !document.empty;
 }
 
 /**
  *
- * @param {string} slug The identifier of the wiki page
+ * @param {string} id The identifier of the wiki page
  */
-export async function getBySlug(slug) {
+export async function getByID(id) {
   const document = await wikiRef
-    .doc(slug)
+    .doc(id)
     .get();
 
   return document.data();
@@ -39,15 +40,19 @@ export async function createWikiPage(wikiData) {
 
   const page = Object.assign(_createWikiPage(), wikiData);
 
-  await wikiRef
-    .doc(page.slug)
-    .set(page);
+  const ref = await wikiRef.doc(page.id).set(page);
 
-  return page;
+  return page.id;
 }
 
-export async function updateWikiPage() {
+/**
+ * 
+ * @param {Wiki} wiki The data that should be saved
+ */
+export async function updateWikiPage(wiki) {
 
+  wiki.lastModified = timestamp();
+  return await wikiRef.doc(wiki.id).update(wiki);
 }
 
 
@@ -59,6 +64,7 @@ function _createWikiPage() {
   const createdAt = timestamp();
 
   return {
+    id: uuid(),
     createdAt,
     lastModified: createdAt,
     title: "",

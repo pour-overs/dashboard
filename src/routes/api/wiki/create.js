@@ -18,8 +18,8 @@ export async function post(req, res, next) {
   }
 
   try {
-    const response = await createWikiPage(wikiData);
-    return res.json(response);
+    const id = await createWikiPage(wikiData);
+    return res.json(id);
   }
   catch (err) {
     res.end(err.message);

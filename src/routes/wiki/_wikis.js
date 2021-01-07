@@ -1,9 +1,7 @@
 import marked from "marked";
 
-export const defaultContent = `# Hello!
-
-This is the initial value of a page. You should definitely update this.
-This editor supports **markdown**! Any markdown you enter will be converted into HTML.`;
+export const defaultContent = `This is the initial value of a page. **You should definitely update this.**
+This editor supports _markdown_! Any markdown you enter will be converted into HTML!`;
 
 export function defaultWiki() {
   return {
@@ -33,7 +31,7 @@ export function parseMarkdown(markdown) {
 }
 
 export async function pageExists(slug) {
-  const response = await fetch(`/api/wiki/${slug}`, {
+  const response = await fetch(`/api/wiki/?slug=${slug}`, {
     credentials: "include",
     method: "HEAD",
   });
@@ -69,10 +67,10 @@ export async function listAllWikiPages() {
   }
 }
 
-export async function getBySlug(slug) {
+export async function getByID(id) {
   const isoFetch = this.fetch || fetch;
 
-  const response = await isoFetch(`/api/wiki/${slug}`, {
+  const response = await isoFetch(`/api/wiki/${id}`, {
     credentials: "include",
     method: "GET",
   });
@@ -82,7 +80,23 @@ export async function getBySlug(slug) {
   }
 }
 
-export async function updateWikiPage() { }
+export async function updateWikiPage(wiki) {
+
+  const response = await fetch(`/api/wiki/${wiki.id}`, {
+    credentials: "include",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(wiki)
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json();
+}
 
 
 export const toSlug = (title = "") => encodeURI(title.trim().toLowerCase().replace(/ /g, "-"));

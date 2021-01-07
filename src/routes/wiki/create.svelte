@@ -8,6 +8,7 @@
   import WikiEditor from "./_wiki-editor.svelte";
 
   const title = "Create Wiki Page";
+  let lastCreatedID = null;
   let wikiEditor = null;
   let wiki = defaultWiki();
 
@@ -26,8 +27,9 @@
     notify("Creating wiki page...");
 
     try {
-      let response = await createWikiPage(wiki);
-    } catch (err) {
+      lastCreatedID = await createWikiPage(wiki);
+    } 
+    catch (err) {
       notify(err.message);
       wikiEditor.loading(false);
       return;
@@ -90,7 +92,7 @@
     <p>You've successfully created a new wiki page.</p>
     <h4>What next?</h4>
     <footer class="actions">
-      <button on:click={goto(`/wiki/${wiki.slug}`)}>
+      <button on:click={goto(`/wiki/${lastCreatedID}`)}>
         Edit "
         <strong>{wiki.title}</strong>
         "

@@ -28,3 +28,23 @@ export class Deferred extends Promise {
     promise.catch(this.reject);
   }
 }
+
+
+const PUSH_CHARS = '-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz';
+
+/**
+ * Creates a timestamp based id,
+ * based on the firebase method of creating IDs
+ *    https://gist.github.com/mikelehen/3596a30bd69384624c11
+ */
+export const uuid = () => {
+  let now = new Date().getTime();
+  const timeStampChars = new Array(8);
+
+  for (let i = 7; i >= 0; i--) {
+    timeStampChars[i] = PUSH_CHARS.charAt(now % 64);
+    now = Math.floor(now / 64);
+  }
+
+  return timeStampChars.join("");
+}

@@ -61,6 +61,11 @@
     font-family: var(--font-monospace);
   }
 
+  .empty {
+    text-align: center;
+    padding: 1rem 2rem;
+  }
+
 </style>
 
 
@@ -78,7 +83,7 @@
           <li class="wiki-page-item">
               <Icon name="article" color="var(--border-color)" size={16} />
 
-              <a class="title" href={`/wiki/${page.slug}`}>{page.title}</a>
+              <a class="title" href={`/wiki/${page.id}`}>{page.title}</a>
               <span class="slug">/wiki/{page.slug}</span>
 
               <div class="wiki-page-actions">
@@ -86,14 +91,14 @@
                   <Icon name="open_in_new" size={16} color="var(--link-color)" />
                   <!-- View -->
                 </a>
-                <a href={`/wiki/${page.slug}`} title="Edit Page">
+                <a href={`/wiki/${page.id}`} title="Edit Page">
                   <Icon name="edit" size={16} color="var(--link-color)" />
                   <!-- Edit -->
                 </a>
               </div>
           </li>
         {:else}
-          <li>
+          <li class="empty">
             <p>No wiki pages exist yet.</p>
           </li>
         {/each}
