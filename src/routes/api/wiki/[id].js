@@ -41,6 +41,6 @@ export async function post(req, res, next) {
   catch (err) {
     res.end(err.message);
   }
-  
+
   return res.json();
 }

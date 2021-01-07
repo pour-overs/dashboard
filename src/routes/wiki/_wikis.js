@@ -8,6 +8,7 @@ export function defaultWiki() {
     title: "",
     slug: "",
     content: defaultContent,
+    description: "",
   }
 }
 
@@ -91,11 +92,7 @@ export async function updateWikiPage(wiki) {
     body: JSON.stringify(wiki)
   });
 
-  if (!response.ok) {
-    return null;
-  }
-
-  return await response.json();
+  return response.ok;
 }
 
 

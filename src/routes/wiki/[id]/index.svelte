@@ -20,7 +20,8 @@
   id;
   export let wiki;
   let initialValue = Object.assign({}, wiki);
-  
+  console.log(initialValue);
+
   $: hasChanged = wiki.content !== initialValue.content || wiki.title !== initialValue.title;
 
   let wikiEditor = null;
@@ -29,7 +30,7 @@
 
   async function submitHandler() {
     wikiEditor.loading(true);
-    
+
     let slugHasChanged = wiki.slug !== initialValue.slug;
 
     if (slugHasChanged) {
@@ -42,15 +43,16 @@
     }
 
     try {
-      let response = await updateWikiPage(wiki);
-    } 
+      await updateWikiPage(wiki);
+    }
     catch (err) {
       notify(err.message);
       wikiEditor.loading(false);
       return;
     }
 
-    notify(`Saved changes!`);
+    notify(`Saved changes!`, 6000);
+    wikiEditor.loading(false);
 
     // update initialValue upon save
     initialValue = wiki;
@@ -92,7 +94,7 @@
 
     <form on:submit|preventDefault={submitHandler}>
       <WikiEditor bind:this={wikiEditor} on:submit={submitHandler} bind:wiki>
-        <p>More form controls here...</p>
+
       </WikiEditor>
     </form>
   </section>
@@ -105,4 +107,5 @@
       </div>
     </div>
   </aside>
+
 </TwoColumnLayout>

@@ -30,20 +30,8 @@
 
 <style>
 
-.hidden {
-  display: none;
-}
-
-label {
-    display: block;
-    margin: 0em auto;
-    margin-bottom: 1em;
-  }
-
-  label input {
-    width: 100%;
-    margin: 0em auto;
-    padding: 0.5em 0.5em;
+  .hidden {
+    display: none;
   }
 
   footer {
@@ -69,6 +57,13 @@ label {
     <label>
       Slug
       <input type="text" name="slug" bind:value={wiki.slug} />
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <label>
+      Page Description
+      <input type="text" bind:value={wiki.description}>
     </label>
   </fieldset>
 

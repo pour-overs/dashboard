@@ -28,14 +28,14 @@
 
     try {
       lastCreatedID = await createWikiPage(wiki);
-    } 
+    }
     catch (err) {
       notify(err.message);
       wikiEditor.loading(false);
       return;
     }
 
-    notify(`Wiki Page "${wiki.title}" created!`);
+    notify(`Wiki Page "${wiki.title}" created!`, 6000);
     wikiEditor.loading(false);
     isComplete = true;
   };

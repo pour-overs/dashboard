@@ -137,6 +137,15 @@ select:hover {
 label {
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  margin: 0em auto;
+  margin-bottom: 1em;
+}
+
+label input {
+  width: 100%;
+  margin: 0em auto;
+  padding: 0.5em 0.5em;
 }
 
 button {
