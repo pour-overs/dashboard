@@ -14,11 +14,11 @@ const useRealTimeDatabase = true;
 
 /**
  * Create a new deploy and associate to the userId
- * @returns {Promise<string>} A promise that resolves to the newly created Deploy ID
+ * @returns {Promise<any>} A promise that resolves to the newly created Deploy ID
  */
 export async function createDeploy(triggerId, branchName) {
 
-  console.log(`Triggered build for trigger: ${triggerId}`);
+  console.log(`Triggered build for trigger "${triggerId}" on "${branchName}"`);
   /** @type google.devtools.cloudbuild.v1. IBuild */
   const longRunningOperation = await runBuild(triggerId, branchName);
 
@@ -29,9 +29,10 @@ export async function createDeploy(triggerId, branchName) {
     console.log(`Using RTDB to track trigger: ${triggerId}`);
 
     await setRealTimeDBEntry(triggerId, false, "Triggering");
-  
+
       // not awaiting — "webjob" style
       const start = Date.now();
+      let end = Date.now();
       console.log("Starting LongRunningOperation.")
       longRunningOperation.promise()
         .then(async ([build]) => {
@@ -39,20 +40,21 @@ export async function createDeploy(triggerId, branchName) {
           debugger;
           const statusText = STATUS_LOOKUP[build.status];
           await setRealTimeDBEntry(triggerId, true, `Status: ${statusText}`);
-          
+
           for (const step of build.steps) {
             console.log(`step:\n\tname: ${step.name}\n\tstatus: ${statusText}`);
           }
 
-          const end = Date.now();
+          end = Date.now();
           console.log(`Ending LongRunningOperation. Duration: ${end - start}`);
         })
         .catch(async (err) => {
+          end = Date.now();
           console.log(`Ending LongRunningOperation. Duration: ${end - start}`);
           console.log(`Long running operation failed. trigger: ${triggerId})`);
           console.error(err);
           await setRealTimeDBEntry(triggerId, true, `Long running operation failed. ${err}`)
-          .catch(() => console.err("Failed to set RTDB"));
+            .catch(() => console.error("Failed to set RTDB"));
         })
   }
 
@@ -60,7 +62,7 @@ export async function createDeploy(triggerId, branchName) {
 }
 
 /**
- * 
+ *
  */
 export async function listDeploys() {
 

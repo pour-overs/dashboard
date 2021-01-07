@@ -134,8 +134,7 @@
   }
 
   .coffee-form select,
-  .coffee-form input,
-  .coffee-form textarea {
+  .coffee-form input {
     display: block;
     width: 100%;
   }

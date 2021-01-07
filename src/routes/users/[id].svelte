@@ -1,7 +1,7 @@
 
 <script>
   import PageTitle from "@components/PageTitle.svelte";
-  export let user;
+  // export let user;
 
 </script>
 

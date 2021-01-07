@@ -1,5 +1,7 @@
 export const title = "Pour Over Guides";
 
+export const productionDomain = "https://pouroverguides.com";
+
 /**
  * The Google Cloud Build triggerID's for the various environments
  *

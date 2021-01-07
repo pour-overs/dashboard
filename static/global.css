@@ -124,7 +124,7 @@ select {
 
 fieldset {
   border: var(--border-color);
-  padding: 0.5rem 1rem;
+  padding: 0 0;
   margin-bottom: 0.5rem;
 }
 
@@ -137,6 +137,15 @@ select:hover {
 label {
   font-weight: 600;
   cursor: pointer;
+  display: block;
+  margin: 0em auto;
+  margin-bottom: 1em;
+}
+
+label input {
+  width: 100%;
+  margin: 0em auto;
+  padding: 0.5em 0.5em;
 }
 
 button {
@@ -212,6 +221,9 @@ code {
   transform-origin: center center;
 }
 
+/*
+  Animations
+*/
 
 @keyframes colorize {
   from {

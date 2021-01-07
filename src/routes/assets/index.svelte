@@ -10,7 +10,7 @@
 
 </script>
 
-<PageTitle>Assets</PageTitle>
+<PageTitle title="Assets">Assets</PageTitle>
 
 <p>Use this page to upload images to be used within a guide.</p>
 

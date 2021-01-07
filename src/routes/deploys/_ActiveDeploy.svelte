@@ -10,6 +10,7 @@
 
   import Warning from "@components/Warning.svelte";
   import Icon from "@components/Icon.svelte";
+  import Loading from "@components/Loading.svelte";
 
   const { database } = getContext("firebase")();
   const ref = database.ref(`deploys/${id}`);
@@ -58,7 +59,7 @@
 </style>
 
 {#if isLoading}
-  <p>Loading...</p>
+  <Loading />
 {:else if isValid}
   <div class="status">
     <span class="loading-spinner">

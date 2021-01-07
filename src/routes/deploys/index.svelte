@@ -26,6 +26,7 @@
   import Warning from "@components/Warning.svelte";
   import PageTitle from "@components/PageTitle.svelte";
   import Collapsible from "@components/Collapsible.svelte";
+  import Loading from "@components/Loading.svelte";
 
   let deploys = [];
   let loadingDeploys = new Deferred();
@@ -145,14 +146,14 @@
   <h3 slot="title" class="deploy-history-title">
       Deploy History
       <aside class="actions">
-        <button type="button" on:click={reloadDeploys}>Refresh</button>
+        <button type="button" on:click|stopPropagation={reloadDeploys}>Refresh</button>
       </aside>
   </h3>
   <div slot="content" class="deploy-history">
 
     <div>
       {#if isLoadingDeploys}
-        <p>Loading...</p>
+        <Loading text="Loading deploy history" />
       {:else}
         <DeployHistory {deploys} />
       {/if}
