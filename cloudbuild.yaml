@@ -10,7 +10,7 @@
    args:
    - 'run'
    - 'deploy'
-   - 'pouroverguides-dashboard'
+   - 'bloomandpour-dashboard'
    - '--image'
    - 'gcr.io/$PROJECT_ID/bloomandpour-dashboard:$COMMIT_SHA'
    - '--region'
