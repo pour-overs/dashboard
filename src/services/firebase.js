@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
-
-const databaseURL = "https://pour-over-guides.firebaseio.com";
+import { firebaseConfig } from "@config/firebase.config";
+const { databaseURL } = firebaseConfig;
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),

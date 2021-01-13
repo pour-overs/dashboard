@@ -23,7 +23,7 @@
   Welcome, <span class="text-primary">{user.name.split(" ")[0]}</span>!
 </PageTitle>
 <p>
-  This is the dashboard for the Pour Over Guides website. Here you can create, edit, and publish guides and wiki pages.
+  This is the dashboard for the <strong>{title}</strong> website. Here you can create, edit, and publish guides and wiki pages.
 </p>
 
 <h2>Vision</h2>

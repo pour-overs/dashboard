@@ -1,10 +1,10 @@
  steps:
  # build the container image
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['build', '-t', 'gcr.io/$PROJECT_ID/pouroverguides-dashboard:$COMMIT_SHA', '.']
+   args: ['build', '-t', 'gcr.io/$PROJECT_ID/bloomandpour-dashboard:$COMMIT_SHA', '.']
  # push the container image to Container Registry
  - name: 'gcr.io/cloud-builders/docker'
-   args: ['push', 'gcr.io/$PROJECT_ID/pouroverguides-dashboard:$COMMIT_SHA']
+   args: ['push', 'gcr.io/$PROJECT_ID/bloomandpour-dashboard:$COMMIT_SHA']
  # Deploy container image to Cloud Run
  - name: 'gcr.io/cloud-builders/gcloud'
    args:
@@ -12,10 +12,10 @@
    - 'deploy'
    - 'pouroverguides-dashboard'
    - '--image'
-   - 'gcr.io/$PROJECT_ID/pouroverguides-dashboard:$COMMIT_SHA'
+   - 'gcr.io/$PROJECT_ID/bloomandpour-dashboard:$COMMIT_SHA'
    - '--region'
    - 'us-west1'
    - '--platform'
    - 'managed'
  images:
- - 'gcr.io/$PROJECT_ID/pouroverguides-dashboard:$COMMIT_SHA'
+ - 'gcr.io/$PROJECT_ID/bloomandpour-dashboard:$COMMIT_SHA'

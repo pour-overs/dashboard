@@ -15,7 +15,7 @@
       {
         "source": "**",
         "run": {
-          "serviceId": "pouroverguides-dashboard",
+          "serviceId": "bloomandpour-dashboard",
           "region": "us-west1"
         }
       }

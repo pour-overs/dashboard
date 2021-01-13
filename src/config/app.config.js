@@ -1,21 +1,21 @@
-export const title = "Pour Over Guides";
+export const title = "Bloom & Pour";
 
-export const productionDomain = "https://pouroverguides.com";
+export const productionDomain = "https://bloomandpour.com";
 
 /**
  * The Google Cloud Build triggerID's for the various environments
  *
- * https://console.cloud.google.com/cloud-build/triggers/edit/74781781-b39e-4823-b8b6-f5f1c40440fd?project=pour-over-guides
+ * https://console.cloud.google.com/cloud-build/triggers/edit/016abd83-6f1c-4d18-b14f-d65e34fa66e8?authuser=0&project=bloomandpour
  */
 
- export const productionKey = "pouroverguides.com";
- export const stagingKey = "staging.pouroverguides.com";
- export const dashboardKey = "dashboard.pouroverguides.com";
+ export const productionKey = "bloomandpour.com";
+ export const stagingKey = "staging.bloomandpour.com";
+ export const dashboardKey = "dashboard.bloomandpour.com";
 
  export const entries = [
-  [stagingKey, "1e4e15fb-f633-40be-918b-ef8f0bfd5d98"],
-  [productionKey, "b941cec0-e431-4509-b3d1-a9be42d2ce04"],
-  [dashboardKey, "74781781-b39e-4823-b8b6-f5f1c40440fd"],
+  [productionKey, "d1ffcafa-3afe-4fba-a566-ef0c2e846c89"],
+  [stagingKey, "016abd83-6f1c-4d18-b14f-d65e34fa66e8"],
+  [dashboardKey, "db6f08dc-fa3b-4c4a-8f9d-09d63598fadd"],
 ];
 
 export const cloudBuildTriggers = new Map();

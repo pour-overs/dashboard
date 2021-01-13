@@ -5,7 +5,7 @@
 
 
 1. `npm i`
-1. [Generate firebase-admin Service credentials](https://console.firebase.google.com/u/0/project/pour-over-guides/settings/serviceaccounts/adminsdk)
+1. [Generate firebase-admin Service credentials](https://console.firebase.google.com/u/0/project/bloomandpour/settings/serviceaccounts/adminsdk)
 1. Move and rename service key file to root as `firebase-admin-service-key.json`
 1. `export GOOGLE_APPLICATION_CREDENTIALS=firebase-admin-service-key.json`
 1. `npm run dev`
