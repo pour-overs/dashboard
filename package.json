@@ -1,7 +1,7 @@
 {
-  "name": "pouroverguides-dashboard",
+  "name": "bloomandpour-dashboard",
   "description": "",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "cross-env GOOGLE_APPLICATION_CREDENTIALS=firebase-admin-service-key.json sapper dev",
     "dev:node": "cross-env GOOGLE_APPLICATION_CREDENTIALS=firebase-admin-service-key.json node --inspect node_modules/sapper/dist/cli.js dev",
