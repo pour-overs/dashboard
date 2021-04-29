@@ -10,6 +10,7 @@
       const deploys = await response.json();
       return deploys;
     }
+    return [];
   }
 </script>
 
