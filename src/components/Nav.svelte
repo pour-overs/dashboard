@@ -89,17 +89,17 @@
 <IconProvider color="var(--nav-icon-color)" size="16">
   <nav>
     <ul class="nav-items">
-    {#key segment}
-      {#each routes as route}
-        <li>
-          <a aria-current={isActive(segment || defaultSegment, route.segment) ? 'page' : undefined} href={route.segment}>
-            <span class="icon">
-              <Icon name={route.icon} />
-            </span>
-            <span class="text">{route.label}</span>
-          </a>
-        </li>
-      {/each}
+      {#key segment}
+        {#each routes as route}
+          <li>
+            <a aria-current={isActive(segment || defaultSegment, route.segment) ? 'page' : undefined} href={route.segment}>
+              <span class="icon">
+                <Icon name={route.icon} />
+              </span>
+              <span class="text">{route.label}</span>
+            </a>
+          </li>
+        {/each}
       {/key}
     </ul>
   </nav>
