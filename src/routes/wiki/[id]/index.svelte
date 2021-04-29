@@ -16,11 +16,10 @@
   import TwoColumnLayout from "@components/layouts/TwoColumnLayout.svelte";
   import PageTitle from "@components/PageTitle.svelte";
 
+  // svelte-ignore unused-export-let
   export let id;
-  id;
   export let wiki;
   let initialValue = Object.assign({}, wiki);
-  console.log(initialValue);
 
   $: hasChanged = wiki.content !== initialValue.content || wiki.title !== initialValue.title;
 
