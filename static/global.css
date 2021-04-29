@@ -54,7 +54,7 @@ body {
 }
 
 body.theme--animating {
-  transition: 0.8s ease-out color, 0.5s ease-out background, 0.2s ease-out border;
+  transition: 0.1s ease-out color, 0.1s ease-out background, 0.1s ease-out border;
 }
 
 body.theme--dark {
