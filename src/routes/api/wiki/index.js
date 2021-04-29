@@ -19,7 +19,7 @@ import { pageExists } from "@services/wikis.js";
  * @param {Function} next
  */
 export async function head(req, res, next) {
-    
+
   const slug = req.query.slug || null;
 
     if (!slug) {

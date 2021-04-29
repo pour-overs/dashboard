@@ -50,7 +50,8 @@
 
   async function slugIsAvailable(slug) {
     if (slug.length > 0) {
-      return !(await pageExists(slug));
+      const exists = await pageExists(slug);
+      return !exists;
     }
 
     return false;

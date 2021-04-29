@@ -37,7 +37,7 @@ export async function pageExists(slug) {
     method: "HEAD",
   });
 
-  return response.ok;
+  return response.ok && response.status !== 404;
 }
 
 export async function createWikiPage(wikiData) {
