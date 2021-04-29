@@ -96,4 +96,12 @@ export async function updateWikiPage(wiki) {
 }
 
 
-export const toSlug = (title = "") => encodeURI(title.trim().toLowerCase().replace(/ /g, "-"));
+export const toSlug = (title = "") => {
+  let slug = title.trim()
+    .toLowerCase()
+    .replace(/\?/, "")
+    .replace(/\&/, "")
+    .replace(/ /g, "-");
+
+  return encodeURI(slug);
+};

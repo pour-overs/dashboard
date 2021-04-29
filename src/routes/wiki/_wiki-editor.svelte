@@ -56,7 +56,7 @@
   <fieldset>
     <label>
       Slug
-      <input type="text" name="slug" bind:value={wiki.slug} />
+      <input type="text" name="slug" bind:value={wiki.slug} disabled />
     </label>
   </fieldset>
 
