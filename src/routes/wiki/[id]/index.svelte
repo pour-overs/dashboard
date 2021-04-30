@@ -16,8 +16,7 @@
   import TwoColumnLayout from "@components/layouts/TwoColumnLayout.svelte";
   import PageTitle from "@components/PageTitle.svelte";
 
-  // svelte-ignore unused-export-let
-  export let id;
+  //export let id;
   export let wiki;
   let initialValue = Object.assign({}, wiki);
 
@@ -95,13 +94,13 @@
 
       <fieldset>
 
-        <label>Visibility</label>
+        <label for="isPublished">Visibility</label>
 
         <div>
           Currently {initialValue.isPublished ? "published" : "unpublished"}.
         </div>
 
-        <button type="button" on:click={() => wiki.isPublished = !wiki.isPublished}>
+        <button id="isPublished" type="button" on:click={() => wiki.isPublished = !wiki.isPublished}>
           {#if wiki.isPublished === initialValue.isPublished}
             {wiki.isPublished ? "Unpublish" : "Publish"}
           {:else}
