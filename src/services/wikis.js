@@ -6,6 +6,17 @@ const timestamp = () => FieldValue.serverTimestamp();
 
 
 const wikiRef = firestore.collection("wiki");
+const wikiSettingsRef = firestore.collection("wikiSettings");
+
+export async function getWikiSettings() {
+  const doc = await wikiSettingsRef.doc("topics").get();
+
+  if (doc.exists) {
+    return doc.data();
+  }
+
+  return Object.create(null);
+}
 
 /**
  *
@@ -46,7 +57,7 @@ export async function createWikiPage(wikiData) {
 }
 
 /**
- * 
+ *
  * @param {Wiki} wiki The data that should be saved
  */
 export async function updateWikiPage(wiki) {

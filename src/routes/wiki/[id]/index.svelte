@@ -54,7 +54,7 @@
     wikiEditor.loading(false);
 
     // update initialValue upon save
-    initialValue = wiki;
+    initialValue = Object.assign({}, wiki);
   }
 </script>
 
@@ -92,9 +92,31 @@
     <PageTitle title={`Edit ${wiki.title}`} crumb={wiki.title} useAsBreadcrumb={true}>Edit{hasChanged ? "*" : ""}</PageTitle>
 
     <form on:submit|preventDefault={submitHandler}>
-      <WikiEditor bind:this={wikiEditor} on:submit={submitHandler} bind:wiki>
 
-      </WikiEditor>
+      <fieldset>
+
+        <label>Visibility</label>
+
+        <div>
+          Currently {initialValue.isPublished ? "published" : "unpublished"}.
+        </div>
+
+        <button type="button" on:click={() => wiki.isPublished = !wiki.isPublished}>
+          {#if wiki.isPublished === initialValue.isPublished}
+            {wiki.isPublished ? "Unpublish" : "Publish"}
+          {:else}
+            Undo
+          {/if}
+
+        </button>
+
+        {#if initialValue.isPublished !== wiki.isPublished}
+          <p><em>You must "Save" to finish {wiki.isPublished ? "" : "un"}publishing.</em></p>
+        {/if}
+
+      </fieldset>
+
+      <WikiEditor bind:this={wikiEditor} on:submit={submitHandler} bind:wiki></WikiEditor>
     </form>
   </section>
 

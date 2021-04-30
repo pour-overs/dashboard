@@ -5,10 +5,13 @@ This editor supports _markdown_! Any markdown you enter will be converted into H
 
 export function defaultWiki() {
   return {
+    id: null,
+    topic: null,
     title: "",
     slug: "",
     content: defaultContent,
     description: "",
+    isPublished: false,
   }
 }
 
@@ -105,3 +108,19 @@ export const toSlug = (title = "") => {
 
   return encodeURI(slug);
 };
+
+export async function getSettings() {
+  const response = await fetch(`/api/wiki/settings`, {
+    credentials: "include",
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json();
+}

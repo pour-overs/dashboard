@@ -74,7 +74,7 @@
 </PageTitle>
 
 <CollectionLayout.Layout sidebar="right">
-  <CollectionLayout.Collection></CollectionLayout.Collection>
+  <CollectionLayout.Collection>
     {#await loadingPages}
       <Loading text="Loading Wiki Pages" />
     {:then pages}
@@ -104,6 +104,7 @@
         {/each}
       </ul>
     {/await}
+  </CollectionLayout.Collection>
   <CollectionLayout.Sidebar>
     <h3 class="actions">Actions</h3>
     <a class="button" href="wiki/create">Create Wiki Page</a>

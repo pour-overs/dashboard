@@ -1,5 +1,6 @@
 <script>
-  import { defaultWiki, defaultContent, toSlug } from "./_wikis.js";
+  import { onMount } from "svelte";
+  import { defaultWiki, defaultContent, toSlug, getSettings } from "./_wikis.js";
   import Loading from "@components/Loading.svelte";
   import MarkdownEditor from "@components/MarkdownEditor.svelte";
   import CodeMirrorProvider from "@providers/CodeMirrorProvider.svelte";
@@ -11,12 +12,17 @@
   let form = null;
   let editor = null;
 
+  let wikiSettings = null;
   let isLoading = false;
 
   $: wiki.slug = toSlug(wiki.title);
 
   $: disabled = isLoading || wiki.title.length === 0 || wiki.slug.length === 0;
   $: submitText = isLoading ? "Saving..." : actionText;
+
+  onMount(() => {
+    wikiSettings = getSettings();
+  })
 
   export function reset() {
     wiki = defaultWiki();
@@ -55,8 +61,25 @@
 
   <fieldset>
     <label>
+      Route
+      <input type="text" name="topic" bind:value={wiki.topic} list="topics" placeholder="/"/>
+      {#if wikiSettings !== null}
+        <datalist id="topics">
+          {#await wikiSettings}
+            <option>Loading...</option>
+          {:then settings}
+            {#each Object.keys(settings.topics).filter( t => t !== "root") as topic}
+              <option value={`${topic}`}>/{topic}/</option>
+            {/each}
+          {/await}
+        </datalist>
+      {/if}
+    </label>
+  </fieldset>
+  <fieldset>
+    <label>
       Slug
-      <input type="text" name="slug" bind:value={wiki.slug} disabled />
+      <input type="text" name="slug" bind:value={wiki.slug} />
     </label>
   </fieldset>
 
