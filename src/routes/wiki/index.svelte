@@ -87,6 +87,11 @@
               <span class="slug">/wiki/{page.slug}</span>
 
               <div class="wiki-page-actions">
+                {#if page.isPublished}
+                  <Icon name="visibility" size={16} />
+                {:else}
+                  <Icon name="disabled_visible" size={16} />
+                {/if}
                 <a href={`${productionDomain}/wiki/${page.slug}`} target="_blank"  title="Open Page">
                   <Icon name="open_in_new" size={16} color="var(--link-color)" />
                   <!-- View -->
