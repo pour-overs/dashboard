@@ -121,33 +121,35 @@
 
 <CollectionLayout.Layout sidebar="right" loading={loadingGuides}>
   <CollectionLayout.Collection>
-    {#await loadingGuides}
-      <Loading text="Loading Guides" />
-    {:then guides}
-      <div class="guides" transition:fade>
-        {#each guides as guide}
-          <a class="guide-card" href={`/guides/${guide.id}`}>
-            <h2 class="title">{guide.title}</h2>
-            <p>{guide.description}</p>
-            <p>
-              <strong>URL:</strong>
-              {guide.slug ? guide.slug : 'not set'}
-            </p>
-            <p>
-              <strong>Steps:</strong>
-              {guide.steps ? guide.steps.map(s => s.title).join(', ') : 'None.'}
-            </p>
-          </a>
-        {:else}
-          <p>There are no guides yet.</p>
-        {/each}
-      </div>
-    {:catch error}
-      <p>
-        Unable to load guides.
-        <button on:click={reloadGuides}>Retry</button>
-      </p>
-    {/await}
+    {#key loadingGuides}
+      {#await loadingGuides}
+        <Loading text="Loading Guides" />
+      {:then guides}
+          <div class="guides" transition:fade>
+            {#each guides as guide}
+              <a class="guide-card" href={`/guides/${guide.id}`}>
+                <h2 class="title">{guide.title}</h2>
+                <p>{guide.description}</p>
+                <p>
+                  <strong>URL:</strong>
+                  {guide.slug ? guide.slug : 'not set'}
+                </p>
+                <p>
+                  <strong>Steps:</strong>
+                  {guide.steps ? guide.steps.map(s => s.title).join(', ') : 'None.'}
+                </p>
+              </a>
+            {:else}
+              <p>There are no guides yet.</p>
+            {/each}
+          </div>
+      {:catch error}
+        <p>
+          Unable to load guides.
+          <button on:click={reloadGuides}>Retry</button>
+        </p>
+      {/await}
+    {/key}
 
   </CollectionLayout.Collection>
   <CollectionLayout.Sidebar>
